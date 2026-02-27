@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Home - Pvreza Club</title>
+  <link rel="icon" href="/assets/img/favicon.png" type="image/png">
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+
+<body>
+  <header>
+    <!-- Botón del menú (SVG hamburguesa) -->
+    <div class="header-left">
+      <button id="menu-toggle" class="menu-button cart-icon " aria-label="Abrir menú">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="size-6" width="32" height="32">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+      </button>
+    </div>
+
+    <!-- Menú lateral oculto -->
+    <div id="side-menu" class="side-menu">
+      <button id="close-menu" class="close-button" aria-label="Cerrar menú">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          width="28" height="28">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+        </svg>
+      </button>
+      <!-- aquí va el contenido del menú -->
+      <nav class="menu-links">
+        <h2>DROPS</h2>
+        <ul>
+          <li><a href="/frontend/camis.html">GENESIS</a></li>
+          <li><a href="/frontend/isla_bonita.html" class="isla-bonita">ISLA BONITA</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <div class="logo">
+      <img src="/assets/img/png_en_negro.png" alt="Logo Pvreza Club" />
+    </div>
+
+    <div class="header-right">
+      <a href="/cart" class="cart-icon" aria-label="Carrito">
+        <!-- Aquí el SVG del carrito que quieras -->
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+        </svg>
+      </a>
+    </div>
+
+    <div class="header-right">
+      <a href="/cart" class="cart-icon" aria-label="Carrito">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
+          class="size-6">
+          <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+        </svg>
+      </a>
+    </div>
+  </header>
+
+  <section class="banner">
+    <div class="banner-content">
+      <h2>PVREZA CLUB®</h2>
+      <p>CREATED TO CREATE</p>
+    </div>
+  </section>
+
+  <div class="carousel">
+    <section class="hero">
+      <div class="carousel-track" id="carousel-track">
+        <img src="/assets/img/ISLA BONITA/IMG_1871.JPG" alt="Slide 1">
+        <img src="/assets/img/ISLA BONITA/IMG_1866.JPG" alt="Slide 2">
+        <img src="/assets/img/ISLA BONITA/IMG_1943.JPG" alt="Slide 3">
+        <img src="/assets/img/ISLA BONITA/3087ab49-e68e-46ff-90a6-ae7ca579a409.JPG" alt="Slide 4">
+      </div>
+    </section>
+  </div>
+
+  <div class="todo">
+    <div class="camiseta1">
+      <a href="/frontend/cami_isla_bonita.html">
+        <img src="/assets/img/ISLA BONITA/IMG_7422a.jpg" alt="">
+      </a>
+      <div>
+        <p>ISLA BONITA TEE </p>
+        <p>28,00 €</p>
+      </div>
+    </div>
+    <div class="camiseta1">
+      <a href="/frontend/cami_azul.html">
+        <img src="/assets/img/camis/IMG_8516a.jpg" alt="">
+      </a>
+      <div>
+        <p>PVREZA CLASSIC TEE</p>
+        <p>28,00 €</p>
+      </div>
+    </div>
+    <div class="camiseta1">
+      <a href="/frontend/cami_blanca.html">
+        <img src="/assets/img/camis/IMG_8530a.jpg" alt="">
+      </a>
+      <div>
+        <p>CREATED TO CREATE TEE</p>
+        <p>28,00 €</p>
+      </div>
+    </div>
+    <div class="camiseta1">
+      <a href="/frontend/cami_gris.html">
+        <img src="/assets//img/camis/IMG_8541a.jpg" alt="">
+      </a>
+      <div>
+        <p>GXS TEE</p>
+        <p>28,00 €</p>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <div class="join-section">
+        <p class="join-text">JOIN THE FAMILY</p>
+        <div class="social-icons">
+          <a href="https://www.instagram.com/pvreza.club/" target="_blank">
+            <img src="/assets/img/ig.png" alt="Instagram" />
+          </a>
+          <a href="https://www.tiktok.com/@pvrezaclub" target="_blank">
+            <img src="/assets/img/tiktok.png" alt="TikTok" />
+          </a>
+        </div>
+      </div>
+
+      <div class="brand-logo">
+        <img src="/assets/img/png_en_negro.png" alt="pvreza-logo" class="pvreza-logo" />
+      </div>
+
+      <div class="footer-bottom-wrapper">
+        <div class="flex-container">
+          <span class="copyright">©</span>
+          <div class="rights-text">
+            <span>PVREZA CLUB</span>
+            <span>ALL RIGHTS RESERVED.</span>
+          </div>
+          <span class="year">2025</span>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="/scripts/slide-index.js"></script>
+  <script src="/scripts/menu.js"></script>
+  <script src="/scripts/repeat.js"></script>
+</body>
+
+</html>
