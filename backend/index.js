@@ -11,10 +11,11 @@ const cors = require("cors");
 require('./config/db');
 
 // Importar rutas de la API
-const productosRoutes = require('./routes/productos.routes');
-const authRoutes = require('./routes/auth.routes');
-const usuariosRoutes = require('./routes/usuarios.routes');
-const pedidosRoutes = require('./routes/pedidos.routes');
+const productosRoutes = require('./routes/productosRoutes');
+const authRoutes = require('./routes/authRoutes');
+const usuariosRoutes = require('./routes/usuariosRoutes');
+const pedidosRoutes = require('./routes/pedidosRoutes');
+
 
 // ============================================
 // INICIALIZACIÓN
