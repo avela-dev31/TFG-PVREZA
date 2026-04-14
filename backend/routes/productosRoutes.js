@@ -1,14 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const productosController = require('../controllers/productosController');
+const { getAll, getById, getVariantes, update, remove } = require('../controllers/productosController');
+const { verifyAdmin } = require('../middleware/middlewareAuth');
 
-// GET /api/productos -> Devuelve todas las camisetas de PVREZA
-router.get('/', productosController.obtenerProductos);
+// Rutas públicas
+router.get('/', getAll);
+router.get('/:id', getById);
+router.get('/:id/variantes', getVariantes);  // ← /api/camisetas/:id/variantes
 
-// GET /api/productos/:id -> Devuelve una camiseta específica (ej: /api/productos/1)
-router.get('/:id', productosController.obtenerProductoPorId);
-
-// GET /api/productos/:id/stock -> Devuelve las tallas y colores de una camiseta
-router.get('/:id/stock', productosController.obtenerStockPorProducto);
+// Rutas protegidas (solo admin)
+router.put('/:id', verifyAdmin, update);
+router.delete('/:id', verifyAdmin, remove);
 
 module.exports = router;

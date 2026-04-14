@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, "public")));
 // RUTAS
 // ============================================
 // (Las asignamos SOLO UNA VEZ, ahora que la app ya existe)
-app.use('/api/productos', productosRoutes);
+app.use('/api/camisetas', productosRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usuariosRoutes);
 app.use('/api/pedidos', pedidosRoutes);

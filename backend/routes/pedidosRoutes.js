@@ -1,15 +1,13 @@
-// routes/pedidos.routes.js
 const express = require('express');
 const router = express.Router();
+const { createOrder, getUserOrders, getAllOrders } = require('../controllers/orderController');
+const { verifyToken, verifyAdmin } = require('../middleware/middlewareAuth');
 
-// POST /api/pedidos -> Generar un nuevo pedido
-router.post('/', (req, res) => {
-    res.json({ mensaje: 'Ruta para crear pedido preparada' });
-});
+// Usuario autenticado
+router.post('/', verifyToken, createOrder);
+router.get('/mis-pedidos', verifyToken, getUserOrders);
 
-// GET /api/pedidos -> Ver historial de pedidos
-router.get('/', (req, res) => {
-    res.json({ mensaje: 'Historial de pedidos del usuario' });
-});
+// Solo admin
+router.get('/todos', verifyAdmin, getAllOrders);
 
 module.exports = router;
