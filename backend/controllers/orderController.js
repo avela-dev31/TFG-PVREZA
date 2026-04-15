@@ -13,7 +13,7 @@ const createOrder = async (req, res) => {
     // 1. Verificar stock de cada item
     for (const item of items) {
       const stockData = await Order.checkStock(item.id_stock);
-      if (!stockData || stockData.stock < item.cantidad) {
+      if (!stockData || stockData.cantidad < item.cantidad) {
         return res.status(400).json({
           message: `Stock insuficiente para el producto con id_stock ${item.id_stock}`
         });

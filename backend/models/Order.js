@@ -39,19 +39,19 @@ const Order = {
     return results;
   },
 
-  checkStock: async (id_stock) => {
-    const [results] = await db.query(
-      'SELECT stock FROM stock WHERE id_stock = ?', [id_stock]
-    );
-    return results[0];
-  },
+checkStock: async (id_stock) => {
+  const [results] = await db.query(
+    'SELECT cantidad FROM stock WHERE id_stock = ?', [id_stock]
+  );
+  return results[0];
+},
 
-  decreaseStock: async (id_stock, cantidad) => {
-    await db.query(
-      'UPDATE stock SET stock = stock - ? WHERE id_stock = ?',
-      [cantidad, id_stock]
-    );
-  }
+decreaseStock: async (id_stock, cantidad) => {
+  await db.query(
+    'UPDATE stock SET cantidad = cantidad - ? WHERE id_stock = ?',
+    [cantidad, id_stock]
+  );
+}
 
 };
 
