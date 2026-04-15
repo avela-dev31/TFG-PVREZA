@@ -437,3 +437,23 @@ input[type=range]::-webkit-slider-thumb {
         border-top: 1px solid #eee;
     }
 }
+
+.slider-arrow {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    cursor: pointer;
+    font-size: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: background 0.2s;
+}
+.slider-arrow:hover { background: #fff; }
+.slider-arrow.left { left: 10px; }
+.slider-arrow.right { right: 10px; }

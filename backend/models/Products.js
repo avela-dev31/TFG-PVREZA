@@ -21,9 +21,19 @@ const Product = {
     return results;
   },
 
+  // 💥 NUEVO: Lo metemos DENTRO del objeto Product
+  getImagenes: async (id) => {
+    const [rows] = await db.query(
+      'SELECT url FROM imagenes_producto WHERE id_producto = ? ORDER BY orden ASC', 
+      [id]
+    );
+    return rows;
+  },
+
   update: async (id, { nombre, descripcion, coleccion }) => {
     const [result] = await db.query(
-      'UPDATE productos SET nombre = ?, descripcion = ?, colección = ? WHERE id_producto = ?',
+      // Corregida la tilde de "coleccion"
+      'UPDATE productos SET nombre = ?, descripcion = ?, coleccion = ? WHERE id_producto = ?',
       [nombre, descripcion, coleccion, id]
     );
     return result.affectedRows;
@@ -38,4 +48,5 @@ const Product = {
 
 };
 
+// Exportamos el objeto entero
 module.exports = Product;
