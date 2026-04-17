@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getProductoById } from '../api/productosApi';
+import { useParams, Link } from 'react-router-dom';
+import { getProductoById, getProductos } from '../api/productosApi';
 
 const BACKEND_URL = 'http://localhost:3000';
 
@@ -16,8 +16,13 @@ const Producto = () => {
     const [isTryOnOpen, setIsTryOnOpen] = useState(false);
     const [altura, setAltura] = useState(175);
     const [peso, setPeso] = useState(75);
+    const [relacionados, setRelacionados] = useState([]);
 
     useEffect(() => {
+        setFotoActiva(0);
+        setTallaSeleccionada(null);
+        window.scrollTo(0, 0);
+
         getProductoById(id)
             .then(res => {
                 const data = res.data;
@@ -32,6 +37,12 @@ const Producto = () => {
                 console.error('Error obteniendo el producto:', err);
                 setLoading(false);
             });
+
+        getProductos().then(res => {
+            const otros = res.data.filter(p => p.id_producto !== parseInt(id));
+            setRelacionados(otros);
+        });
+
     }, [id]);
 
     const siguiente = () => setFotoActiva(prev => (prev === imagenes.length - 1 ? 0 : prev + 1));
@@ -73,7 +84,6 @@ const Producto = () => {
                         </div>
                     </div>
 
-                    {/* Flechas */}
                     {imagenes.length > 1 && (
                         <>
                             <button onClick={anterior} style={{ ...styles.arrow, left: '12px' }}>&#10094;</button>
@@ -81,7 +91,6 @@ const Producto = () => {
                         </>
                     )}
 
-                    {/* Puntos */}
                     {imagenes.length > 1 && (
                         <div style={styles.dots}>
                             {imagenes.map((_, index) => (
@@ -100,7 +109,6 @@ const Producto = () => {
                     <h1 style={styles.nombre}>{producto.nombre}</h1>
                     <p style={styles.precio}>{producto.precio} €</p>
 
-                    {/* Tallas */}
                     <div style={styles.tallasWrapper}>
                         <div style={styles.tallas}>
                             {stock.map(item => (
@@ -123,7 +131,6 @@ const Producto = () => {
                         )}
                     </div>
 
-                    {/* Botón probador */}
                     <button style={styles.tryonBtn} onClick={() => setIsTryOnOpen(true)}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ marginRight: '8px' }}>
                             <path d="M12 3v19" /><path d="M5 10h14" /><path d="M5 15h14" />
@@ -131,7 +138,6 @@ const Producto = () => {
                         Probar en mi Avatar 3D
                     </button>
 
-                    {/* Botón carrito */}
                     <button
                         style={{ ...styles.cartBtn, opacity: tallaSeleccionada ? 1 : 0.5 }}
                         disabled={!tallaSeleccionada}
@@ -139,7 +145,6 @@ const Producto = () => {
                         {tallaSeleccionada ? 'Añadir al carrito' : 'Selecciona una talla'}
                     </button>
 
-                    {/* Acordeones */}
                     <details style={styles.details_section}>
                         <summary style={styles.summary}><strong>Detalles del Producto</strong></summary>
                         <p style={styles.detailsText}>{producto.descripcion}</p>
@@ -156,6 +161,30 @@ const Producto = () => {
                     </details>
                 </div>
             </section>
+
+            {/* TAMBIÉN TE PUEDE GUSTAR */}
+            {relacionados.length > 0 && (
+                <section style={stylesRel.section}>
+                    <h2 style={stylesRel.titulo}>TAMBIÉN TE PUEDE GUSTAR</h2>
+                    <div style={stylesRel.grid}>
+                        {relacionados.map(p => (
+                            <Link
+                                to={`/producto/${p.id_producto}`}
+                                key={p.id_producto}
+                                style={stylesRel.card}
+                            >
+                                <img
+                                    src={`${BACKEND_URL}${p.imagen_url}`}
+                                    alt={p.nombre}
+                                    style={stylesRel.img}
+                                />
+                                <p style={stylesRel.nombre}>{p.nombre}</p>
+                                <p style={stylesRel.precio}>{p.precio} €</p>
+                            </Link>
+                        ))}
+                    </div>
+                </section>
+            )}
 
             {/* MODAL PROBADOR 3D */}
             {isTryOnOpen && (
@@ -194,8 +223,6 @@ const styles = {
     bannerTitle: { fontSize: '22px', letterSpacing: '6px', fontWeight: '700', margin: '0 0 6px' },
     bannerSub: { fontSize: '11px', letterSpacing: '4px', color: '#999', margin: 0 },
     product: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', maxWidth: '1100px', margin: '48px auto', padding: '0 24px' },
-
-    // Carrusel
     carouselWrapper: { position: 'relative' },
     carouselViewport: { width: '100%', overflow: 'hidden' },
     carouselTrack: { display: 'flex', transition: 'transform 0.4s ease-in-out' },
@@ -203,8 +230,6 @@ const styles = {
     arrow: { position: 'absolute', top: '50%', transform: 'translateY(-50%)', background: 'rgba(255,255,255,0.8)', border: 'none', cursor: 'pointer', fontSize: '18px', padding: '8px 12px', zIndex: 10 },
     dots: { display: 'flex', justifyContent: 'center', gap: '8px', marginTop: '12px' },
     dot: { width: '8px', height: '8px', borderRadius: '50%', cursor: 'pointer', transition: 'background-color 0.3s' },
-
-    // Detalles
     details: { display: 'flex', flexDirection: 'column', gap: '16px', paddingTop: '16px' },
     nombre: { fontSize: '20px', letterSpacing: '3px', fontWeight: '700', margin: 0 },
     precio: { fontSize: '16px', color: '#333', margin: 0 },
@@ -219,14 +244,22 @@ const styles = {
     details_section: { borderTop: '1px solid #e5e5e5', paddingTop: '12px' },
     summary: { cursor: 'pointer', fontSize: '13px', letterSpacing: '1px', padding: '4px 0' },
     detailsText: { fontSize: '13px', color: '#666', marginTop: '8px', lineHeight: '1.8' },
-
-    // Modal
     modalOverlay: { position: 'fixed', inset: 0, backgroundColor: 'rgba(0,0,0,0.6)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' },
     modalContent: { backgroundColor: '#fff', width: '90%', maxWidth: '900px', maxHeight: '90vh', overflow: 'auto', padding: '32px', position: 'relative' },
     modalClose: { position: 'absolute', top: '16px', right: '20px', background: 'none', border: 'none', fontSize: '28px', cursor: 'pointer' },
     modalLayout: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '32px', marginTop: '16px' },
     modalCanvas: { backgroundColor: '#f5f5f5', aspectRatio: '1', display: 'flex', alignItems: 'center', justifyContent: 'center' },
     modalControls: { display: 'flex', flexDirection: 'column' },
+};
+
+const stylesRel = {
+    section: { maxWidth: '1100px', margin: '64px auto', padding: '0 24px' },
+    titulo: { fontSize: '12px', letterSpacing: '4px', color: '#999', marginBottom: '32px', textAlign: 'center' },
+    grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '24px' },
+    card: { textDecoration: 'none', color: '#000' },
+    img: { width: '100%', aspectRatio: '3/4', objectFit: 'cover' },
+    nombre: { fontSize: '12px', letterSpacing: '2px', fontWeight: '600', marginTop: '12px', marginBottom: '4px' },
+    precio: { fontSize: '12px', color: '#666' },
 };
 
 export default Producto;
