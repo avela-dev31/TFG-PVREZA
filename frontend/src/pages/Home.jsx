@@ -127,7 +127,7 @@ const Home = () => {
         <h2 style={styles.sectionTitle}>DROPS</h2>
         <div style={styles.dropsGrid}>
           <Link to="/catalogo/genesis" style={styles.dropCard}>
-            <img src="/assets/img/camis/cami_azul.JPG" alt="Genesis" style={styles.dropImg} />
+            <img src="/assets/img/camis/IMG_8516a.jpg" alt="Genesis" style={styles.dropImg} />
             <p style={styles.dropName}>GENESIS</p>
           </Link>
           <Link to="/catalogo/isla-bonita" style={styles.dropCard}>
