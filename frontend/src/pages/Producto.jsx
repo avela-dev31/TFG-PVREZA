@@ -5,6 +5,7 @@ import { getProductoById, getProductos } from '../api/productosApi';
 import { CartContext } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext'; // 💥 Importamos Auth
 import AvatarCreator from '../components/AvatarCreator'; // 💥 Importamos el creador 3D
+import Banner from '../components/Banner';
 import '../styles/producto.css';
 
 const BACKEND_URL = 'http://localhost:3000';
@@ -27,13 +28,21 @@ const Producto = () => {
     const [peso, setPeso] = useState(75);
     const [relacionados, setRelacionados] = useState([]);
 
-    // 💥 Efecto para cargar datos del usuario si está logueado al abrir el probador
-    useEffect(() => {
-        if (isTryOnOpen && isAuthenticated && user) {
+    // ✅ AÑADE ESTO
+    const handleAbrirProbador = () => {
+        // Si tiene sesión, le precargamos sus datos
+        if (isAuthenticated && user) {
             setAltura(user.altura || 175);
             setPeso(user.peso || 75);
+        } else {
+            // Si es invitado, ponemos valores por defecto
+            setAltura(175);
+            setPeso(75);
         }
-    }, [isTryOnOpen, isAuthenticated, user]);
+        // Finalmente, abrimos el modal
+        setIsTryOnOpen(true);
+    };
+
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -68,11 +77,7 @@ const Producto = () => {
 
     return (
         <main>
-            <section style={styles.banner}>
-                <h2 style={styles.bannerTitle}>PVREZA CLUB®</h2>
-                <p style={styles.bannerSub}>CREATED TO CREATE</p>
-            </section>
-
+        <Banner/>
             <section style={styles.product}>
                 {/* CARRUSEL */}
                 <div style={styles.carouselWrapper}>
@@ -124,7 +129,7 @@ const Producto = () => {
                         </div>
                     </div>
 
-                    <button style={styles.tryonBtn} onClick={() => setIsTryOnOpen(true)}>
+                    <button style={styles.tryonBtn} onClick={handleAbrirProbador}>
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" style={{ marginRight: '8px' }}>
                             <path d="M12 3v19" /><path d="M5 10h14" /><path d="M5 15h14" />
                         </svg>
