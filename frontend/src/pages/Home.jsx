@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import usePageTitle from '../hooks/usePageTitle';
+import Banner from "../components/Banner";
+
 
 // ============================================
 // CONFIGURA AQUÍ TU HERO
@@ -124,6 +126,7 @@ const Home = () => {
 
   return (
     <div>
+    <Banner/>
       {/* HERO */}
       <section style={{ position: 'relative', height: '90vh', overflow: 'hidden' }}>
         {HERO_TYPE === 'carousel' ? <HeroCarousel /> : <HeroVideo />}
