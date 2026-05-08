@@ -1,61 +1,80 @@
-// ============================================
-// IMPORTACIONES
-// ============================================
-require("dotenv").config(); // Vital para que lea tu archivo .env
+require("dotenv").config();
 const express = require("express");
 const path = require("path");
 const cors = require("cors");
-// const { logMensaje } = require("./utils/logger.js"); // Descomenta esto si tienes el archivo creado
+const helmet = require("helmet");
 
-// Conectar a la base de datos (¡Imprescindible para el catálogo!)
 require('./config/db');
 
-// Importar rutas de la API
 const productosRoutes = require('./routes/productosRoutes');
 const authRoutes = require('./routes/authRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const pedidosRoutes = require('./routes/pedidosRoutes');
 
-
-// ============================================
-// INICIALIZACIÓN
-// ============================================
-const app = express(); // ¡Aquí nace app! A partir de aquí ya podemos usarla
+const app = express();
 const port = process.env.PORT || 3000;
 
 // ============================================
-// MIDDLEWARE
+// SEGURIDAD — cabeceras HTTP
 // ============================================
-app.use(express.json());
-app.use(cors()); // Permite conexiones desde tu app móvil (React Native) y web
-app.use(express.static(path.join(__dirname, "public")));
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" }, // permite servir imágenes al frontend
+}));
 
+// ============================================
+// CORS — solo acepta el origen del frontend
+// ============================================
+const ALLOWED_ORIGINS = (process.env.FRONTEND_URL || 'http://localhost:5173').split(',');
+
+app.use(cors({
+  origin: (origin, callback) => {
+    // Permite peticiones sin origin (Postman, curl) solo en desarrollo
+    if (!origin && process.env.NODE_ENV !== 'production') return callback(null, true);
+    if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
+    callback(new Error(`CORS: origen no permitido — ${origin}`));
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+// ============================================
+// PARSEO — limita el tamaño del body (evita ataques DoS)
+// ============================================
+app.use(express.json({ limit: '10kb' }));
+
+// Archivos estáticos (uploads de imágenes de producto)
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ============================================
 // RUTAS
 // ============================================
-// (Las asignamos SOLO UNA VEZ, ahora que la app ya existe)
 app.use('/api/camisetas', productosRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usuariosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 
-// Ruta base para comprobar que el backend respira
 app.get("/", (req, res) => {
-    res.send("Backend de PVREZA funcionando correctamente en Docker 🚀");
+  res.json({ status: "ok", message: "Backend PVREZA activo" });
 });
 
 // ============================================
-// ARRANCAR SERVIDOR
+// MANEJADOR DE ERRORES GLOBAL
+// ============================================
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, next) => {
+  // No filtramos detalles internos hacia el cliente
+  const status = err.status || 500;
+  const message = status < 500 ? err.message : 'Error interno del servidor';
+  res.status(status).json({ message });
+});
+
+// ============================================
+// ARRANQUE
 // ============================================
 if (process.env.NODE_ENV !== "test") {
-    app.listen(port, '0.0.0.0', () => { 
-        console.log(`🚀 Servidor escuchando en el puerto ${port}`);
-        console.log(`📱 Accesible desde la red local para React Native`);
-        // if (logMensaje) logMensaje(`Servidor iniciado en puerto ${port}`);
-    });
+  app.listen(port, '0.0.0.0', () => {
+    console.log(`Servidor escuchando en el puerto ${port}`);
+  });
 }
 
-// Exportamos para los tests
 module.exports = app;

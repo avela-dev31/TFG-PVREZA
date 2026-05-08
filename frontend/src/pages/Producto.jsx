@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link } from "react-router-dom";
-import { getProductoById, getProductos } from "../api/productosApi";
+import { getProductoById } from "../api/productosApi";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { BACKEND_URL } from "../constants";
@@ -9,11 +9,7 @@ import AvatarCreator from "../components/AvatarCreator";
 import Banner from "../components/Banner";
 import "../styles/producto.css";
 
-const MODEL_MAP = {
-  1: "Avatar_Pvreza.glb",
-  2: "Avatar_Pvreza.glb",
-  3: "Avatar_Pvreza.glb",
-};
+const FALLBACK_MODEL = "Avatar_Pvreza.glb";
 
 const Producto = () => {
   const { id } = useParams();
@@ -31,7 +27,11 @@ const Producto = () => {
   const [altura, setAltura] = useState(175);
   const [peso, setPeso] = useState(75);
 
-  const modeloCamiseta = MODEL_MAP[id] || "camiseta_azul.glb";
+  // Modelo 3D: usa la talla seleccionada, si no el primero disponible, si no el fallback
+  const modeloCamiseta =
+    tallaSeleccionada?.url_modelo_3d ||
+    stock.find((s) => s.url_modelo_3d)?.url_modelo_3d ||
+    FALLBACK_MODEL;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -49,10 +49,6 @@ const Producto = () => {
       })
       .catch((err) => console.error("Error obteniendo el producto:", err))
       .finally(() => setLoading(false));
-
-    getProductos().then((res) => {
-      res.data.filter((p) => p.id_producto !== parseInt(id));
-    });
   }, [id]);
 
   const handleAbrirProbador = () => {
