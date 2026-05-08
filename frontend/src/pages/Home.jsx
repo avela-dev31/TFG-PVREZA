@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import usePageTitle from '../hooks/usePageTitle'; 
+import PropTypes from 'prop-types';
+import usePageTitle from '../hooks/usePageTitle';
 
 // ============================================
 // CONFIGURA AQUÍ TU HERO
@@ -33,6 +34,10 @@ const SplashScreen = ({ onFinish }) => {
   );
 };
 
+SplashScreen.propTypes = {
+  onFinish: PropTypes.func.isRequired,
+};
+
 const HeroCarousel = () => {
   const [activa, setActiva] = useState(0);
 
@@ -47,7 +52,7 @@ const HeroCarousel = () => {
     <div style={heroStyles.wrapper}>
       {HERO_FOTOS.map((foto, index) => (
         <img
-          key={index}
+          key={foto}
           src={foto}
           alt={`Hero ${index + 1}`}
           style={{
@@ -58,9 +63,11 @@ const HeroCarousel = () => {
       ))}
       {/* Puntos */}
       <div style={heroStyles.dots}>
-        {HERO_FOTOS.map((_, index) => (
-          <div
-            key={index}
+        {HERO_FOTOS.map((foto, index) => (
+          <button
+            key={foto}
+            type="button"
+            aria-label={`Ir a imagen ${index + 1}`}
             onClick={() => setActiva(index)}
             style={{ ...heroStyles.dot, backgroundColor: activa === index ? '#fff' : 'rgba(255,255,255,0.4)' }}
           />
@@ -126,7 +133,7 @@ const Home = () => {
       <section style={styles.drops}>
         <h2 style={styles.sectionTitle}>DROPS</h2>
         <div style={styles.dropsGrid}>
-          <Link to="/catalogo/genesis" style={styles.dropCard}>
+          <Link to="/catalogo/drop-genesis" style={styles.dropCard}>
             <img src="/assets/img/camis/IMG_8516a.jpg" alt="Genesis" style={styles.dropImg} />
             <p style={styles.dropName}>GENESIS</p>
           </Link>
