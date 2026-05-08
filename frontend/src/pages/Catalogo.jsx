@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProductos } from '../api/productosApi';
+import { BACKEND_URL } from '../constants';
 import Banner from '../components/Banner';
 
 const Catalogo = () => {
@@ -8,19 +9,28 @@ const Catalogo = () => {
   const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const BACKEND_URL = 'http://localhost:3000';
-
   useEffect(() => {
+    setLoading(true);
     getProductos()
       .then(res => {
-        setProductos(res.data);
+        const todos = res.data;
+        if (coleccion) {
+          // Normaliza "isla-bonita" para comparar con "Isla Bonita" de la BD
+          const filtrados = todos.filter(p => {
+            const col = (p.coleccion || '').toLowerCase().replaceAll(' ', '-');
+            return col === coleccion.toLowerCase();
+          });
+          setProductos(filtrados);
+        } else {
+          setProductos(todos);
+        }
       })
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
-  }, []);
+  }, [coleccion]);
 
   const titulo = coleccion
-    ? coleccion.replace('-', ' ').toUpperCase()
+    ? coleccion.replaceAll('-', ' ').toUpperCase()
     : 'ALL PRODUCTS';
 
   return (

@@ -1,11 +1,11 @@
 import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Link } from 'react-router-dom';
+import { BACKEND_URL } from '../constants';
 import '../styles/carrito-page.css';
 
 const Carrito = () => {
     const { cart, removeFromCart, cartTotal } = useContext(CartContext);
-    const BACKEND_URL = 'http://localhost:3000';
 
     if (cart.length === 0) {
         return (

@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
+import { BACKEND_URL } from '../constants';
 import '../styles/cart.css';
 
 const CartDrawer = () => {
     const { cart, isCartOpen, setIsCartOpen, removeFromCart, cartTotal } = useContext(CartContext);
-    const BACKEND_URL = 'http://localhost:3000';
 
     return (
         <>

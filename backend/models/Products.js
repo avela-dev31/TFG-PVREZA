@@ -3,7 +3,13 @@ const db = require('../config/db');
 const Product = {
 
   getAll: async () => {
-    const [results] = await db.query('SELECT * FROM productos');
+    const [results] = await db.query(`
+      SELECT p.*,
+        (SELECT url FROM imagenes_producto
+         WHERE id_producto = p.id_producto
+         ORDER BY orden ASC LIMIT 1) AS imagen_url
+      FROM productos p
+    `);
     return results;
   },
 
