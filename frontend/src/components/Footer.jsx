@@ -33,9 +33,8 @@ const Footer = () => {
 
           <div className="footer-column">
             <h3>SOCIAL</h3>
-            <a href="https://instagram.com/pvreza" target="_blank" rel="noreferrer">Instagram</a>
-            <a href="https://tiktok.com/@pvreza" target="_blank" rel="noreferrer">TikTok</a>
-            <a href="https://twitter.com/pvreza" target="_blank" rel="noreferrer">Twitter</a>
+            <a href="https://www.instagram.com/pvreza.club/" target="_blank" rel="noreferrer">Instagram</a>
+            <a href="https://www.tiktok.com/@pvrezaclub" target="_blank" rel="noreferrer">TikTok</a>
           </div>
         </div>
       </div>

@@ -16,6 +16,9 @@ import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Perfil from './pages/Perfil';
 import Dashboard from './pages/admin/Dashboard';
+import FAQ from './pages/FAQ';
+import Envios from './pages/Envios';
+import Contacto from './pages/Contacto';
 
 function App() {
   return (
@@ -32,6 +35,9 @@ function App() {
             <Route path="/producto/:id" element={<Producto />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registro" element={<Registro />} />
+            <Route path="/faq" element={<FAQ />} />
+            <Route path="/envios" element={<Envios />} />
+            <Route path="/contacto" element={<Contacto />} />
 
             {/* Rutas protegidas (usuario logueado) */}
             <Route element={<ProtectedRoute />}>
