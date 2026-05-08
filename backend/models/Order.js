@@ -51,7 +51,40 @@ decreaseStock: async (id_stock, cantidad) => {
     'UPDATE stock SET cantidad = cantidad - ? WHERE id_stock = ?',
     [cantidad, id_stock]
   );
-}
+},
+
+  getMonthSales: async () => {
+    const [results] = await db.query(`
+      SELECT COALESCE(SUM(total), 0) AS ventas_mes
+      FROM pedidos
+      WHERE MONTH(fecha_pedido) = MONTH(CURRENT_DATE())
+        AND YEAR(fecha_pedido) = YEAR(CURRENT_DATE())
+    `);
+    return results[0].ventas_mes;
+  },
+
+  getActiveOrdersCount: async () => {
+    const [results] = await db.query(`
+      SELECT COUNT(*) AS pedidos_activos
+      FROM pedidos
+      WHERE estado IN ('pendiente', 'pagado', 'enviado')
+    `);
+    return results[0].pedidos_activos;
+  },
+
+  getCriticalStockCount: async () => {
+    const [results] = await db.query(`
+      SELECT COUNT(*) AS stock_critico
+      FROM (
+        SELECT p.id_producto
+        FROM productos p
+        LEFT JOIN stock s ON p.id_producto = s.id_producto
+        GROUP BY p.id_producto
+        HAVING COALESCE(SUM(s.cantidad), 0) = 0
+      ) AS agotados
+    `);
+    return results[0].stock_critico;
+  }
 
 };
 

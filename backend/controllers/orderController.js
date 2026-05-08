@@ -64,4 +64,23 @@ const getAllOrders = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getUserOrders, getAllOrders };
+const getDashboardStats = async (req, res) => {
+  try {
+    const [ventasMes, pedidosActivos, stockCritico] = await Promise.all([
+      Order.getMonthSales(),
+      Order.getActiveOrdersCount(),
+      Order.getCriticalStockCount()
+    ]);
+
+    res.status(200).json({
+      ventas_mes: ventasMes,
+      pedidos_activos: pedidosActivos,
+      stock_critico: stockCritico
+    });
+  } catch (error) {
+    console.error('Error en getDashboardStats:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+module.exports = { createOrder, getUserOrders, getAllOrders, getDashboardStats };

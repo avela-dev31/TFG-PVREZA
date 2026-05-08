@@ -58,4 +58,14 @@ const remove = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getById, getVariantes, update, remove };
+const getAllWithStock = async (req, res) => {
+  try {
+    const productos = await Product.getAllWithStock();
+    res.status(200).json(productos);
+  } catch (error) {
+    console.error('Error en getAllWithStock:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+module.exports = { getAll, getById, getVariantes, update, remove, getAllWithStock };

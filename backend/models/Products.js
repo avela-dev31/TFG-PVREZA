@@ -63,6 +63,18 @@ const Product = {
       'DELETE FROM productos WHERE id_producto = ?', [id]
     );
     return result.affectedRows;
+  },
+
+  getAllWithStock: async () => {
+    const [results] = await db.query(`
+      SELECT p.id_producto, p.nombre, p.precio, p.coleccion,
+        COALESCE(SUM(s.cantidad), 0) AS stock_total
+      FROM productos p
+      LEFT JOIN stock s ON p.id_producto = s.id_producto
+      GROUP BY p.id_producto
+      ORDER BY p.id_producto
+    `);
+    return results;
   }
 
 };

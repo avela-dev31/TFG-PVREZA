@@ -1,28 +1,57 @@
-// 1. Hemos quitado el useEffect de aquí porque aún no estamos haciendo fetch al backend
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useAuth } from '../../context/AuthContext';
+import { getProductosConStock, eliminarProducto as eliminarProductoApi } from '../../api/productosApi';
+import { getDashboardStats, getTodosPedidos } from '../../api/pedidosApi';
 import '../../styles/dashboard.css';
 
 const Dashboard = () => {
     const { user } = useAuth();
     const [activeTab, setActiveTab] = useState('resumen');
-    
-    // 2. Aquí está tu setProductos
-    const [productos, setProductos] = useState([
-        { id_producto: 1, nombre: 'CLASSIC TEE', precio: 28.00, stock_total: 145 },
-        { id_producto: 2, nombre: 'GENESIS HOODIE', precio: 55.00, stock_total: 12 },
-        { id_producto: 3, nombre: 'GXS CAP', precio: 20.00, stock_total: 0 }
-    ]);
 
-    // 💥 3. NUEVO: Creamos una función real para borrar un producto (Esto soluciona el error)
-    const eliminarProducto = (id) => {
-        // Filtramos la lista para quedarnos con todos menos el que queremos borrar
-        const nuevaLista = productos.filter(producto => producto.id_producto !== id);
-        // Usamos setProductos por fin
-        setProductos(nuevaLista);
+    const [productos, setProductos] = useState([]);
+    const [stats, setStats] = useState({ ventas_mes: 0, pedidos_activos: 0, stock_critico: 0 });
+    const [pedidos, setPedidos] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const [statsRes, productosRes, pedidosRes] = await Promise.all([
+                    getDashboardStats(),
+                    getProductosConStock(),
+                    getTodosPedidos()
+                ]);
+                setStats(statsRes.data);
+                setProductos(productosRes.data);
+                setPedidos(pedidosRes.data);
+            } catch (error) {
+                console.error('Error cargando datos del dashboard:', error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchData();
+    }, []);
+
+    const eliminarProducto = async (id) => {
+        if (!window.confirm('¿Estás seguro de que quieres eliminar este producto?')) return;
+        try {
+            await eliminarProductoApi(id);
+            setProductos(productos.filter(p => p.id_producto !== id));
+        } catch (error) {
+            console.error('Error eliminando producto:', error);
+        }
+    };
+
+    const formatPrecio = (valor) => {
+        return Number(valor).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     };
 
     const renderContent = () => {
+        if (loading) {
+            return <div className="dash-section"><p>Cargando datos...</p></div>;
+        }
+
         switch (activeTab) {
             case 'resumen':
                 return (
@@ -31,15 +60,15 @@ const Dashboard = () => {
                         <div className="stats-grid">
                             <div className="stat-card">
                                 <h3>VENTAS DEL MES</h3>
-                                <p className="stat-number">1,284 €</p>
+                                <p className="stat-number">{formatPrecio(stats.ventas_mes)} €</p>
                             </div>
                             <div className="stat-card">
                                 <h3>PEDIDOS ACTIVOS</h3>
-                                <p className="stat-number">14</p>
+                                <p className="stat-number">{stats.pedidos_activos}</p>
                             </div>
                             <div className="stat-card alert">
                                 <h3>STOCK CRÍTICO</h3>
-                                <p className="stat-number">1</p>
+                                <p className="stat-number">{stats.stock_critico}</p>
                                 <span className="stat-label">Artículos agotados</span>
                             </div>
                         </div>
@@ -67,7 +96,7 @@ const Dashboard = () => {
                                     <tr key={p.id_producto}>
                                         <td>#{p.id_producto}</td>
                                         <td><strong>{p.nombre}</strong></td>
-                                        <td>{p.precio} €</td>
+                                        <td>{formatPrecio(p.precio)} €</td>
                                         <td>
                                             <span className={`status-badge ${p.stock_total === 0 ? 'out' : 'ok'}`}>
                                                 {p.stock_total === 0 ? 'AGOTADO' : p.stock_total}
@@ -75,8 +104,7 @@ const Dashboard = () => {
                                         </td>
                                         <td className="actions-cell">
                                             <button className="btn-text">EDITAR</button>
-                                            {/* 💥 4. NUEVO: Conectamos el botón con la función */}
-                                            <button 
+                                            <button
                                                 className="btn-text danger"
                                                 onClick={() => eliminarProducto(p.id_producto)}
                                             >
@@ -93,7 +121,34 @@ const Dashboard = () => {
                 return (
                     <div className="dash-section">
                         <h2>ÚLTIMOS PEDIDOS</h2>
-                        <p>Módulo de pedidos en construcción para la fase 2 del TFG.</p>
+                        {pedidos.length === 0 ? (
+                            <p>No hay pedidos registrados.</p>
+                        ) : (
+                            <table className="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>TOTAL</th>
+                                        <th>ESTADO</th>
+                                        <th>FECHA</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {pedidos.map((p, i) => (
+                                        <tr key={`${p.id_pedido}-${i}`}>
+                                            <td>#{p.id_pedido}</td>
+                                            <td>{formatPrecio(p.total)} €</td>
+                                            <td>
+                                                <span className={`status-badge ${p.estado === 'entregado' ? 'ok' : ''}`}>
+                                                    {p.estado.toUpperCase()}
+                                                </span>
+                                            </td>
+                                            <td>{new Date(p.fecha_pedido).toLocaleDateString('es-ES')}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </table>
+                        )}
                     </div>
                 );
             default:
@@ -109,20 +164,20 @@ const Dashboard = () => {
                     <p>Hola, {user?.nombre}</p>
                 </div>
                 <nav className="sidebar-nav">
-                    <button 
-                        className={activeTab === 'resumen' ? 'active' : ''} 
+                    <button
+                        className={activeTab === 'resumen' ? 'active' : ''}
                         onClick={() => setActiveTab('resumen')}
                     >
                         RESUMEN
                     </button>
-                    <button 
-                        className={activeTab === 'productos' ? 'active' : ''} 
+                    <button
+                        className={activeTab === 'productos' ? 'active' : ''}
                         onClick={() => setActiveTab('productos')}
                     >
                         PRODUCTOS
                     </button>
-                    <button 
-                        className={activeTab === 'pedidos' ? 'active' : ''} 
+                    <button
+                        className={activeTab === 'pedidos' ? 'active' : ''}
                         onClick={() => setActiveTab('pedidos')}
                     >
                         PEDIDOS
