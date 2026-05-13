@@ -12,6 +12,12 @@ backend/node_modules/
 frontend/dist/
 frontend/dist-ssr/
 
+# Design source files
+docs/designs/
+*.psd
+*.ai
+*.prproj
+
 # Logs
 *.log
 npm-debug.log*

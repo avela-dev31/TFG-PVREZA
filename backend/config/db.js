@@ -1,5 +1,4 @@
 const mysql = require("mysql2/promise");
-const { patch } = require("../routes/usuariosRoutes");
 
 require("dotenv").config({
   path: `.env.${process.env.NODE_ENV || "development"}`,

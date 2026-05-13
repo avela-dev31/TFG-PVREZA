@@ -7,12 +7,12 @@ const User = {
     return results[0];
   },
 
-  create: async ({ nombre, email, password, altura = null, peso = null, edad = null, avatar_config = null }) => {
+  create: async ({ nombre, email, password, altura = null, peso = null, edad = null, avatar_url = null }) => {
     const sql = `
       INSERT INTO usuarios (nombre, email, password, altura, peso, edad, rol, avatar_url)
       VALUES (?, ?, ?, ?, ?, ?, 'user', ?)
     `;
-    const [result] = await db.query(sql, [nombre, email, password, altura, peso, edad, avatar_config]);
+    const [result] = await db.query(sql, [nombre, email, password, altura, peso, edad, avatar_url]);
     
     return result.insertId;
   }
