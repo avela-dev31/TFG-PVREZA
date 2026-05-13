@@ -1,37 +1,44 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProductos } from '../api/productosApi';
 import { BACKEND_URL } from '../constants';
+import usePageTitle from '../hooks/usePageTitle';
 import Banner from '../components/Banner';
 
 const Catalogo = () => {
   const { coleccion } = useParams();
-  const [productos, setProductos] = useState([]);
+  const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setLoading(true);
-    getProductos()
-      .then(res => {
-        const todos = res.data;
-        if (coleccion) {
-          // Normaliza "isla-bonita" para comparar con "Isla Bonita" de la BD
-          const filtrados = todos.filter(p => {
-            const col = (p.coleccion || '').toLowerCase().replaceAll(' ', '-');
-            return col === coleccion.toLowerCase();
-          });
-          setProductos(filtrados);
-        } else {
-          setProductos(todos);
-        }
-      })
-      .catch(err => console.error(err))
-      .finally(() => setLoading(false));
-  }, [coleccion]);
 
   const titulo = coleccion
     ? coleccion.replaceAll('-', ' ').toUpperCase()
     : 'ALL PRODUCTS';
+
+  usePageTitle(titulo);
+
+  useEffect(() => {
+    let cancelado = false;
+
+    getProductos()
+      .then(res => {
+        if (!cancelado) setTodos(res.data);
+      })
+      .catch(err => console.error(err))
+      .finally(() => {
+        if (!cancelado) setLoading(false);
+      });
+
+    return () => { cancelado = true; };
+  }, []);
+
+  const productos = useMemo(() => {
+    if (!coleccion) return todos;
+    const slug = coleccion.toLowerCase();
+    return todos.filter(p => {
+      const col = (p.coleccion || '').toLowerCase().replaceAll(' ', '-');
+      return col === slug;
+    });
+  }, [todos, coleccion]);
 
   return (
     <div>
@@ -39,15 +46,21 @@ const Catalogo = () => {
       <section style={styles.page}>
         <h2 style={styles.titulo}>{titulo}</h2>
 
-        {loading ? (
+        {loading && (
           <p style={styles.loading}>CARGANDO...</p>
-        ) : (
+        )}
+
+        {!loading && productos.length === 0 && (
+          <p style={styles.loading}>NO HAY PRODUCTOS EN ESTA COLECCIÓN.</p>
+        )}
+
+        {!loading && productos.length > 0 && (
           <div style={styles.grid}>
             {productos.map(producto => (
               <Link to={`/producto/${producto.id_producto}`} key={producto.id_producto} style={styles.card}>
                 <img
-                  src={producto.imagen_url 
-                    ? `${BACKEND_URL}${producto.imagen_url}` 
+                  src={producto.imagen_url
+                    ? `${BACKEND_URL}${producto.imagen_url}`
                     : '/assets/img/camis/cami_azul.JPG'
                   }
                   alt={producto.nombre}

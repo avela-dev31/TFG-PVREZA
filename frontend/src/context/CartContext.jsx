@@ -17,6 +17,8 @@ export const CartProvider = ({ children }) => {
     });
     const [isCartOpen, setIsCartOpen] = useState(false);
 
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+
     useEffect(() => {
         localStorage.setItem(CART_KEY, JSON.stringify(cart));
     }, [cart]);
@@ -24,27 +26,26 @@ export const CartProvider = ({ children }) => {
     // Función para añadir al carrito
     const addToCart = (producto, tallaObj) => {
         setCart((prevCart) => {
-            // Comprobamos si ya existe ese producto CON ESA TALLA en el carrito
             const itemIndex = prevCart.findIndex(
                 (item) => item.id_producto === producto.id_producto && item.id_stock === tallaObj.id_stock
             );
 
             if (itemIndex >= 0) {
-                // Si existe, le sumamos 1 a la cantidad
-                const newCart = [...prevCart];
-                newCart[itemIndex].cantidadCompra += 1;
-                return newCart;
+                return prevCart.map((item, index) =>
+                    index === itemIndex
+                        ? { ...item, cantidadCompra: item.cantidadCompra + 1 }
+                        : item
+                );
             } else {
-                // Si no existe, lo añadimos como nuevo
-                return [...prevCart, { 
-                    ...producto, 
+                return [...prevCart, {
+                    ...producto,
                     id_stock: tallaObj.id_stock,
                     talla: tallaObj.talla,
-                    cantidadCompra: 1 
+                    cantidadCompra: 1
                 }];
             }
         });
-        setIsCartOpen(true); 
+        setIsCartOpen(true);
     };
 
     // Función para eliminar un item concreto
@@ -55,9 +56,8 @@ export const CartProvider = ({ children }) => {
     const cartTotal = cart.reduce((total, item) => total + (item.precio * item.cantidadCompra), 0);
 
     const value = useMemo(
-        () => ({ cart, isCartOpen, setIsCartOpen, addToCart, removeFromCart, cartTotal }),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [cart, isCartOpen, cartTotal]
+        () => ({ cart, isCartOpen, setIsCartOpen, addToCart, removeFromCart, cartTotal, isMenuOpen, setIsMenuOpen }),
+        [cart, isCartOpen, cartTotal, isMenuOpen]
     );
 
     return (

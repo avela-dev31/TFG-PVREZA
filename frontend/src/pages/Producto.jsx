@@ -13,7 +13,7 @@ const FALLBACK_MODEL = "Avatar_Pvreza.glb";
 
 const Producto = () => {
   const { id } = useParams();
-  const { addToCart } = useContext(CartContext);
+  const { addToCart, isCartOpen, isMenuOpen } = useContext(CartContext);
   const { user } = useAuth();
 
   const [producto, setProducto] = useState(null);
@@ -70,7 +70,7 @@ const Producto = () => {
 
   return (
     <main>
-    <Banner/>
+    {!isTryOnOpen && !isCartOpen && !isMenuOpen && <Banner />}
       <section className="product">
         {/* CARRUSEL */}
         <div className="carousel">
