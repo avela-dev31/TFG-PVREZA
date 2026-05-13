@@ -4,11 +4,14 @@ import { getProductos } from '../api/productosApi';
 import { BACKEND_URL } from '../constants';
 import usePageTitle from '../hooks/usePageTitle';
 import Banner from '../components/Banner';
+import { useContext } from 'react';
+import { CartContext } from '../context/CartContext';
 
 const Catalogo = () => {
   const { coleccion } = useParams();
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isCartOpen, isMenuOpen } = useContext(CartContext);
 
   const titulo = coleccion
     ? coleccion.replaceAll('-', ' ').toUpperCase()
@@ -42,7 +45,7 @@ const Catalogo = () => {
 
   return (
     <div>
-      <Banner />
+    {!isCartOpen && !isMenuOpen && <Banner />}
       <section style={styles.page}>
         <h2 style={styles.titulo}>{titulo}</h2>
 

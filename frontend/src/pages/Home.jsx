@@ -1,27 +1,12 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import usePageTitle from '../hooks/usePageTitle';
-import Banner from "../components/Banner";
+import Banner from '../components/Banner';
+import { CartContext } from '../context/CartContext';
 
-
-// ============================================
-// CONFIGURA AQUÍ TU HERO
-// Pon 'video' o 'carousel'
-// ============================================
-const HERO_TYPE = 'video'; // 'video' | 'carousel'
-
-const HERO_VIDEOS = [
-  '/assets/video/video-fondo.mp4',
-  '/assets/video/AB1946FC-E73B-43A4-A7BF-9C71844C20F9.mov',
-];
-
-const HERO_FOTOS = [
-  '/assets/img/ISLA BONITA/IMG_1943.JPG',
-  '/assets/img/ISLA_BONITA/IMG_1866.JPG',
-  '/assets/img/camis/cami_gris.JPG',
-];
-// ============================================
+const VIDEO_DESKTOP = '/assets/video/video-fondo.mp4';
+const VIDEO_MOBILE = '/assets/video/AB1946FC-E73B-43A4-A7BF-9C71844C20F9.mov';
 
 const SplashScreen = ({ onFinish }) => {
   useEffect(() => {
@@ -36,80 +21,22 @@ const SplashScreen = ({ onFinish }) => {
   );
 };
 
-SplashScreen.propTypes = {
-  onFinish: PropTypes.func.isRequired,
-};
-
-const HeroCarousel = () => {
-  const [activa, setActiva] = useState(0);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiva(prev => (prev === HERO_FOTOS.length - 1 ? 0 : prev + 1));
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
-
-  return (
-    <div style={heroStyles.wrapper}>
-      {HERO_FOTOS.map((foto, index) => (
-        <img
-          key={foto}
-          src={foto}
-          alt={`Hero ${index + 1}`}
-          style={{
-            ...heroStyles.slide,
-            opacity: activa === index ? 1 : 0,
-          }}
-        />
-      ))}
-      {/* Puntos */}
-      <div style={heroStyles.dots}>
-        {HERO_FOTOS.map((foto, index) => (
-          <button
-            key={foto}
-            type="button"
-            aria-label={`Ir a imagen ${index + 1}`}
-            onClick={() => setActiva(index)}
-            style={{ ...heroStyles.dot, backgroundColor: activa === index ? '#fff' : 'rgba(255,255,255,0.4)' }}
-          />
-        ))}
-      </div>
-    </div>
-  );
-};
+SplashScreen.propTypes = { onFinish: PropTypes.func.isRequired };
 
 const HeroVideo = () => {
-  // 1. Estado para saber si estamos en móvil (pantallas de menos de 768px de ancho)
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
-  // 2. Efecto para escuchar si el usuario redimensiona la ventana
   useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    
+    const handleResize = () => setIsMobile(window.innerWidth < 768);
     window.addEventListener('resize', handleResize);
-    // Limpiamos el evento al desmontar
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  // 3. Elegimos el vídeo según el dispositivo
-  // IMPORTANTE: Asegúrate de tener estos dos archivos en tu carpeta public/assets/video/
-  const videoSource = isMobile 
-    ? '/assets/video/AB1946FC-E73B-43A4-A7BF-9C71844C20F9.mov' 
-    : '/assets/video/video-fondo.mp4';
+  const videoSource = isMobile ? VIDEO_MOBILE : VIDEO_DESKTOP;
 
   return (
     <div style={heroStyles.wrapper}>
-      <video
-        key={videoSource} // La clave hace que React recargue el vídeo si cambia de móvil a desktop
-        autoPlay
-        muted
-        loop
-        playsInline
-        style={heroStyles.video}
-      >
+      <video key={videoSource} autoPlay muted loop playsInline style={heroStyles.video}>
         <source src={videoSource} type="video/mp4" />
       </video>
     </div>
@@ -117,7 +44,8 @@ const HeroVideo = () => {
 };
 
 const Home = () => {
-  usePageTitle("Inicio");
+  usePageTitle('Inicio');
+  const { isCartOpen, isMenuOpen } = useContext(CartContext);
   const [showSplash, setShowSplash] = useState(true);
 
   if (showSplash) {
@@ -126,13 +54,12 @@ const Home = () => {
 
   return (
     <div>
-      {/* HERO */}
-      <section style={{ position: 'relative', height: '90vh', overflow: 'hidden' }}>
-      <Banner/>
-        {HERO_TYPE === 'carousel' ? <HeroCarousel /> : <HeroVideo />}
+      {!isCartOpen && !isMenuOpen && <Banner />}
+
+      <section style={heroStyles.section}>
+        <HeroVideo />
       </section>
 
-      {/* DROPS */}
       <section style={styles.drops}>
         <h2 style={styles.sectionTitle}>DROPS</h2>
         <div style={styles.dropsGrid}>
@@ -150,10 +77,6 @@ const Home = () => {
   );
 };
 
-// ============================================
-// ESTILOS
-// ============================================
-
 const splashStyles = {
   overlay: {
     position: 'fixed', inset: 0, backgroundColor: '#fff',
@@ -164,27 +87,9 @@ const splashStyles = {
 };
 
 const heroStyles = {
+  section: { position: 'relative', height: '90vh', overflow: 'hidden' },
   wrapper: { position: 'relative', width: '100%', height: '100%' },
-  slide: {
-    position: 'absolute', inset: 0, width: '100%', height: '100%',
-    objectFit: 'cover', transition: 'opacity 1s ease-in-out',
-  },
   video: { width: '100%', height: '100%', objectFit: 'cover' },
-  overlay: {
-    position: 'absolute', inset: 0, backgroundColor: 'rgba(0,0,0,0.35)',
-    display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-  },
-  tag: { color: '#fff', fontSize: '11px', letterSpacing: '4px', marginBottom: '8px' },
-  title: { color: '#fff', fontSize: '48px', letterSpacing: '8px', fontWeight: '700', margin: '0 0 24px' },
-  btn: {
-    padding: '14px 40px', backgroundColor: '#fff', color: '#000',
-    textDecoration: 'none', fontSize: '12px', letterSpacing: '3px', fontWeight: '600',
-  },
-  dots: {
-    position: 'absolute', bottom: '24px', width: '100%',
-    display: 'flex', justifyContent: 'center', gap: '8px', zIndex: 10,
-  },
-  dot: { width: '8px', height: '8px', borderRadius: '50%', cursor: 'pointer', transition: 'background-color 0.3s' },
 };
 
 const styles = {
