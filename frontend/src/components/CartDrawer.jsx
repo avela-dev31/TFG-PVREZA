@@ -1,10 +1,12 @@
 import { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { BACKEND_URL } from '../constants';
 import '../styles/cart.css';
 
 const CartDrawer = () => {
     const { cart, isCartOpen, setIsCartOpen, removeFromCart, cartTotal } = useContext(CartContext);
+    const navigate = useNavigate();
 
     return (
         <>
@@ -48,7 +50,7 @@ const CartDrawer = () => {
                             <span>TOTAL</span>
                             <span>{cartTotal.toFixed(2)} €</span>
                         </div>
-                        <button className="checkout-btn">PASAR POR CAJA</button>
+                        <button className="checkout-btn" onClick={() => { setIsCartOpen(false); navigate('/carrito'); }}>PASAR POR CAJA</button>
                     </div>
                 )}
             </div>

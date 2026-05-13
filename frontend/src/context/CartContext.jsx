@@ -53,10 +53,12 @@ export const CartProvider = ({ children }) => {
         setCart(prevCart => prevCart.filter(item => item.id_stock !== id_stock));
     };
 
+    const clearCart = () => setCart([]);
+
     const cartTotal = cart.reduce((total, item) => total + (item.precio * item.cantidadCompra), 0);
 
     const value = useMemo(
-        () => ({ cart, isCartOpen, setIsCartOpen, addToCart, removeFromCart, cartTotal, isMenuOpen, setIsMenuOpen }),
+        () => ({ cart, isCartOpen, setIsCartOpen, addToCart, removeFromCart, clearCart, cartTotal, isMenuOpen, setIsMenuOpen }),
         [cart, isCartOpen, cartTotal, isMenuOpen]
     );
 

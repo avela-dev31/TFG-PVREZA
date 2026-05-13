@@ -19,9 +19,13 @@ const Order = {
 
   getByUser: async (id_usuario) => {
     const [results] = await db.query(
-      `SELECT p.*, d.id_stock, d.cantidad, d.precio_unitario 
+      `SELECT p.id_pedido, p.total, p.estado, p.fecha_pedido,
+              d.cantidad, d.precio_unitario,
+              pr.nombre, pr.imagen_url, s.talla
        FROM pedidos p
        JOIN detalles_pedido d ON p.id_pedido = d.id_pedido
+       JOIN stock s ON d.id_stock = s.id_stock
+       JOIN productos pr ON s.id_producto = pr.id_producto
        WHERE p.id_usuario = ?
        ORDER BY p.fecha_pedido DESC`,
       [id_usuario]
@@ -39,19 +43,23 @@ const Order = {
     return results;
   },
 
-checkStock: async (id_stock) => {
-  const [results] = await db.query(
-    'SELECT cantidad FROM stock WHERE id_stock = ?', [id_stock]
-  );
-  return results[0];
-},
+  checkStock: async (id_stock) => {
+    const [results] = await db.query(
+      `SELECT s.cantidad, p.precio
+       FROM stock s
+       JOIN productos p ON s.id_producto = p.id_producto
+       WHERE s.id_stock = ?`,
+      [id_stock]
+    );
+    return results[0];
+  },
 
-decreaseStock: async (id_stock, cantidad) => {
-  await db.query(
-    'UPDATE stock SET cantidad = cantidad - ? WHERE id_stock = ?',
-    [cantidad, id_stock]
-  );
-},
+  decreaseStock: async (id_stock, cantidad) => {
+    await db.query(
+      'UPDATE stock SET cantidad = cantidad - ? WHERE id_stock = ?',
+      [cantidad, id_stock]
+    );
+  },
 
   getMonthSales: async () => {
     const [results] = await db.query(`

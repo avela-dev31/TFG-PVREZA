@@ -1,11 +1,12 @@
 import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { BACKEND_URL } from '../constants';
 import '../styles/carrito-page.css';
 
 const Carrito = () => {
     const { cart, removeFromCart, cartTotal } = useContext(CartContext);
+    const navigate = useNavigate();
 
     if (cart.length === 0) {
         return (
@@ -72,7 +73,7 @@ const Carrito = () => {
                         <span>{cartTotal.toFixed(2)} €</span>
                     </div>
                     
-                    <button className="btn-checkout">TRAMITAR PEDIDO</button>
+                    <button className="btn-checkout" onClick={() => navigate('/checkout')}>TRAMITAR PEDIDO</button>
                     
                     <div className="payment-methods">
                         <p>MÉTODOS DE PAGO ACEPTADOS</p>

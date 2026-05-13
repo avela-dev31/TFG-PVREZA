@@ -2,7 +2,6 @@ const Order = require('../models/Order');
 
 const createOrder = async (req, res) => {
   const { items } = req.body;
-  // items = [{ id_stock, cantidad, precio_unitario }, ...]
   const id_usuario = req.user.id;
 
   if (!items || items.length === 0) {
@@ -10,6 +9,7 @@ const createOrder = async (req, res) => {
   }
 
   try {
+    const itemsVerificados = [];
     for (const item of items) {
       const stockData = await Order.checkStock(item.id_stock);
       if (!stockData || stockData.cantidad < item.cantidad) {
@@ -17,13 +17,20 @@ const createOrder = async (req, res) => {
           message: `Stock insuficiente para el producto con id_stock ${item.id_stock}`
         });
       }
+      itemsVerificados.push({
+        id_stock: item.id_stock,
+        cantidad: item.cantidad,
+        precio_unitario: stockData.precio
+      });
     }
 
-    const total = items.reduce((sum, item) => sum + item.precio_unitario * item.cantidad, 0);
+    const total = itemsVerificados.reduce(
+      (sum, item) => sum + Number(item.precio_unitario) * item.cantidad, 0
+    );
 
     const id_pedido = await Order.create(id_usuario, total);
 
-    for (const item of items) {
+    for (const item of itemsVerificados) {
       await Order.addDetail(id_pedido, item.id_stock, item.cantidad, item.precio_unitario);
       await Order.decreaseStock(item.id_stock, item.cantidad);
     }
