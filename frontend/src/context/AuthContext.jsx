@@ -1,10 +1,8 @@
 /* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState } from 'react';
 
-// 1. Creamos el contexto (No hace falta exportarlo, usamos el hook)
 const AuthContext = createContext();
 
-// 2. Creamos y exportamos el Provider
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(() => {
     const savedUser = localStorage.getItem('user');
@@ -30,5 +28,4 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// 3. Exportamos tu Custom Hook (¡La forma pro de usarlo!)
 export const useAuth = () => useContext(AuthContext);

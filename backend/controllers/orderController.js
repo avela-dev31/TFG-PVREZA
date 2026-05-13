@@ -10,7 +10,6 @@ const createOrder = async (req, res) => {
   }
 
   try {
-    // 1. Verificar stock de cada item
     for (const item of items) {
       const stockData = await Order.checkStock(item.id_stock);
       if (!stockData || stockData.cantidad < item.cantidad) {
@@ -20,13 +19,10 @@ const createOrder = async (req, res) => {
       }
     }
 
-    // 2. Calcular total
     const total = items.reduce((sum, item) => sum + item.precio_unitario * item.cantidad, 0);
 
-    // 3. Crear el pedido
     const id_pedido = await Order.create(id_usuario, total);
 
-    // 4. Insertar detalles y descontar stock
     for (const item of items) {
       await Order.addDetail(id_pedido, item.id_stock, item.cantidad, item.precio_unitario);
       await Order.decreaseStock(item.id_stock, item.cantidad);

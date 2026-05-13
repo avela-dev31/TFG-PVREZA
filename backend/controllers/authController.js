@@ -4,26 +4,21 @@ const { validationResult } = require('express-validator');
 const User = require('../models/User');
 
 const register = async (req, res) => {
-  // 1. Validar campos
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  // 💥 AÑADIDO: Extraemos avatar_url de lo que nos envía React
   const { nombre, email, password, altura, peso, edad, avatar_url } = req.body;
 
   try {
-    // 2. Comprobar si el email ya existe
     const existingUser = await User.findByEmail(email);
     if (existingUser) {
       return res.status(409).json({ message: 'El email ya está registrado' });
     }
 
-    // 3. Hashear la contraseña
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 4. Crear el usuario
     const newUserId = await User.create({
       nombre,
       email,
@@ -31,10 +26,9 @@ const register = async (req, res) => {
       altura,
       peso,
       edad,
-      avatar_url // 💥 AÑADIDO: Se lo pasamos a tu modelo
+      avatar_url
     });
 
-    // 5. Generar token JWT
     const token = jwt.sign(
       { id: newUserId, email, rol: 'user' },
       process.env.JWT_SECRET,
@@ -44,12 +38,12 @@ const register = async (req, res) => {
     res.status(201).json({
       message: 'Usuario registrado correctamente',
       token,
-      user: { 
-        id: newUserId, 
-        nombre, 
-        email, 
-        rol: 'user', 
-        avatar_url // 💥 AÑADIDO: Lo devolvemos para que el Perfil de React lo pueda cargar al instante
+      user: {
+        id: newUserId,
+        nombre,
+        email,
+        rol: 'user',
+        avatar_url
       }
     });
 
@@ -60,7 +54,6 @@ const register = async (req, res) => {
 };
 
 const login = async (req, res) => {
-  // 1. Validar campos
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
     return res.status(400).json({ errors: errors.array() });
@@ -69,19 +62,16 @@ const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    // 2. Comprobar si el usuario existe
     const user = await User.findByEmail(email);
     if (!user) {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
 
-    // 3. Comprobar la contraseña
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
 
-    // 4. Generar token JWT
     const token = jwt.sign(
       { id: user.id_usuario, email: user.email, rol: user.rol },
       process.env.JWT_SECRET,

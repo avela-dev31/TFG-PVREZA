@@ -14,7 +14,6 @@ document.addEventListener("DOMContentLoaded", function () {
     onApprove: function (data, actions) {
       return actions.order.capture().then(function (details) {
         alert('Gracias por tu compra, ' + details.payer.name.given_name + '!');
-        // Puedes redirigir o actualizar la UI aquí
       });
     },
     onError: function (err) {

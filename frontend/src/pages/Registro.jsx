@@ -5,8 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import AvatarCreator from '../components/AvatarCreator'; 
 
 const Registro = () => {
-  // 💥 1. AÑADIDO: altura y peso al estado inicial
-  const [form, setForm] = useState({ 
+  const [form, setForm] = useState({
     nombre: '', 
     email: '', 
     password: '', 
@@ -102,7 +101,6 @@ const Registro = () => {
               required
             />
 
-            {/* 💥 2. AÑADIDO: Inputs para el algoritmo 3D */}
             <div style={styles.row}>
                 <input
                 type="number"
@@ -150,8 +148,7 @@ const Registro = () => {
                 <p style={styles.subtitle}>Guardando perfil en la base de datos de PVREZA</p>
              </div>
           ) : (
-             /* 💥 3. AÑADIDO: Le pasamos los datos convirtiéndolos a Número (los inputs de HTML devuelven texto) */
-             <AvatarCreator 
+             <AvatarCreator
                 onAvatarGuardado={handleRegistroFinal} 
                 altura={Number(form.altura)} 
                 peso={Number(form.peso)}

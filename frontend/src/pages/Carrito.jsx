@@ -77,7 +77,6 @@ const Carrito = () => {
                     <div className="payment-methods">
                         <p>MÉTODOS DE PAGO ACEPTADOS</p>
                         <div className="icons">
-                            {/* Aquí podrías poner iconos de Visa, Mastercard, etc */}
                             <span>VISA</span> <span>MC</span> <span>PAYPAL</span>
                         </div>
                     </div>
