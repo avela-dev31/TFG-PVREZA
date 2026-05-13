@@ -96,6 +96,8 @@ const login = async (req, res) => {
         nombre: user.nombre,
         email: user.email,
         rol: user.rol,
+        altura: user.altura,
+        peso: user.peso,
         avatar_url: user.avatar_url
       }
     });

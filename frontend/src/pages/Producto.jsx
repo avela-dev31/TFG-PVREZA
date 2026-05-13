@@ -14,7 +14,7 @@ const FALLBACK_MODEL = "Avatar_Pvreza.glb";
 const Producto = () => {
   const { id } = useParams();
   const { addToCart } = useContext(CartContext);
-  const { isAuthenticated, user } = useAuth();
+  const { user } = useAuth();
 
   const [producto, setProducto] = useState(null);
   const [stock, setStock] = useState([]);
@@ -52,8 +52,8 @@ const Producto = () => {
   }, [id]);
 
   const handleAbrirProbador = () => {
-    setAltura(isAuthenticated && user ? (user.altura || 175) : 175);
-    setPeso(isAuthenticated && user ? (user.peso || 75) : 75);
+    setAltura(user && user ? (user.altura || 175) : 175);
+    setPeso(user && user ? (user.peso || 75) : 75);
     setIsTryOnOpen(true);
   };
 
@@ -70,7 +70,7 @@ const Producto = () => {
 
   return (
     <main>
-      <Banner />
+    <Banner/>
       <section className="product">
         {/* CARRUSEL */}
         <div className="carousel">
@@ -154,9 +154,9 @@ const Producto = () => {
               </div>
 
               <div className="modal-controls">
-                <h2>{isAuthenticated ? "TUS MEDIDAS GUARDADAS" : "CONFIGURA TU AVATAR"}</h2>
+                <h2>{user ? "TUS MEDIDAS GUARDADAS" : "CONFIGURA TU AVATAR"}</h2>
 
-                {isAuthenticated ? (
+                {user ? (
                   <p className="user-greeting">
                     Hola <strong>{user.nombre}</strong>, estamos proyectando tu avatar con los datos de tu perfil.
                   </p>
@@ -182,7 +182,7 @@ const Producto = () => {
                   <p><strong>Talla recomendada:</strong> {altura > 180 || peso > 85 ? "XL" : "L"}</p>
                 </div>
 
-                {!isAuthenticated && (
+                {!user && (
                   <Link to="/login" className="login-prompt-link">
                     ¿Quieres guardar tus medidas? Inicia sesión
                   </Link>

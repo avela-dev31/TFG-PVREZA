@@ -126,9 +126,9 @@ const Home = () => {
 
   return (
     <div>
-    <Banner/>
       {/* HERO */}
       <section style={{ position: 'relative', height: '90vh', overflow: 'hidden' }}>
+      <Banner/>
         {HERO_TYPE === 'carousel' ? <HeroCarousel /> : <HeroVideo />}
       </section>
 

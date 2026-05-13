@@ -2,6 +2,14 @@ const db = require('../config/db');
 
 const Product = {
 
+  create: async ({ nombre, descripcion, precio, coleccion, imagen_url = null }) => {
+    const [result] = await db.query(
+      'INSERT INTO productos (nombre, descripcion, precio, coleccion, imagen_url) VALUES (?, ?, ?, ?, ?)',
+      [nombre, descripcion, precio, coleccion, imagen_url]
+    );
+    return result.insertId;
+  },
+
   getAll: async () => {
     const [results] = await db.query(`
       SELECT p.*,

@@ -1,5 +1,21 @@
 const Product = require('../models/Products');
 
+const create = async (req, res) => {
+  try {
+    const { nombre, descripcion, precio, coleccion, imagen_url } = req.body;
+
+    if (!nombre || precio == null) {
+      return res.status(400).json({ message: 'Nombre y precio son obligatorios' });
+    }
+
+    const id = await Product.create({ nombre, descripcion, precio, coleccion, imagen_url });
+    res.status(201).json({ message: 'Producto creado correctamente', id_producto: id });
+  } catch (error) {
+    console.error('Error en create:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
 const getAll = async (req, res) => {
   try {
     const productos = await Product.getAll();
@@ -68,4 +84,4 @@ const getAllWithStock = async (req, res) => {
   }
 };
 
-module.exports = { getAll, getById, getVariantes, update, remove, getAllWithStock };
+module.exports = { create, getAll, getById, getVariantes, update, remove, getAllWithStock };
