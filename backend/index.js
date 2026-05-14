@@ -14,6 +14,8 @@ const pedidosRoutes = require('./routes/pedidosRoutes');
 const app = express();
 const port = process.env.PORT || 3000;
 
+app.set('trust proxy', 1);
+
 // ============================================
 // SEGURIDAD — cabeceras HTTP
 // ============================================
