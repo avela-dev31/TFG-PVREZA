@@ -18,9 +18,9 @@ const AvatarEquipado = ({ altura, peso, modeloCamiseta }) => {
     );
 };
 
-const AvatarCreator = ({ altura, peso, modeloCamiseta = 'Avatar_Pvreza.glb' }) => {
+const AvatarCreator = ({ altura, peso, modeloCamiseta = 'Avatar_Pvreza.glb', onAvatarGuardado }) => {
     return (
-        <div style={{ width: '100%', height: '100%' }}>
+        <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Canvas
                 camera={{ position: [0, 0, 4.5], fov: 40 }}
                 gl={{ powerPreference: 'high-performance' }}
@@ -37,6 +37,18 @@ const AvatarCreator = ({ altura, peso, modeloCamiseta = 'Avatar_Pvreza.glb' }) =
                     <OrbitControls enableZoom={true} />
                 </Suspense>
             </Canvas>
+            {onAvatarGuardado && (
+                <button
+                    onClick={() => onAvatarGuardado(null)}
+                    style={{
+                        position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)',
+                        padding: '14px 40px', backgroundColor: '#000', color: '#fff', border: 'none',
+                        cursor: 'pointer', fontSize: '13px', letterSpacing: '3px', fontWeight: '600',
+                    }}
+                >
+                    CONFIRMAR REGISTRO
+                </button>
+            )}
         </div>
     );
 };
