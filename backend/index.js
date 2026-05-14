@@ -23,6 +23,9 @@ app.use(helmet({
   crossOriginResourcePolicy: { policy: "cross-origin" }, // permite servir imágenes al frontend
 }));
 
+// Archivos estáticos (uploads de imágenes de producto) — antes de CORS
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // ============================================
 // CORS — solo acepta el origen del frontend
 // ============================================
@@ -30,8 +33,7 @@ const ALLOWED_ORIGINS = (process.env.FRONTEND_URL || 'http://localhost:5173').sp
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Permite peticiones sin origin (Postman, curl) solo en desarrollo
-    if (!origin && process.env.NODE_ENV !== 'production') return callback(null, true);
+    if (!origin) return callback(null, true);
     if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
     callback(new Error(`CORS: origen no permitido — ${origin}`));
   },
@@ -43,9 +45,6 @@ app.use(cors({
 // PARSEO — limita el tamaño del body (evita ataques DoS)
 // ============================================
 app.use(express.json({ limit: '10kb' }));
-
-// Archivos estáticos (uploads de imágenes de producto)
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // ============================================
 // RUTAS
