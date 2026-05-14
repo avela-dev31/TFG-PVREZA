@@ -3,22 +3,22 @@ const db = require('../config/db');
 const Order = {
 
   create: async (id_usuario, total) => {
-    const [result] = await db.query(
-      'INSERT INTO pedidos (id_usuario, total, estado) VALUES (?, ?, "pendiente")',
+    const { rows } = await db.query(
+      "INSERT INTO pedidos (id_usuario, total, estado) VALUES ($1, $2, 'pendiente') RETURNING id_pedido",
       [id_usuario, total]
     );
-    return result.insertId;
+    return rows[0].id_pedido;
   },
 
   addDetail: async (id_pedido, id_stock, cantidad, precio_unitario) => {
     await db.query(
-      'INSERT INTO detalles_pedido (id_pedido, id_stock, cantidad, precio_unitario) VALUES (?, ?, ?, ?)',
+      'INSERT INTO detalles_pedido (id_pedido, id_stock, cantidad, precio_unitario) VALUES ($1, $2, $3, $4)',
       [id_pedido, id_stock, cantidad, precio_unitario]
     );
   },
 
   getByUser: async (id_usuario) => {
-    const [results] = await db.query(
+    const { rows } = await db.query(
       `SELECT p.id_pedido, p.total, p.estado, p.fecha_pedido,
               d.cantidad, d.precio_unitario,
               pr.nombre, pr.imagen_url, s.talla
@@ -26,62 +26,62 @@ const Order = {
        JOIN detalles_pedido d ON p.id_pedido = d.id_pedido
        JOIN stock s ON d.id_stock = s.id_stock
        JOIN productos pr ON s.id_producto = pr.id_producto
-       WHERE p.id_usuario = ?
+       WHERE p.id_usuario = $1
        ORDER BY p.fecha_pedido DESC`,
       [id_usuario]
     );
-    return results;
+    return rows;
   },
 
   getAll: async () => {
-    const [results] = await db.query(
+    const { rows } = await db.query(
       `SELECT p.*, d.id_stock, d.cantidad, d.precio_unitario
        FROM pedidos p
        JOIN detalles_pedido d ON p.id_pedido = d.id_pedido
        ORDER BY p.fecha_pedido DESC`
     );
-    return results;
+    return rows;
   },
 
   checkStock: async (id_stock) => {
-    const [results] = await db.query(
+    const { rows } = await db.query(
       `SELECT s.cantidad, p.precio
        FROM stock s
        JOIN productos p ON s.id_producto = p.id_producto
-       WHERE s.id_stock = ?`,
+       WHERE s.id_stock = $1`,
       [id_stock]
     );
-    return results[0];
+    return rows[0];
   },
 
   decreaseStock: async (id_stock, cantidad) => {
     await db.query(
-      'UPDATE stock SET cantidad = cantidad - ? WHERE id_stock = ?',
+      'UPDATE stock SET cantidad = cantidad - $1 WHERE id_stock = $2',
       [cantidad, id_stock]
     );
   },
 
   getMonthSales: async () => {
-    const [results] = await db.query(`
+    const { rows } = await db.query(`
       SELECT COALESCE(SUM(total), 0) AS ventas_mes
       FROM pedidos
-      WHERE MONTH(fecha_pedido) = MONTH(CURRENT_DATE())
-        AND YEAR(fecha_pedido) = YEAR(CURRENT_DATE())
+      WHERE EXTRACT(MONTH FROM fecha_pedido) = EXTRACT(MONTH FROM CURRENT_DATE)
+        AND EXTRACT(YEAR FROM fecha_pedido) = EXTRACT(YEAR FROM CURRENT_DATE)
     `);
-    return results[0].ventas_mes;
+    return rows[0].ventas_mes;
   },
 
   getActiveOrdersCount: async () => {
-    const [results] = await db.query(`
+    const { rows } = await db.query(`
       SELECT COUNT(*) AS pedidos_activos
       FROM pedidos
       WHERE estado IN ('pendiente', 'pagado', 'enviado')
     `);
-    return results[0].pedidos_activos;
+    return rows[0].pedidos_activos;
   },
 
   getCriticalStockCount: async () => {
-    const [results] = await db.query(`
+    const { rows } = await db.query(`
       SELECT COUNT(*) AS stock_critico
       FROM (
         SELECT p.id_producto
@@ -91,7 +91,7 @@ const Order = {
         HAVING COALESCE(SUM(s.cantidad), 0) = 0
       ) AS agotados
     `);
-    return results[0].stock_critico;
+    return rows[0].stock_critico;
   }
 
 };

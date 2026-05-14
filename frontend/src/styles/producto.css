@@ -241,6 +241,70 @@ details ul {
 }
 
 /* =========================================
+   4b. GUÍA DE TALLAS
+   ========================================= */
+.guia-tallas-img {
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #eee;
+}
+
+/* =========================================
+   4c. OTROS PRODUCTOS (Navegación sin retroceder)
+   ========================================= */
+.otros-productos {
+    max-width: 1100px;
+    margin: 0 auto 60px;
+    padding: 0 24px;
+}
+
+.otros-productos-titulo {
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: #999;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.otros-productos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 24px;
+}
+
+.otro-producto-card {
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    text-align: left;
+    transition: opacity 0.2s;
+}
+
+.otro-producto-card:hover {
+    opacity: 0.75;
+}
+
+.otro-producto-card img {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+}
+
+.otro-producto-nombre {
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+
+.otro-producto-precio {
+    font-size: 13px;
+    color: #666;
+}
+
+/* =========================================
    5. FOOTER
    ========================================= */
 footer {
@@ -454,6 +518,11 @@ input[type=range]::-webkit-slider-thumb {
 
     .modal-controls {
         padding: 20px;
+    }
+
+    .otros-productos-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
     }
 }
 

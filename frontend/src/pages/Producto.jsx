@@ -1,12 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState, useContext } from "react";
-import { useParams, Link } from "react-router-dom";
-import { getProductoById } from "../api/productosApi";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import { getProductoById, getProductos } from "../api/productosApi";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { BACKEND_URL } from "../constants";
 import AvatarCreator from "../components/AvatarCreator";
 import Banner from "../components/Banner";
+import guiaTallasImg from "../../assets/img/guia_tallas.png";
 import "../styles/producto.css";
 
 const FALLBACK_MODEL = "Avatar_Pvreza.glb";
@@ -16,12 +17,15 @@ const Producto = () => {
   const { addToCart, isCartOpen, isMenuOpen } = useContext(CartContext);
   const { user } = useAuth();
 
+  const navigate = useNavigate();
+
   const [producto, setProducto] = useState(null);
   const [stock, setStock] = useState([]);
   const [imagenes, setImagenes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [tallaSeleccionada, setTallaSeleccionada] = useState(null);
   const [fotoActiva, setFotoActiva] = useState(0);
+  const [otrosProductos, setOtrosProductos] = useState([]);
 
   const [isTryOnOpen, setIsTryOnOpen] = useState(false);
   const [altura, setAltura] = useState(175);
@@ -49,6 +53,15 @@ const Producto = () => {
       })
       .catch((err) => console.error("Error obteniendo el producto:", err))
       .finally(() => setLoading(false));
+  }, [id]);
+
+  useEffect(() => {
+    getProductos()
+      .then((res) => {
+        const otros = res.data.filter((p) => String(p.id_producto) !== String(id));
+        setOtrosProductos(otros);
+      })
+      .catch((err) => console.error("Error obteniendo otros productos:", err));
   }, [id]);
 
   const handleAbrirProbador = () => {
@@ -139,8 +152,39 @@ const Producto = () => {
             <summary><strong>DETALLES DEL PRODUCTO</strong></summary>
             <p>{producto.descripcion}</p>
           </details>
+
+          <details className="product-details-section">
+            <summary><strong>GUÍA DE TALLAS</strong></summary>
+            <img
+              src={guiaTallasImg}
+              alt="Guía de tallas"
+              className="guia-tallas-img"
+            />
+          </details>
         </div>
       </section>
+
+      {otrosProductos.length > 0 && (
+        <section className="otros-productos">
+          <h2 className="otros-productos-titulo">TAMBIÉN TE PUEDE GUSTAR</h2>
+          <div className="otros-productos-grid">
+            {otrosProductos.map((p) => (
+              <button
+                key={p.id_producto}
+                className={`otro-producto-card`}
+                onClick={() => navigate(`/producto/${p.id_producto}`)}
+              >
+                <img
+                  src={p.imagen_url ? `${BACKEND_URL}${p.imagen_url}` : ''}
+                  alt={p.nombre}
+                />
+                <p className="otro-producto-nombre">{p.nombre}</p>
+                <p className="otro-producto-precio">{p.precio} €</p>
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* MODAL PROBADOR 3D */}
       {isTryOnOpen && (
