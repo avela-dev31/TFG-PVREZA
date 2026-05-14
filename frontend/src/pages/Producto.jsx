@@ -163,7 +163,7 @@ const Producto = () => {
           </details>
         </div>
       </section>
-
+      
       {otrosProductos.length > 0 && (
         <section className="otros-productos">
           <h2 className="otros-productos-titulo">TAMBIÉN TE PUEDE GUSTAR</h2>
