@@ -27,8 +27,8 @@ const Registro = () => {
   const handleSiguientePaso = (e) => {
     e.preventDefault(); 
     
-    if (form.password.length < 6) {
-      setError('La contraseña debe tener al menos 6 caracteres');
+    if (form.password.length < 8 || !/[A-Z]/.test(form.password) || !/[0-9]/.test(form.password)) {
+      setError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un número');
       return;
     }
     
@@ -94,7 +94,7 @@ const Registro = () => {
             <input
               type="password"
               name="password"
-              placeholder="Contraseña (mín. 6 caracteres)"
+              placeholder="Contraseña (mín. 8 caract., 1 mayúsc., 1 núm.)"
               value={form.password}
               onChange={handleChange}
               style={styles.input}

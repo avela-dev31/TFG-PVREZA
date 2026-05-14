@@ -18,7 +18,7 @@ const AvatarEquipado = ({ altura, peso, modeloCamiseta }) => {
     );
 };
 
-const AvatarCreator = ({ altura, peso, modeloCamiseta }) => {
+const AvatarCreator = ({ altura, peso, modeloCamiseta = 'Avatar_Pvreza.glb' }) => {
     return (
         <div style={{ width: '100%', height: '100%' }}>
             <Canvas
