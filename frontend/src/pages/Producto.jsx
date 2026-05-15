@@ -10,7 +10,7 @@ import Banner from "../components/Banner";
 import guiaTallasImg from "../../assets/img/guia_tallas.png";
 import "../styles/producto.css";
 
-const FALLBACK_MODEL = "Avatar_Pvreza.glb";
+const FALLBACK_MODEL = "camiseta_azul.glb";
 
 const Producto = () => {
   const { id } = useParams();
