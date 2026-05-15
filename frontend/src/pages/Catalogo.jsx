@@ -5,6 +5,7 @@ import { BACKEND_URL } from '../constants';
 import usePageTitle from '../hooks/usePageTitle';
 import Banner from '../components/Banner';
 import { CartContext } from '../context/CartContext';
+import '../styles/catalogo.css';
 
 const Catalogo = () => {
   const { coleccion } = useParams();
@@ -70,35 +71,33 @@ const Catalogo = () => {
   return (
     <div>
       {!isCartOpen && !isMenuOpen && <Banner />}
-      <section style={styles.page}>
-        <h2 style={styles.titulo}>{titulo}</h2>
+      <section className="catalogo-page">
+        <h2 className="catalogo-titulo">{titulo}</h2>
 
-        <div style={styles.filters}>
+        <div className="catalogo-filters">
           <input
             type="text"
             placeholder="Buscar productos..."
             value={busqueda}
             onChange={(e) => setBusqueda(e.target.value)}
-            style={styles.searchInput}
+            className="catalogo-search"
           />
-          <div style={styles.filterRow}>
+          <div className="catalogo-filter-row">
             {!coleccion && colecciones.length > 1 && (
-              <div style={styles.filterChips}>
-                <Link to="/catalogo" style={{ ...styles.chip, ...(coleccion ? {} : styles.chipActive) }}>
-                  TODOS
-                </Link>
+              <div className="catalogo-chips">
+                <Link to="/catalogo" className="catalogo-chip active">TODOS</Link>
                 {colecciones.map(col => (
                   <Link
                     key={col}
                     to={`/catalogo/${col.toLowerCase().replaceAll(' ', '-')}`}
-                    style={styles.chip}
+                    className="catalogo-chip"
                   >
                     {col.toUpperCase()}
                   </Link>
                 ))}
               </div>
             )}
-            <select value={ordenar} onChange={(e) => setOrdenar(e.target.value)} style={styles.select}>
+            <select value={ordenar} onChange={(e) => setOrdenar(e.target.value)} className="catalogo-select">
               <option value="nombre">Nombre A-Z</option>
               <option value="precio-asc">Precio: menor a mayor</option>
               <option value="precio-desc">Precio: mayor a menor</option>
@@ -106,28 +105,23 @@ const Catalogo = () => {
           </div>
         </div>
 
-        {loading && (
-          <p style={styles.loading}>CARGANDO...</p>
-        )}
+        {loading && <p className="catalogo-loading">CARGANDO...</p>}
 
         {!loading && productos.length === 0 && (
-          <p style={styles.loading}>NO SE ENCONTRARON PRODUCTOS.</p>
+          <p className="catalogo-loading">NO SE ENCONTRARON PRODUCTOS.</p>
         )}
 
         {!loading && productos.length > 0 && (
-          <div style={styles.grid}>
+          <div className="catalogo-grid">
             {productos.map(producto => (
-              <Link to={`/producto/${producto.id_producto}`} key={producto.id_producto} style={styles.card}>
+              <Link to={`/producto/${producto.id_producto}`} key={producto.id_producto} className="catalogo-card">
                 <img
-                  src={producto.imagen_url
-                    ? `${BACKEND_URL}${producto.imagen_url}`
-                    : '/assets/img/camis/cami_azul.JPG'
-                  }
+                  src={producto.imagen_url ? `${BACKEND_URL}${producto.imagen_url}` : ''}
                   alt={producto.nombre}
-                  style={styles.img}
+                  className="catalogo-img"
                 />
-                <p style={styles.nombre}>{producto.nombre}</p>
-                <p style={styles.precio}>{producto.precio} €</p>
+                <p className="catalogo-nombre">{producto.nombre}</p>
+                <p className="catalogo-precio">{producto.precio} €</p>
               </Link>
             ))}
           </div>
@@ -135,24 +129,6 @@ const Catalogo = () => {
       </section>
     </div>
   );
-};
-
-const styles = {
-  page: { padding: '48px 24px' },
-  titulo: { textAlign: 'center', fontSize: '13px', letterSpacing: '4px', color: '#999', marginBottom: '32px' },
-  loading: { textAlign: 'center', letterSpacing: '3px', color: '#999' },
-  filters: { maxWidth: '1100px', margin: '0 auto 32px', display: 'flex', flexDirection: 'column', gap: '16px' },
-  searchInput: { width: '100%', padding: '12px 16px', border: '1px solid #e0e0e0', fontSize: '14px', outline: 'none', letterSpacing: '0.5px' },
-  filterRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '12px' },
-  filterChips: { display: 'flex', gap: '8px', flexWrap: 'wrap' },
-  chip: { textDecoration: 'none', color: '#666', fontSize: '11px', letterSpacing: '2px', padding: '8px 16px', border: '1px solid #e0e0e0', fontWeight: '600' },
-  chipActive: { backgroundColor: '#000', color: '#fff', borderColor: '#000' },
-  select: { padding: '8px 12px', border: '1px solid #e0e0e0', fontSize: '12px', letterSpacing: '1px', outline: 'none', cursor: 'pointer' },
-  grid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '32px', maxWidth: '1100px', margin: '0 auto' },
-  card: { textDecoration: 'none', color: '#000' },
-  img: { width: '100%', aspectRatio: '3/4', objectFit: 'cover' },
-  nombre: { fontSize: '13px', letterSpacing: '2px', fontWeight: '600', marginTop: '12px', marginBottom: '4px' },
-  precio: { fontSize: '13px', color: '#666' },
 };
 
 export default Catalogo;

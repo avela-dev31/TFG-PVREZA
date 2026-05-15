@@ -1,0 +1,135 @@
+.auth-page {
+    min-height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+.auth-title {
+    font-size: 20px;
+    letter-spacing: 4px;
+    font-weight: 700;
+    margin: 0 0 8px;
+}
+
+.auth-subtitle {
+    font-size: 12px;
+    letter-spacing: 3px;
+    color: #999;
+    margin-bottom: 40px;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.auth-input {
+    padding: 14px 16px;
+    border: 1px solid #e5e5e5;
+    font-size: 14px;
+    outline: none;
+    letter-spacing: 0.5px;
+}
+
+.auth-input:focus {
+    border-color: #000;
+}
+
+.auth-btn {
+    padding: 14px;
+    background-color: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: 600;
+    margin-top: 8px;
+}
+
+.auth-btn:disabled {
+    opacity: 0.5;
+}
+
+.auth-error {
+    color: red;
+    font-size: 13px;
+    margin: 0;
+}
+
+.auth-footer {
+    margin-top: 24px;
+    font-size: 13px;
+    color: #666;
+}
+
+.auth-link {
+    color: #000;
+    font-weight: 600;
+}
+
+/* Registration extras */
+.auth-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+.auth-row .auth-input {
+    width: 100%;
+}
+
+.avatar-container {
+    width: 100%;
+    max-width: 800px;
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.back-btn {
+    align-self: flex-start;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.loading-box {
+    text-align: center;
+    padding: 100px 20px;
+    border: 1px solid #eee;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .auth-page {
+        padding: 16px;
+        min-height: 70vh;
+    }
+
+    .auth-input {
+        font-size: 16px;
+    }
+
+    .auth-row {
+        flex-direction: column;
+    }
+
+    .avatar-container {
+        height: 60vh;
+    }
+}

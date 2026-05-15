@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import usePageTitle from '../hooks/usePageTitle';
 import Banner from '../components/Banner';
 import { CartContext } from '../context/CartContext';
+import '../styles/home.css';
 
 const VIDEO_DESKTOP = '/assets/video/video-fondo.mp4';
 const VIDEO_MOBILE = '/assets/video/AB1946FC-E73B-43A4-A7BF-9C71844C20F9.mov';
@@ -15,8 +16,8 @@ const SplashScreen = ({ onFinish }) => {
   }, [onFinish]);
 
   return (
-    <div style={splashStyles.overlay}>
-      <img src="/assets/img/png_en_negro.png" alt="Pvreza Club" style={splashStyles.logo} />
+    <div className="splash-overlay">
+      <img src="/assets/img/png_en_negro.png" alt="Pvreza Club" className="splash-logo" />
     </div>
   );
 };
@@ -35,8 +36,8 @@ const HeroVideo = () => {
   const videoSource = isMobile ? VIDEO_MOBILE : VIDEO_DESKTOP;
 
   return (
-    <div style={heroStyles.wrapper}>
-      <video key={videoSource} autoPlay muted loop playsInline style={heroStyles.video}>
+    <div className="hero-wrapper">
+      <video key={videoSource} autoPlay muted loop playsInline className="hero-video">
         <source src={videoSource} type="video/mp4" />
       </video>
     </div>
@@ -56,49 +57,25 @@ const Home = () => {
     <div>
       {!isCartOpen && !isMenuOpen && <Banner />}
 
-      <section style={heroStyles.section}>
+      <section className="hero-section">
         <HeroVideo />
       </section>
 
-      <section style={styles.drops}>
-        <h2 style={styles.sectionTitle}>DROPS</h2>
-        <div style={styles.dropsGrid}>
-          <Link to="/catalogo/drop-genesis" style={styles.dropCard}>
-            <img src="/assets/img/camis/IMG_8516a.jpg" alt="Genesis" style={styles.dropImg} />
-            <p style={styles.dropName}>GENESIS</p>
+      <section className="drops-section">
+        <h2 className="drops-title">DROPS</h2>
+        <div className="drops-grid">
+          <Link to="/catalogo/drop-genesis" className="drop-card">
+            <img src="/assets/img/camis/IMG_8516a.jpg" alt="Genesis" className="drop-img" />
+            <p className="drop-name">GENESIS</p>
           </Link>
-          <Link to="/catalogo/isla-bonita" style={styles.dropCard}>
-            <img src="/assets/img/ISLA BONITA/IMG_7421a.jpg" alt="Isla Bonita" style={styles.dropImg} />
-            <p style={styles.dropName}>ISLA BONITA</p>
+          <Link to="/catalogo/isla-bonita" className="drop-card">
+            <img src="/assets/img/ISLA BONITA/IMG_7421a.jpg" alt="Isla Bonita" className="drop-img" />
+            <p className="drop-name">ISLA BONITA</p>
           </Link>
         </div>
       </section>
     </div>
   );
-};
-
-const splashStyles = {
-  overlay: {
-    position: 'fixed', inset: 0, backgroundColor: '#fff',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 9999,
-    animation: 'fadeOut 0.5s ease 1.5s forwards',
-  },
-  logo: { height: '60px', objectFit: 'contain' },
-};
-
-const heroStyles = {
-  section: { position: 'relative', height: '90vh', overflow: 'hidden' },
-  wrapper: { position: 'relative', width: '100%', height: '100%' },
-  video: { width: '100%', height: '100%', objectFit: 'cover' },
-};
-
-const styles = {
-  drops: { padding: '64px 24px' },
-  sectionTitle: { textAlign: 'center', fontSize: '13px', letterSpacing: '4px', marginBottom: '40px', color: '#999' },
-  dropsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px', maxWidth: '900px', margin: '0 auto' },
-  dropCard: { textDecoration: 'none', color: '#000' },
-  dropImg: { width: '100%', aspectRatio: '3/4', objectFit: 'cover' },
-  dropName: { textAlign: 'center', fontSize: '13px', letterSpacing: '3px', fontWeight: '600', marginTop: '16px' },
 };
 
 export default Home;
