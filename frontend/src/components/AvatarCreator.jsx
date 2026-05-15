@@ -1,4 +1,4 @@
-import { Suspense, useMemo } from 'react';
+import { Suspense, useMemo, useState, useEffect } from 'react';
 import { Canvas } from '@react-three/fiber';
 import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei';
 
@@ -14,6 +14,33 @@ const AvatarEquipado = ({ altura, peso, modeloCamiseta }) => {
         <group position={[0, -1, 0]} scale={[grosorFinal, escalaAltura, grosorFinal]}>
             <primitive object={sceneClone} />
         </group>
+    );
+};
+
+const RotateHint = () => {
+    const [visible, setVisible] = useState(true);
+
+    useEffect(() => {
+        const timer = setTimeout(() => setVisible(false), 4000);
+        return () => clearTimeout(timer);
+    }, []);
+
+    if (!visible) return null;
+
+    return (
+        <div style={{
+            position: 'absolute', bottom: '70px', left: '50%', transform: 'translateX(-50%)',
+            background: 'rgba(0,0,0,0.7)', color: '#fff', padding: '8px 18px',
+            fontSize: '12px', letterSpacing: '1.5px', borderRadius: '20px',
+            pointerEvents: 'none', display: 'flex', alignItems: 'center', gap: '8px',
+            animation: 'fadeOut 0.5s 3.5s forwards',
+        }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M1 4v6h6" /><path d="M23 20v-6h-6" />
+                <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15" />
+            </svg>
+            ARRASTRA PARA ROTAR
+        </div>
     );
 };
 
@@ -33,9 +60,17 @@ const AvatarCreator = ({ altura, peso, modeloCamiseta = 'camiseta_azul.glb', onA
                         modeloCamiseta={modeloCamiseta}
                     />
                     <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={15} blur={2.5} far={4} />
-                    <OrbitControls enableZoom={true} />
+                    <OrbitControls
+                        enableZoom={true}
+                        enablePan={false}
+                        minPolarAngle={Math.PI / 6}
+                        maxPolarAngle={Math.PI / 1.5}
+                        autoRotate
+                        autoRotateSpeed={1.5}
+                    />
                 </Suspense>
             </Canvas>
+            <RotateHint />
             {onAvatarGuardado && (
                 <button
                     onClick={() => onAvatarGuardado(null)}

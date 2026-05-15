@@ -456,6 +456,12 @@ footer {
     font-weight: 600;
 }
 
+/* Hint de rotación */
+@keyframes fadeOut {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+}
+
 /* Sliders personalizados */
 input[type=range] {
     -webkit-appearance: none;

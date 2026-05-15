@@ -223,7 +223,17 @@ const Producto = () => {
                 </div>
 
                 <div className="info-box">
-                  <p><strong>Talla recomendada:</strong> {altura > 180 || peso > 85 ? "XL" : "L"}</p>
+                  <p><strong>Talla recomendada:</strong> {
+                    (() => {
+                      const a = Number(altura);
+                      const p = Number(peso);
+                      const score = (a - 150) / 60 * 50 + (p - 50) / 70 * 50;
+                      if (score < 25) return "S";
+                      if (score < 45) return "M";
+                      if (score < 65) return "L";
+                      return "XL";
+                    })()
+                  }</p>
                 </div>
 
                 {!user && (
