@@ -2,7 +2,7 @@ import '../styles/banner.css';
 
 const Banner = () => {
     // Puedes cambiar este mensaje por el que quieras
-    const mensaje = "PVREZA CLUB • CRETED TO CREATE • ";
+    const mensaje = "PVREZA CLUB • CREATED TO CREATE • ";
     
     return (
         <div className="pvreza-banner-container">
