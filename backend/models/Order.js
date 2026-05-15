@@ -35,8 +35,10 @@ const Order = {
 
   getAll: async () => {
     const { rows } = await db.query(
-      `SELECT p.*, d.id_stock, d.cantidad, d.precio_unitario
+      `SELECT p.*, u.nombre AS nombre_usuario, u.email AS email_usuario,
+              d.id_stock, d.cantidad, d.precio_unitario
        FROM pedidos p
+       JOIN usuarios u ON p.id_usuario = u.id_usuario
        JOIN detalles_pedido d ON p.id_pedido = d.id_pedido
        ORDER BY p.fecha_pedido DESC`
     );

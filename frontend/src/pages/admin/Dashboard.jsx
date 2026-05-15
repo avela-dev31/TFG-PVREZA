@@ -197,6 +197,10 @@ const Dashboard = () => {
                                                 {p.estado.toUpperCase()}
                                             </span>
                                         </div>
+                                        <div className="pedido-admin-user">
+                                            <span>{p.nombre_usuario}</span>
+                                            <span className="pedido-admin-email">{p.email_usuario}</span>
+                                        </div>
                                         <div className="pedido-admin-total">
                                             TOTAL: {formatPrecio(p.total)} €
                                         </div>
@@ -353,6 +357,8 @@ function agruparPedidos(rows) {
                 total: row.total,
                 estado: row.estado,
                 fecha_pedido: row.fecha_pedido,
+                nombre_usuario: row.nombre_usuario,
+                email_usuario: row.email_usuario,
             });
         }
     }
