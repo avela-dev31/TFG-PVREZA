@@ -1,6 +1,7 @@
-import { Suspense, useMemo, useState, useEffect } from 'react';
-import { Canvas } from '@react-three/fiber';
-import { OrbitControls, Environment, ContactShadows, useGLTF } from '@react-three/drei';
+import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
+import { Canvas, useThree } from '@react-three/fiber';
+import { OrbitControls, Environment, ContactShadows, useGLTF, Center } from '@react-three/drei';
+import * as THREE from 'three';
 
 const AvatarEquipado = ({ altura, peso, modeloCamiseta }) => {
     const { scene } = useGLTF(`/models/${modeloCamiseta}`);
@@ -11,10 +12,35 @@ const AvatarEquipado = ({ altura, peso, modeloCamiseta }) => {
     const grosorFinal = Math.max(0.6, Math.min(1.8, 1 + ratioPeso * 0.8));
 
     return (
-        <group position={[0, -1, 0]} scale={[grosorFinal, escalaAltura, grosorFinal]}>
-            <primitive object={sceneClone} />
-        </group>
+        <Center>
+            <group scale={[grosorFinal, escalaAltura, grosorFinal]}>
+                <primitive object={sceneClone} />
+            </group>
+        </Center>
     );
+};
+
+const CameraSetup = ({ modeloCamiseta }) => {
+    const { camera, scene } = useThree();
+    const hasAdjusted = useRef(false);
+
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            const box = new THREE.Box3().setFromObject(scene);
+            if (box.isEmpty()) return;
+            const center = box.getCenter(new THREE.Vector3());
+            const size = box.getSize(new THREE.Vector3());
+            const maxDim = Math.max(size.x, size.y, size.z);
+            const dist = maxDim * 1.8;
+            camera.position.set(center.x, center.y, center.z + dist);
+            camera.lookAt(center);
+            camera.updateProjectionMatrix();
+            hasAdjusted.current = true;
+        }, 100);
+        return () => clearTimeout(timer);
+    }, [modeloCamiseta, camera, scene]);
+
+    return null;
 };
 
 const RotateHint = () => {
@@ -48,17 +74,19 @@ const AvatarCreator = ({ altura, peso, modeloCamiseta = 'camiseta_azul.glb', onA
     return (
         <div style={{ width: '100%', height: '100%', position: 'relative' }}>
             <Canvas
-                camera={{ position: [0, 0, 4.5], fov: 40 }}
+                camera={{ position: [0, 0, 5], fov: 35 }}
                 gl={{ powerPreference: 'high-performance' }}
             >
                 <Suspense fallback={null}>
                     <Environment preset="city" />
                     <ambientLight intensity={0.5} />
+                    <directionalLight position={[5, 5, 5]} intensity={0.3} />
                     <AvatarEquipado
                         altura={altura}
                         peso={peso}
                         modeloCamiseta={modeloCamiseta}
                     />
+                    <CameraSetup modeloCamiseta={modeloCamiseta} />
                     <ContactShadows position={[0, -2, 0]} opacity={0.4} scale={15} blur={2.5} far={4} />
                     <OrbitControls
                         enableZoom={true}
@@ -67,6 +95,7 @@ const AvatarCreator = ({ altura, peso, modeloCamiseta = 'camiseta_azul.glb', onA
                         maxPolarAngle={Math.PI / 1.5}
                         autoRotate
                         autoRotateSpeed={1.5}
+                        target={[0, 0, 0]}
                     />
                 </Suspense>
             </Canvas>
