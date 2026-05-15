@@ -81,11 +81,16 @@
     }
 
     .drops-section {
-        padding: 40px 16px;
+        padding: 32px 12px;
     }
 
     .drops-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .drop-name {
+        font-size: 11px;
+        margin-top: 8px;
     }
 }
