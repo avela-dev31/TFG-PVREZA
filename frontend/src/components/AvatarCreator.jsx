@@ -31,7 +31,7 @@ const CameraSetup = ({ modeloCamiseta }) => {
             const center = box.getCenter(new THREE.Vector3());
             const size = box.getSize(new THREE.Vector3());
             const maxDim = Math.max(size.x, size.y, size.z);
-            const dist = maxDim * 1.8;
+            const dist = maxDim * 1.2;
             camera.position.set(center.x, center.y, center.z + dist);
             camera.lookAt(center);
             camera.updateProjectionMatrix();
