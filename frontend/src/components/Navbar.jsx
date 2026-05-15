@@ -57,7 +57,7 @@ const Navbar = () => {
             </button>
             <nav style={styles.menuNav}>
               <p style={styles.menuTitle}>DROPS</p>
-              <Link to="/catalogo/genesis" style={styles.menuLink} onClick={() => setMenuOpen(false)}>GENESIS</Link>
+              <Link to="/catalogo/drop-genesis" style={styles.menuLink} onClick={() => setMenuOpen(false)}>GENESIS</Link>
               <Link to="/catalogo/isla-bonita" style={styles.menuLink} onClick={() => setMenuOpen(false)}>ISLA BONITA</Link>
               <hr style={styles.menuDivider} />
               {user ? (
