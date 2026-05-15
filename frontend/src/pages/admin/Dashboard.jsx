@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { getProductosConStock, crearProducto, eliminarProducto as eliminarProductoApi } from '../../api/productosApi';
-import { getDashboardStats, getTodosPedidos } from '../../api/pedidosApi';
+import { getDashboardStats, getTodosPedidos, actualizarEstadoPedido } from '../../api/pedidosApi';
 import '../../styles/dashboard.css';
 
 const PRODUCTO_VACIO = { nombre: '', precio: '', coleccion: '', descripcion: '' };
@@ -84,6 +84,18 @@ const Dashboard = () => {
         }
     };
 
+    const handleEstadoPedido = async (idPedido, nuevoEstado) => {
+        const label = nuevoEstado === 'rechazado' ? 'rechazar' : `marcar como "${nuevoEstado}"`;
+        if (!window.confirm(`¿Seguro que quieres ${label} el pedido #${idPedido}?`)) return;
+        try {
+            await actualizarEstadoPedido(idPedido, nuevoEstado);
+            await fetchData();
+        } catch (error) {
+            console.error('Error actualizando estado:', error);
+            alert(error.response?.data?.message || 'Error al actualizar el pedido');
+        }
+    };
+
     const formatPrecio = (valor) => {
         return Number(valor).toLocaleString('es-ES', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
     };
@@ -163,40 +175,74 @@ const Dashboard = () => {
                         )}
                     </div>
                 );
-            case 'pedidos':
+            case 'pedidos': {
+                const pedidosAgrupados = agruparPedidos(pedidos);
                 return (
                     <div className="dash-section">
-                        <h2>ÚLTIMOS PEDIDOS</h2>
-                        {pedidos.length === 0 ? (
+                        <h2>GESTIÓN DE PEDIDOS</h2>
+                        {pedidosAgrupados.length === 0 ? (
                             <p>No hay pedidos registrados.</p>
                         ) : (
-                            <table className="admin-table">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>TOTAL</th>
-                                        <th>ESTADO</th>
-                                        <th>FECHA</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {pedidos.map((p, i) => (
-                                        <tr key={`${p.id_pedido}-${i}`}>
-                                            <td>#{p.id_pedido}</td>
-                                            <td>{formatPrecio(p.total)} €</td>
-                                            <td>
-                                                <span className={`status-badge ${p.estado === 'entregado' ? 'ok' : ''}`}>
-                                                    {p.estado.toUpperCase()}
+                            <div className="pedidos-admin-list">
+                                {pedidosAgrupados.map(p => (
+                                    <div key={p.id_pedido} className="pedido-admin-card">
+                                        <div className="pedido-admin-header">
+                                            <div>
+                                                <strong>Pedido #{p.id_pedido}</strong>
+                                                <span className="pedido-admin-date">
+                                                    {new Date(p.fecha_pedido).toLocaleDateString('es-ES', { day: 'numeric', month: 'long', year: 'numeric' })}
                                                 </span>
-                                            </td>
-                                            <td>{new Date(p.fecha_pedido).toLocaleDateString('es-ES')}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
+                                            </div>
+                                            <span className={`status-badge ${p.estado === 'pagado' ? 'ok' : p.estado === 'rechazado' ? 'out' : ''}`}>
+                                                {p.estado.toUpperCase()}
+                                            </span>
+                                        </div>
+                                        <div className="pedido-admin-total">
+                                            TOTAL: {formatPrecio(p.total)} €
+                                        </div>
+                                        {p.estado === 'pendiente' && (
+                                            <div className="pedido-admin-actions">
+                                                <button
+                                                    className="btn-primary"
+                                                    onClick={() => handleEstadoPedido(p.id_pedido, 'pagado')}
+                                                >
+                                                    ACEPTAR
+                                                </button>
+                                                <button
+                                                    className="btn-text danger"
+                                                    onClick={() => handleEstadoPedido(p.id_pedido, 'rechazado')}
+                                                >
+                                                    RECHAZAR
+                                                </button>
+                                            </div>
+                                        )}
+                                        {p.estado === 'pagado' && (
+                                            <div className="pedido-admin-actions">
+                                                <button
+                                                    className="btn-primary"
+                                                    onClick={() => handleEstadoPedido(p.id_pedido, 'enviado')}
+                                                >
+                                                    MARCAR ENVIADO
+                                                </button>
+                                            </div>
+                                        )}
+                                        {p.estado === 'enviado' && (
+                                            <div className="pedido-admin-actions">
+                                                <button
+                                                    className="btn-primary"
+                                                    onClick={() => handleEstadoPedido(p.id_pedido, 'entregado')}
+                                                >
+                                                    MARCAR ENTREGADO
+                                                </button>
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
                 );
+            }
             default:
                 return null;
         }
@@ -297,5 +343,20 @@ const Dashboard = () => {
         </div>
     );
 };
+
+function agruparPedidos(rows) {
+    const map = new Map();
+    for (const row of rows) {
+        if (!map.has(row.id_pedido)) {
+            map.set(row.id_pedido, {
+                id_pedido: row.id_pedido,
+                total: row.total,
+                estado: row.estado,
+                fecha_pedido: row.fecha_pedido,
+            });
+        }
+    }
+    return Array.from(map.values());
+}
 
 export default Dashboard;

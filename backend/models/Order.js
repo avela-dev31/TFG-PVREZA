@@ -80,6 +80,50 @@ const Order = {
     return rows[0].pedidos_activos;
   },
 
+  updateEstado: async (id_pedido, estado) => {
+    const { rows } = await db.query(
+      'UPDATE pedidos SET estado = $1 WHERE id_pedido = $2 RETURNING *',
+      [estado, id_pedido]
+    );
+    return rows[0];
+  },
+
+  getOrderWithUser: async (id_pedido) => {
+    const { rows } = await db.query(
+      `SELECT p.*, u.email, u.nombre AS nombre_usuario
+       FROM pedidos p
+       JOIN usuarios u ON p.id_usuario = u.id_usuario
+       WHERE p.id_pedido = $1`,
+      [id_pedido]
+    );
+    return rows[0];
+  },
+
+  getOrderDetails: async (id_pedido) => {
+    const { rows } = await db.query(
+      `SELECT d.cantidad, d.precio_unitario, pr.nombre, s.talla
+       FROM detalles_pedido d
+       JOIN stock s ON d.id_stock = s.id_stock
+       JOIN productos pr ON s.id_producto = pr.id_producto
+       WHERE d.id_pedido = $1`,
+      [id_pedido]
+    );
+    return rows;
+  },
+
+  restoreStock: async (id_pedido) => {
+    const { rows } = await db.query(
+      'SELECT id_stock, cantidad FROM detalles_pedido WHERE id_pedido = $1',
+      [id_pedido]
+    );
+    for (const item of rows) {
+      await db.query(
+        'UPDATE stock SET cantidad = cantidad + $1 WHERE id_stock = $2',
+        [item.cantidad, item.id_stock]
+      );
+    }
+  },
+
   getCriticalStockCount: async () => {
     const { rows } = await db.query(`
       SELECT COUNT(*) AS stock_critico

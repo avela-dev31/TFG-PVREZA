@@ -1,4 +1,5 @@
 const Order = require('../models/Order');
+const { sendOrderAccepted, sendOrderRejected } = require('../services/emailService');
 
 const createOrder = async (req, res) => {
   const { items } = req.body;
@@ -86,4 +87,40 @@ const getDashboardStats = async (req, res) => {
   }
 };
 
-module.exports = { createOrder, getUserOrders, getAllOrders, getDashboardStats };
+const updateEstado = async (req, res) => {
+  const { id } = req.params;
+  const { estado } = req.body;
+
+  const estadosValidos = ['pendiente', 'pagado', 'enviado', 'entregado', 'rechazado'];
+  if (!estadosValidos.includes(estado)) {
+    return res.status(400).json({ message: 'Estado no válido' });
+  }
+
+  try {
+    const orderData = await Order.getOrderWithUser(id);
+    if (!orderData) {
+      return res.status(404).json({ message: 'Pedido no encontrado' });
+    }
+
+    const pedido = await Order.updateEstado(id, estado);
+
+    if (estado === 'pagado') {
+      const detalles = await Order.getOrderDetails(id);
+      sendOrderAccepted(orderData.email, orderData.nombre_usuario, pedido, detalles)
+        .catch(err => console.error('Error enviando email de aceptación:', err));
+    }
+
+    if (estado === 'rechazado') {
+      await Order.restoreStock(id);
+      sendOrderRejected(orderData.email, orderData.nombre_usuario, pedido)
+        .catch(err => console.error('Error enviando email de rechazo:', err));
+    }
+
+    res.json({ message: `Pedido #${id} actualizado a "${estado}"`, pedido });
+  } catch (error) {
+    console.error('Error en updateEstado:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+module.exports = { createOrder, getUserOrders, getAllOrders, getDashboardStats, updateEstado };

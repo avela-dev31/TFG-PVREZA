@@ -4,7 +4,7 @@
 -- ============================================
 
 -- Tipos ENUM
-CREATE TYPE estado_pedido AS ENUM ('pendiente', 'pagado', 'enviado', 'entregado');
+CREATE TYPE estado_pedido AS ENUM ('pendiente', 'pagado', 'enviado', 'entregado', 'rechazado');
 CREATE TYPE talla_tipo AS ENUM ('S', 'M', 'L', 'XL');
 CREATE TYPE rol_tipo AS ENUM ('user', 'admin');
 

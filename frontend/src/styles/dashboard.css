@@ -270,3 +270,47 @@
     background: #999;
     cursor: not-allowed;
 }
+
+/* --- PEDIDOS ADMIN --- */
+.pedidos-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pedido-admin-card {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 20px;
+}
+
+.pedido-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.pedido-admin-header strong {
+    font-size: 0.95rem;
+    margin-right: 12px;
+}
+
+.pedido-admin-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.pedido-admin-total {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+}
+
+.pedido-admin-actions {
+    display: flex;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}

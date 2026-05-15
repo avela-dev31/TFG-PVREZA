@@ -9,9 +9,10 @@ import '../styles/perfil.css';
 
 const ESTADO_LABEL = {
     pendiente: 'PENDIENTE',
-    pagado: 'PAGADO',
+    pagado: 'ACEPTADO',
     enviado: 'ENVIADO',
-    entregado: 'ENTREGADO'
+    entregado: 'ENTREGADO',
+    rechazado: 'RECHAZADO'
 };
 
 const Perfil = () => {

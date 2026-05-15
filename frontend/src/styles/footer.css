@@ -123,25 +123,52 @@
 
 /* --- Responsive (Móviles) --- */
 @media (max-width: 900px) {
+    .pvreza-footer {
+        padding: 40px 16px 16px;
+        margin-top: 40px;
+    }
+
     .footer-container {
         grid-template-columns: 1fr;
-        gap: 50px;
+        gap: 30px;
+        padding-bottom: 30px;
     }
-    
+
+    .footer-newsletter h2 {
+        font-size: 1.1rem;
+    }
+
+    .footer-newsletter p {
+        font-size: 0.8rem;
+        margin-bottom: 16px;
+    }
+
     .footer-links {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+
+    .footer-column h3 {
+        font-size: 0.75rem;
+        margin-bottom: 12px;
+    }
+
+    .footer-column a {
+        font-size: 0.8rem;
+        margin-bottom: 8px;
     }
 
     .footer-bottom {
         flex-direction: column;
-        gap: 15px;
+        gap: 10px;
         text-align: center;
+        font-size: 0.65rem;
     }
 }
 
 @media (max-width: 500px) {
     .footer-links {
-        grid-template-columns: 1fr;
-        gap: 30px;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
     }
 }
