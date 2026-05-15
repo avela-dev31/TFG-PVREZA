@@ -68,6 +68,15 @@ CREATE TABLE detalles_pedido (
   precio_unitario DECIMAL(10,2) NOT NULL
 );
 
+-- Favoritos
+CREATE TABLE favoritos (
+  id_favorito SERIAL PRIMARY KEY,
+  id_usuario INT NOT NULL REFERENCES usuarios(id_usuario) ON DELETE CASCADE,
+  id_producto INT NOT NULL REFERENCES productos(id_producto) ON DELETE CASCADE,
+  fecha_agregado TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  UNIQUE(id_usuario, id_producto)
+);
+
 -- ============================================
 -- DATOS INICIALES
 -- ============================================

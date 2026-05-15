@@ -185,3 +185,98 @@
     font-size: 1.1rem;
     letter-spacing: 1px;
 }
+
+/* Tabs */
+.perfil-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+
+.perfil-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    padding: 12px 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    color: #999;
+    transition: 0.2s;
+}
+
+.perfil-tab.active {
+    color: #000;
+    border-bottom-color: #000;
+}
+
+.perfil-tab:hover {
+    color: #000;
+}
+
+.perfil-section {
+    margin-top: 10px;
+}
+
+/* Edit form */
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 500px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.form-group input {
+    padding: 12px 14px;
+    border: 1px solid #e0e0e0;
+    font-size: 0.95rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+    border-color: #000;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-hint {
+    font-size: 0.7rem;
+    color: #999;
+}
+
+.form-success {
+    color: #155724;
+    background: #d4edda;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.form-error {
+    color: #721c24;
+    background: #f8d7da;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin: 0;
+}

@@ -63,7 +63,7 @@ const Navbar = () => {
               {user ? (
                 <>
                   <Link to="/perfil" style={styles.menuLink} onClick={() => setMenuOpen(false)}>MI PERFIL</Link>
-                  <Link to="/perfil/pedidos" style={styles.menuLink} onClick={() => setMenuOpen(false)}>MIS PEDIDOS</Link>
+                  <Link to="/favoritos" style={styles.menuLink} onClick={() => setMenuOpen(false)}>FAVORITOS</Link>
                   {user.rol === 'admin' && (
                     <Link to="/admin" style={styles.menuLink} onClick={() => setMenuOpen(false)}>ADMIN</Link>
                   )}

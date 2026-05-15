@@ -2,6 +2,7 @@
 import { useEffect, useState, useContext } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { getProductoById, getProductos } from "../api/productosApi";
+import { getFavoritos, addFavorito, removeFavorito } from "../api/authApi";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { BACKEND_URL } from "../constants";
@@ -30,6 +31,7 @@ const Producto = () => {
   const [isTryOnOpen, setIsTryOnOpen] = useState(false);
   const [altura, setAltura] = useState(175);
   const [peso, setPeso] = useState(75);
+  const [esFavorito, setEsFavorito] = useState(false);
 
   // Modelo 3D: usa la talla seleccionada, si no el primero disponible, si no el fallback
   const modeloCamiseta =
@@ -63,6 +65,26 @@ const Producto = () => {
       })
       .catch((err) => console.error("Error obteniendo otros productos:", err));
   }, [id]);
+
+  useEffect(() => {
+    if (!user) return;
+    getFavoritos()
+      .then((res) => {
+        setEsFavorito(res.data.some((p) => String(p.id_producto) === String(id)));
+      })
+      .catch(() => {});
+  }, [id, user]);
+
+  const toggleFavorito = async () => {
+    if (!user) return;
+    if (esFavorito) {
+      await removeFavorito(id);
+      setEsFavorito(false);
+    } else {
+      await addFavorito(id);
+      setEsFavorito(true);
+    }
+  };
 
   const handleAbrirProbador = () => {
     setAltura(user && user ? (user.altura || 175) : 175);
@@ -115,7 +137,16 @@ const Producto = () => {
 
         {/* DETALLES */}
         <div className="product-details">
-          <h1 className="product-name">{producto.nombre}</h1>
+          <div className="product-name-row">
+            <h1 className="product-name">{producto.nombre}</h1>
+            {user && (
+              <button onClick={toggleFavorito} className="fav-btn" title={esFavorito ? 'Quitar de favoritos' : 'Añadir a favoritos'}>
+                <svg width="22" height="22" viewBox="0 0 24 24" fill={esFavorito ? '#000' : 'none'} stroke="#000" strokeWidth="2">
+                  <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
+                </svg>
+              </button>
+            )}
+          </div>
           <p className="price">{producto.precio} €</p>
 
           <div className="tallas">
