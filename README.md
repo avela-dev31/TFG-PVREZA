@@ -132,5 +132,5 @@ Ejecutar el script `deploy/supabase-schema.sql` en el SQL Editor de Supabase o e
 ## Autor
 
 **Antonio Luis Vela Garcia**
-Grado Superior en Desarrollo de Aplicaciones Web — IES Virgen de Valme, Dos Hermanas (Sevilla)
-Curso 2024/2025
+Grado Superior en Desarrollo de Aplicaciones Multiplataforma — IES Hermanos Machad, Dos Hermanas (Sevilla)
+Curso 2025/2026
