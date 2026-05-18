@@ -62,6 +62,9 @@ const Login = () => {
         </form>
 
         <p className="auth-footer">
+          <Link to="/forgot-password" className="auth-link">¿Has olvidado tu contraseña?</Link>
+        </p>
+        <p className="auth-footer">
           ¿No tienes cuenta?{' '}
           <Link to="/registro" className="auth-link">Regístrate</Link>
         </p>

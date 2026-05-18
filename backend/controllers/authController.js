@@ -98,4 +98,63 @@ const login = async (req, res) => {
   }
 };
 
-module.exports = { register, login };
+const crypto = require('crypto');
+const { sendPasswordReset } = require('../services/emailService');
+
+const forgotPassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { email } = req.body;
+
+  try {
+    const user = await User.findByEmail(email);
+    if (!user) {
+      return res.status(200).json({ message: 'Si el email existe, recibirás un enlace de recuperación' });
+    }
+
+    const token = crypto.randomBytes(32).toString('hex');
+    const expires = new Date(Date.now() + 60 * 60 * 1000);
+
+    await User.saveResetToken(user.id_usuario, token, expires);
+
+    const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:5173').split(',')[0];
+    const resetUrl = `${frontendUrl}/reset-password/${token}`;
+
+    await sendPasswordReset(email, user.nombre, resetUrl);
+
+    res.status(200).json({ message: 'Si el email existe, recibirás un enlace de recuperación' });
+  } catch (error) {
+    console.error('Error en forgotPassword:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
+
+  const { token, password } = req.body;
+
+  try {
+    const user = await User.findByResetToken(token);
+    if (!user) {
+      return res.status(400).json({ message: 'El enlace ha expirado o no es válido' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    await User.updatePassword(user.id_usuario, hashedPassword);
+    await User.clearResetToken(user.id_usuario);
+
+    res.status(200).json({ message: 'Contraseña actualizada correctamente' });
+  } catch (error) {
+    console.error('Error en resetPassword:', error);
+    res.status(500).json({ message: 'Error interno del servidor' });
+  }
+};
+
+module.exports = { register, login, forgotPassword, resetPassword };

@@ -67,6 +67,28 @@ const User = {
       [userId, productoId]
     );
     return rowCount;
+  },
+
+  saveResetToken: async (id, token, expires) => {
+    await db.query(
+      'UPDATE usuarios SET reset_token = $1, reset_token_expires = $2 WHERE id_usuario = $3',
+      [token, expires, id]
+    );
+  },
+
+  findByResetToken: async (token) => {
+    const { rows } = await db.query(
+      'SELECT * FROM usuarios WHERE reset_token = $1 AND reset_token_expires > NOW()',
+      [token]
+    );
+    return rows[0];
+  },
+
+  clearResetToken: async (id) => {
+    await db.query(
+      'UPDATE usuarios SET reset_token = NULL, reset_token_expires = NULL WHERE id_usuario = $1',
+      [id]
+    );
   }
 
 };

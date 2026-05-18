@@ -80,4 +80,33 @@ const sendOrderRejected = async (to, nombreUsuario, pedido) => {
   });
 };
 
-module.exports = { sendOrderAccepted, sendOrderRejected };
+const sendPasswordReset = async (to, nombreUsuario, resetUrl) => {
+  const html = `
+    <div style="font-family:Helvetica,Arial,sans-serif;max-width:600px;margin:0 auto;color:#000">
+      <div style="text-align:center;padding:30px 0;border-bottom:2px solid #000">
+        <h1 style="font-size:18px;letter-spacing:4px;margin:0">PVREZA CLUB®</h1>
+      </div>
+      <div style="padding:30px 20px">
+        <p>Hola <strong>${nombreUsuario}</strong>,</p>
+        <p>Hemos recibido una solicitud para restablecer la contraseña de tu cuenta.</p>
+        <p>Haz clic en el siguiente enlace para crear una nueva contraseña:</p>
+        <div style="text-align:center;margin:30px 0">
+          <a href="${resetUrl}" style="background:#000;color:#fff;padding:14px 32px;text-decoration:none;font-size:13px;letter-spacing:2px;font-weight:bold">RESTABLECER CONTRASEÑA</a>
+        </div>
+        <p style="color:#666;font-size:13px">Este enlace expira en 1 hora. Si no has solicitado este cambio, ignora este mensaje.</p>
+      </div>
+      <div style="text-align:center;padding:20px;border-top:1px solid #eee;font-size:11px;color:#999;letter-spacing:1px">
+        © ${new Date().getFullYear()} PVREZA. TODOS LOS DERECHOS RESERVADOS.
+      </div>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: `"PVREZA CLUB" <${process.env.SMTP_USER}>`,
+    to,
+    subject: 'Restablecer contraseña — PVREZA',
+    html,
+  });
+};
+
+module.exports = { sendOrderAccepted, sendOrderRejected, sendPasswordReset };

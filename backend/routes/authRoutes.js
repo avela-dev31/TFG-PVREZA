@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const rateLimit = require('express-rate-limit');
-const { register, login } = require('../controllers/authController');
+const { register, login, forgotPassword, resetPassword } = require('../controllers/authController');
 
 // ============================================
 // RATE LIMITING — máximo 10 intentos por IP cada 15 minutos
@@ -54,7 +54,25 @@ const loginValidation = [
 // ============================================
 // RUTAS
 // ============================================
+const forgotValidation = [
+  body('email')
+    .trim()
+    .normalizeEmail()
+    .isEmail().withMessage('Email no válido'),
+];
+
+const resetValidation = [
+  body('token')
+    .notEmpty().withMessage('Token requerido'),
+  body('password')
+    .isLength({ min: 8 }).withMessage('Mínimo 8 caracteres')
+    .matches(/[A-Z]/).withMessage('Debe contener al menos una mayúscula')
+    .matches(/[0-9]/).withMessage('Debe contener al menos un número'),
+];
+
 router.post('/register', authLimiter, registerValidation, register);
 router.post('/login', authLimiter, loginValidation, login);
+router.post('/forgot-password', authLimiter, forgotValidation, forgotPassword);
+router.post('/reset-password', authLimiter, resetValidation, resetPassword);
 
 module.exports = router;
