@@ -21,8 +21,7 @@ PVREZA CLUB es una plataforma e-commerce fullstack que combina la compra de ropa
 - **PostgreSQL** (Supabase) como base de datos
 - **JWT** para autenticacion
 - **bcryptjs** para hash de contraseñas
-- **Nodemailer** para envio de emails transaccionales
-- **Helmet** + **express-rate-limit** + **express-validator** para seguridad
+- **express-rate-limit** + **express-validator** para seguridad
 - **CORS** configurado para origenes autorizados
 
 ### Infraestructura
@@ -48,7 +47,7 @@ PVREZA/
 │   ├── models/             # Queries a PostgreSQL
 │   ├── routes/             # Definicion de endpoints
 │   ├── middleware/          # Autenticacion JWT (verifyToken, verifyAdmin)
-│   ├── services/           # Servicio de email (Nodemailer)
+│   ├── services/           # Servicio de email (Nodemailer) (En un futuro)
 │   └── uploads/            # Imagenes de productos
 ├── deploy/                 # Schema SQL para Supabase
 └── docs/                   # Diseños (PSD, AI)
@@ -67,7 +66,7 @@ PVREZA/
 - Lista de favoritos
 - Carrito de compra con resumen y checkout
 - Historial de pedidos con seguimiento de estado
-- Notificacion por email cuando un pedido es aceptado o rechazado
+- Notificacion por email cuando un pedido es aceptado o rechazado (Futuro update)
 
 ### Administrador
 - Dashboard con metricas: ventas del mes, pedidos activos, stock critico
@@ -80,9 +79,8 @@ PVREZA/
 - Autenticacion con JWT y middleware de verificacion
 - Rate limiting: maximo 10 intentos de login cada 15 minutos
 - Validacion de entrada con express-validator
-- Cabeceras HTTP seguras con Helmet
+- Cabeceras HTTP seguras
 - CORS restringido a origenes autorizados
-- Body parser limitado a 10KB para prevenir ataques DoS
 
 ## Instalacion local
 
@@ -132,5 +130,5 @@ Ejecutar el script `deploy/supabase-schema.sql` en el SQL Editor de Supabase o e
 ## Autor
 
 **Antonio Luis Vela Garcia**
-Grado Superior en Desarrollo de Aplicaciones Multiplataforma — IES Hermanos Machad, Dos Hermanas (Sevilla)
+Grado Superior en Desarrollo de Aplicaciones Multiplataforma — IES Hermanos Machado, Dos Hermanas (Sevilla)
 Curso 2025/2026
