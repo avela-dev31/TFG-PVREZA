@@ -21,6 +21,7 @@ import Envios from './pages/Envios';
 import Contacto from './pages/Contacto';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
+import IslaBonita from './pages/IslaBonita';
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/envios" element={<Envios />} />
             <Route path="/contacto" element={<Contacto />} />
+            <Route path="/isla-bonita" element={<IslaBonita />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
 

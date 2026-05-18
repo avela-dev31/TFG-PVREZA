@@ -10,6 +10,7 @@ const productosRoutes = require('./routes/productosRoutes');
 const authRoutes = require('./routes/authRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const pedidosRoutes = require('./routes/pedidosRoutes');
+const reservasRoutes = require('./routes/reservasRoutes');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -54,6 +55,7 @@ app.use('/api/camisetas', productosRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/users', usuariosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
+app.use('/api/reservas', reservasRoutes);
 
 app.get("/", (req, res) => {
   res.json({ status: "ok", message: "Backend PVREZA activo" });

@@ -1,0 +1,190 @@
+.isla-page {
+    min-height: 80vh;
+}
+
+.isla-hero {
+    position: relative;
+    height: 60vh;
+    overflow: hidden;
+}
+
+.isla-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: brightness(0.4);
+}
+
+.isla-hero-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-align: center;
+}
+
+.isla-label {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: #999;
+    margin-bottom: 16px;
+}
+
+.isla-title {
+    font-size: 3rem;
+    letter-spacing: 8px;
+    margin: 0;
+}
+
+.isla-subtitle {
+    font-size: 13px;
+    letter-spacing: 4px;
+    margin-top: 12px;
+    color: #ccc;
+}
+
+.isla-content {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    text-align: center;
+}
+
+.isla-heading {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    margin-bottom: 16px;
+}
+
+.isla-desc {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+.isla-plazas {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #999;
+    margin-bottom: 24px;
+}
+
+.isla-agotado {
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #d93025;
+    font-weight: bold;
+    padding: 20px 0;
+}
+
+.isla-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.isla-input {
+    padding: 14px 16px;
+    border: 1px solid #e5e5e5;
+    font-size: 14px;
+    outline: none;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+
+.isla-input:focus {
+    border-color: #000;
+}
+
+.isla-btn {
+    padding: 14px;
+    background: #000;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    font-size: 13px;
+    letter-spacing: 3px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.isla-btn:hover {
+    background: #333;
+}
+
+.isla-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.isla-error {
+    color: #d93025;
+    font-size: 13px;
+    margin: 0;
+}
+
+.isla-success h2 {
+    font-size: 1.1rem;
+    letter-spacing: 3px;
+    margin-bottom: 24px;
+}
+
+.isla-posicion {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #000;
+    color: #fff;
+    padding: 25px;
+    margin-bottom: 24px;
+}
+
+.isla-posicion-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #999;
+}
+
+.isla-posicion-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 8px 0;
+}
+
+.isla-posicion-sub {
+    font-size: 11px;
+    letter-spacing: 1px;
+    color: #999;
+}
+
+.isla-success-text {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.6;
+    margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+    .isla-hero {
+        height: 45vh;
+    }
+
+    .isla-title {
+        font-size: 2rem;
+        letter-spacing: 5px;
+    }
+
+    .isla-content {
+        padding: 40px 16px;
+    }
+
+    .isla-input {
+        font-size: 16px;
+    }
+}

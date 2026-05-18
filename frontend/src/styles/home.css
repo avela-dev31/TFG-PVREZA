@@ -74,6 +74,25 @@
     margin-top: 16px;
 }
 
+.drop-img-wrapper {
+    position: relative;
+    overflow: hidden;
+}
+
+.drop-badge {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    text-align: center;
+    padding: 10px;
+    font-size: 11px;
+    letter-spacing: 3px;
+    font-weight: 600;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .hero-section {

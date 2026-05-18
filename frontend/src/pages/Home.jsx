@@ -68,8 +68,11 @@ const Home = () => {
             <img src="/assets/img/camis/IMG_8516a.jpg" alt="Genesis" className="drop-img" />
             <p className="drop-name">GENESIS</p>
           </Link>
-          <Link to="/catalogo/isla-bonita" className="drop-card">
-            <img src="/assets/img/ISLA BONITA/IMG_7421a.jpg" alt="Isla Bonita" className="drop-img" />
+          <Link to="/isla-bonita" className="drop-card drop-card-coming">
+            <div className="drop-img-wrapper">
+              <img src="/assets/img/ISLA BONITA/IMG_7421a.jpg" alt="Isla Bonita" className="drop-img" />
+              <span className="drop-badge">PRÓXIMAMENTE</span>
+            </div>
             <p className="drop-name">ISLA BONITA</p>
           </Link>
         </div>
