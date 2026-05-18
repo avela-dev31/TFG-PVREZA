@@ -96,13 +96,9 @@ npm install
 
 Crear archivo `.env`:
 ```
-DATABASE_URL=postgresql://usuario:password@host:puerto/basedatos
-JWT_SECRET=tu_secreto_jwt
+DATABASE_URL=postgresql://postgres:root@localhost:5432/TFG-PVREZA
+JWT_SECRET=PVREZA_CLUB_Secreto_TFG_2026
 FRONTEND_URL=http://localhost:5173
-SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
-SMTP_USER=tu-email@gmail.com
-SMTP_PASS=tu-contraseña-de-aplicacion
 ```
 
 ```bash
