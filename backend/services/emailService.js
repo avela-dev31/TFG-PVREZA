@@ -141,4 +141,33 @@ const sendReservaConfirmation = async (to, coleccion, posicion) => {
   });
 };
 
-module.exports = { sendOrderAccepted, sendOrderRejected, sendPasswordReset, sendReservaConfirmation };
+const sendWelcome = async (to, nombreUsuario) => {
+  const html = `
+    <div style="font-family:Helvetica,Arial,sans-serif;max-width:600px;margin:0 auto;color:#000">
+      <div style="text-align:center;padding:30px 0;border-bottom:2px solid #000">
+        <h1 style="font-size:18px;letter-spacing:4px;margin:0">PVREZA CLUB®</h1>
+      </div>
+      <div style="padding:30px 20px">
+        <p>Hola <strong>${nombreUsuario}</strong>,</p>
+        <p>Bienvenido/a a <strong>PVREZA CLUB</strong>. Tu cuenta ha sido creada correctamente.</p>
+        <p>Ya puedes explorar nuestras colecciones, guardar tus favoritos y realizar pedidos.</p>
+        <div style="text-align:center;margin:30px 0">
+          <a href="${(process.env.FRONTEND_URL || 'http://localhost:5173').split(',')[0]}/catalogo" style="background:#000;color:#fff;padding:14px 32px;text-decoration:none;font-size:13px;letter-spacing:2px;font-weight:bold">EXPLORAR COLECCIONES</a>
+        </div>
+        <p style="color:#666;font-size:13px;margin-top:30px">Gracias por unirte a PVREZA.</p>
+      </div>
+      <div style="text-align:center;padding:20px;border-top:1px solid #eee;font-size:11px;color:#999;letter-spacing:1px">
+        © ${new Date().getFullYear()} PVREZA. TODOS LOS DERECHOS RESERVADOS.
+      </div>
+    </div>
+  `;
+
+  await transporter.sendMail({
+    from: `"PVREZA CLUB" <${process.env.SMTP_USER}>`,
+    to,
+    subject: 'Bienvenido/a a PVREZA CLUB',
+    html,
+  });
+};
+
+module.exports = { sendOrderAccepted, sendOrderRejected, sendPasswordReset, sendReservaConfirmation, sendWelcome };

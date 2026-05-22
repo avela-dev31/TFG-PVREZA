@@ -35,6 +35,10 @@ const register = async (req, res) => {
       { expiresIn: '7d' }
     );
 
+    sendWelcome(email, nombre).catch(err =>
+      console.error('Error enviando email de bienvenida:', err)
+    );
+
     res.status(201).json({
       message: 'Usuario registrado correctamente',
       token,
@@ -99,7 +103,7 @@ const login = async (req, res) => {
 };
 
 const crypto = require('crypto');
-const { sendPasswordReset } = require('../services/emailService');
+const { sendPasswordReset, sendWelcome } = require('../services/emailService');
 
 const forgotPassword = async (req, res) => {
   const errors = validationResult(req);
