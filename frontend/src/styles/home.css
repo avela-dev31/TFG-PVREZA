@@ -100,10 +100,19 @@
     color: #000;
     position: relative;
     display: block;
+    animation: dropEnter var(--duration-enter) var(--ease-out-expo) both;
     transition:
         transform var(--duration-normal) var(--ease-out-expo),
         box-shadow var(--duration-normal) var(--ease-out-expo);
 }
+
+@keyframes dropEnter {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.drop-card:nth-child(1) { animation-delay: 100ms; }
+.drop-card:nth-child(2) { animation-delay: 200ms; }
 
 .drop-card:hover {
     transform: translateY(-6px);

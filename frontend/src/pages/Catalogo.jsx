@@ -3,7 +3,6 @@ import { useParams, Link } from 'react-router-dom';
 import { getProductos } from '../api/productosApi';
 import { BACKEND_URL } from '../constants';
 import usePageTitle from '../hooks/usePageTitle';
-import useScrollReveal from '../hooks/useScrollReveal';
 import Banner from '../components/Banner';
 import { CartContext } from '../context/CartContext';
 import '../styles/catalogo.css';
@@ -15,7 +14,6 @@ const Catalogo = () => {
   const [busqueda, setBusqueda] = useState('');
   const [ordenar, setOrdenar] = useState('nombre');
   const { isCartOpen, isMenuOpen } = useContext(CartContext);
-  const revealRef = useScrollReveal();
 
   const colecciones = useMemo(() => {
     const cols = [...new Set(todos.map(p => p.coleccion).filter(Boolean))];
@@ -71,12 +69,12 @@ const Catalogo = () => {
   }, [todos, coleccion, busqueda, ordenar]);
 
   return (
-    <div ref={revealRef} className="page-enter">
+    <div className="page-enter">
       {!isCartOpen && !isMenuOpen && <Banner />}
       <section className="catalogo-page">
-        <h2 className="catalogo-titulo reveal">{titulo}</h2>
+        <h2 className="catalogo-titulo">{titulo}</h2>
 
-        <div className="catalogo-filters reveal">
+        <div className="catalogo-filters">
           <input
             type="text"
             placeholder="Buscar productos..."
@@ -114,9 +112,9 @@ const Catalogo = () => {
         )}
 
         {!loading && productos.length > 0 && (
-          <div className="catalogo-grid stagger-children">
+          <div className="catalogo-grid">
             {productos.map(producto => (
-              <Link to={`/producto/${producto.id_producto}`} key={producto.id_producto} className="catalogo-card reveal">
+              <Link to={`/producto/${producto.id_producto}`} key={producto.id_producto} className="catalogo-card">
                 <div className="catalogo-img-wrapper">
                   <img
                     src={producto.imagen_url ? `${BACKEND_URL}${producto.imagen_url}` : ''}

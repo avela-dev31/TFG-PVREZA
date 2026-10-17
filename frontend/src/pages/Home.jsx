@@ -2,7 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import usePageTitle from '../hooks/usePageTitle';
-import useScrollReveal from '../hooks/useScrollReveal';
 import Banner from '../components/Banner';
 import { CartContext } from '../context/CartContext';
 import '../styles/home.css';
@@ -49,14 +48,13 @@ const Home = () => {
   usePageTitle('Inicio');
   const { isCartOpen, isMenuOpen } = useContext(CartContext);
   const [showSplash, setShowSplash] = useState(true);
-  const revealRef = useScrollReveal();
 
   if (showSplash) {
     return <SplashScreen onFinish={() => setShowSplash(false)} />;
   }
 
   return (
-    <div ref={revealRef} className="page-enter">
+    <div className="page-enter">
       {!isCartOpen && !isMenuOpen && <Banner />}
 
       <section className="hero-section">
@@ -64,15 +62,15 @@ const Home = () => {
       </section>
 
       <section className="drops-section">
-        <h2 className="drops-title reveal">DROPS</h2>
-        <div className="drops-grid stagger-children">
-          <Link to="/catalogo/drop-genesis" className="drop-card reveal">
+        <h2 className="drops-title">DROPS</h2>
+        <div className="drops-grid">
+          <Link to="/catalogo/drop-genesis" className="drop-card">
             <div className="drop-img-wrapper">
               <img src="/assets/img/camis/IMG_8516a.jpg" alt="Genesis" className="drop-img" />
             </div>
             <p className="drop-name">GENESIS</p>
           </Link>
-          <Link to="/isla-bonita" className="drop-card drop-card-coming reveal">
+          <Link to="/isla-bonita" className="drop-card drop-card-coming">
             <div className="drop-img-wrapper">
               <img src="/assets/img/ISLA BONITA/IMG_7421a.jpg" alt="Isla Bonita" className="drop-img" />
               <span className="drop-badge">PRÓXIMAMENTE</span>
