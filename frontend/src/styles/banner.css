@@ -1,0 +1,40 @@
+/* =========================================
+   BANNER — ANIMATED TICKER
+   ========================================= */
+
+.pvreza-banner-container {
+    width: 100%;
+    background-color: #1e2b3d;
+    color: #fff;
+    overflow: hidden;
+    padding: 8px 0;
+    position: relative;
+    z-index: 99;
+}
+
+.pvreza-banner-track {
+    display: flex;
+    width: max-content;
+    animation: scroll-banner 20s linear infinite;
+}
+
+.pvreza-banner-track:hover {
+    animation-play-state: paused;
+}
+
+.pvreza-banner-track span {
+    font-size: 0.75rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+    white-space: nowrap;
+    padding-right: 45px;
+}
+
+@keyframes scroll-banner {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}

@@ -1,0 +1,259 @@
+/* =========================================
+   CATÁLOGO — LIQUID GLASS
+   ========================================= */
+
+.catalogo-page {
+    padding: 48px 24px;
+}
+
+.catalogo-titulo {
+    text-align: center;
+    font-size: 13px;
+    letter-spacing: 4px;
+    color: #999;
+    margin-bottom: 32px;
+}
+
+.catalogo-loading {
+    text-align: center;
+    letter-spacing: 3px;
+    color: #999;
+}
+
+/* =========================================
+   FILTERS — GLASS CHIPS
+   ========================================= */
+.catalogo-filters {
+    max-width: 1100px;
+    margin: 0 auto 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.catalogo-search {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+    font-size: 14px;
+    outline: none;
+    letter-spacing: 0.5px;
+    transition:
+        border-color var(--duration-fast) var(--ease-smooth),
+        background-color var(--duration-fast) var(--ease-smooth),
+        box-shadow var(--duration-fast) var(--ease-smooth);
+}
+
+.catalogo-search:focus {
+    border-color: #000;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.catalogo-filter-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.catalogo-chips {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.catalogo-chip {
+    text-decoration: none;
+    color: #666;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 10px 18px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    background: rgba(0, 0, 0, 0.02);
+    transition:
+        background-color var(--duration-fast) var(--ease-smooth),
+        color var(--duration-fast) var(--ease-smooth),
+        border-color var(--duration-fast) var(--ease-smooth),
+        transform var(--duration-fast) var(--ease-spring),
+        box-shadow var(--duration-fast) var(--ease-smooth);
+}
+
+.catalogo-chip:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.catalogo-chip.active {
+    background-color: #000;
+    color: #fff;
+    border-color: #000;
+}
+
+.catalogo-select {
+    padding: 10px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    font-size: 12px;
+    letter-spacing: 1px;
+    outline: none;
+    cursor: pointer;
+    background: rgba(0, 0, 0, 0.02);
+    transition:
+        border-color var(--duration-fast) var(--ease-smooth),
+        box-shadow var(--duration-fast) var(--ease-smooth);
+}
+
+.catalogo-select:focus {
+    border-color: #000;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* =========================================
+   PRODUCT GRID — CARD HOVER
+   ========================================= */
+.catalogo-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 32px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.catalogo-card {
+    text-decoration: none;
+    color: #000;
+    display: block;
+    transition:
+        transform var(--duration-normal) var(--ease-out-expo),
+        box-shadow var(--duration-normal) var(--ease-out-expo);
+}
+
+.catalogo-card:hover {
+    transform: translateY(-4px);
+}
+
+.catalogo-card:hover .catalogo-img {
+    transform: scale(1.03);
+}
+
+.catalogo-img-wrapper {
+    overflow: hidden;
+    border-radius: 2px;
+}
+
+.catalogo-img {
+    width: 100%;
+    aspect-ratio: 3/4;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--duration-slow) var(--ease-out-expo);
+}
+
+.catalogo-nombre {
+    font-size: 13px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    margin-top: 14px;
+    margin-bottom: 4px;
+    transition: opacity var(--duration-fast) var(--ease-smooth);
+}
+
+.catalogo-card:hover .catalogo-nombre {
+    opacity: 0.7;
+}
+
+.catalogo-precio {
+    font-size: 13px;
+    color: #666;
+}
+
+/* =========================================
+   FAVORITOS
+   ========================================= */
+.favoritos-empty {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+}
+
+.favoritos-explore-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 14px 32px;
+    background-color: #000;
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    letter-spacing: 3px;
+    font-weight: 600;
+    transition:
+        transform var(--duration-fast) var(--ease-spring),
+        background-color var(--duration-normal) var(--ease-smooth);
+}
+
+.favoritos-explore-btn:hover {
+    background-color: #222;
+    transform: translateY(-1px);
+}
+
+.favorito-remove-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 1.5px;
+    color: #999;
+    text-decoration: underline;
+    margin-top: 8px;
+    padding: 0;
+    transition: color var(--duration-fast) var(--ease-smooth);
+}
+
+.favorito-remove-btn:hover {
+    color: #000;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+    .catalogo-page {
+        padding: 32px 16px;
+    }
+
+    .catalogo-filter-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .catalogo-chips {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        flex-wrap: nowrap;
+        padding-bottom: 4px;
+    }
+
+    .catalogo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+    }
+
+    .catalogo-nombre {
+        font-size: 11px;
+    }
+
+    .catalogo-precio {
+        font-size: 11px;
+    }
+}
+
+@media (max-width: 400px) {
+    .catalogo-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}

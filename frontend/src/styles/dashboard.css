@@ -1,0 +1,349 @@
+/* dashboard.css */
+.dashboard-layout {
+    display: flex;
+    min-height: 100vh;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    background-color: #f9f9f9;
+    animation: pageEnter var(--duration-enter) var(--ease-out-expo) both;
+}
+
+/* --- SIDEBAR --- */
+.dashboard-sidebar {
+    width: 250px;
+    background-color: #000;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0; /* Evita que el menú encoja */
+}
+
+.sidebar-header {
+    padding: 30px 20px;
+    border-bottom: 1px solid #333;
+}
+
+.sidebar-header h2 {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin: 0 0 5px 0;
+}
+
+.sidebar-header p {
+    font-size: 0.8rem;
+    color: #888;
+    margin: 0;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 0;
+}
+
+.sidebar-nav button {
+    background: none;
+    border: none;
+    color: #888;
+    text-align: left;
+    padding: 15px 20px;
+    font-size: 0.9rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition:
+        color var(--duration-fast) var(--ease-smooth),
+        background-color var(--duration-fast) var(--ease-smooth),
+        border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.sidebar-nav button:hover {
+    color: #fff;
+    background-color: #111;
+}
+
+.sidebar-nav button.active {
+    color: #fff;
+    background-color: #222;
+    border-left: 4px solid #fff;
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.dashboard-content {
+    flex: 1;
+    padding: 40px;
+    overflow-y: auto;
+}
+
+.dash-section h2 {
+    font-size: 1.8rem;
+    margin-top: 0;
+    margin-bottom: 30px;
+    letter-spacing: 1px;
+}
+
+/* Tarjetas de Resumen */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 25px;
+    border: 1px solid #eee;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+    transition:
+        box-shadow var(--duration-normal) var(--ease-smooth),
+        transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.stat-card:hover {
+    box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+    transform: translateY(-2px);
+}
+
+.stat-card.alert {
+    border-left: 4px solid #e00000;
+}
+
+.stat-card h3 {
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0 0 10px 0;
+    letter-spacing: 1px;
+}
+
+.stat-number {
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin: 0;
+}
+
+.stat-label {
+    font-size: 0.75rem;
+    color: #e00000;
+    font-weight: bold;
+}
+
+/* Cabecera de Secciones */
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.btn-primary {
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 12px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
+.btn-primary:hover {
+    background: #333;
+}
+
+/* Tablas Administrativas */
+.admin-table {
+    width: 100%;
+    background: #fff;
+    border-collapse: collapse;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.02);
+}
+
+.admin-table th, .admin-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    font-size: 0.9rem;
+}
+
+.admin-table th {
+    background: #fafafa;
+    color: #666;
+    font-weight: bold;
+    letter-spacing: 1px;
+}
+
+.status-badge {
+    padding: 4px 8px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    border-radius: 3px;
+}
+
+.status-badge.ok { background: #e6f4ea; color: #1e8e3e; }
+.status-badge.out { background: #fce8e6; color: #d93025; }
+
+.actions-cell {
+    display: flex;
+    gap: 15px;
+}
+
+.btn-text {
+    background: none;
+    border: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.btn-text.danger { color: #d93025; }
+
+/* --- DIALOG CREAR PRODUCTO --- */
+.product-dialog {
+    border: none;
+    border-radius: 8px;
+    padding: 40px;
+    width: 90%;
+    max-width: 480px;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.15);
+    position: relative;
+    animation: modalContentIn var(--duration-slow) var(--ease-out-expo) both;
+}
+
+@keyframes modalContentIn {
+    from { opacity: 0; transform: scale(0.95) translateY(20px); }
+    to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.product-dialog::backdrop {
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.product-dialog h2 {
+    font-size: 1.2rem;
+    letter-spacing: 2px;
+    margin: 0 0 24px 0;
+}
+
+.modal-close-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #999;
+    line-height: 1;
+}
+
+.modal-close-btn:hover {
+    color: #000;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-field label {
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    color: #666;
+    font-weight: bold;
+}
+
+.form-field input,
+.form-field textarea {
+    padding: 12px 14px;
+    border: 1px solid #e5e5e5;
+    font-size: 0.9rem;
+    outline: none;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+    border-color: #000;
+}
+
+.modal-error {
+    color: #d93025;
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.modal-form .btn-primary {
+    margin-top: 8px;
+}
+
+.btn-primary:disabled {
+    background: #999;
+    cursor: not-allowed;
+}
+
+/* --- PEDIDOS ADMIN --- */
+.pedidos-admin-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.pedido-admin-card {
+    background: #fff;
+    border: 1px solid #eee;
+    padding: 20px;
+}
+
+.pedido-admin-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.pedido-admin-header strong {
+    font-size: 0.95rem;
+    margin-right: 12px;
+}
+
+.pedido-admin-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.pedido-admin-user {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+}
+
+.pedido-admin-email {
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.pedido-admin-total {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+}
+
+.pedido-admin-actions {
+    display: flex;
+    gap: 12px;
+    padding-top: 12px;
+    border-top: 1px solid #eee;
+}

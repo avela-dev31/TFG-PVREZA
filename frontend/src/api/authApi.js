@@ -1,0 +1,15 @@
+import api from './axios';
+
+export const loginRequest = (data) => api.post('/auth/login', data);
+export const registerRequest = (data) => api.post('/auth/register', data);
+
+export const getMe = () => api.get('/users/me');
+export const updateProfile = (data) => api.put('/users/me', data);
+export const updatePassword = (data) => api.put('/users/me/password', data);
+
+export const forgotPassword = (email) => api.post('/auth/forgot-password', { email });
+export const resetPasswordRequest = (token, password) => api.post('/auth/reset-password', { token, password });
+
+export const getFavoritos = () => api.get('/users/favoritos');
+export const addFavorito = (idProducto) => api.post(`/users/favoritos/${idProducto}`);
+export const removeFavorito = (idProducto) => api.delete(`/users/favoritos/${idProducto}`);

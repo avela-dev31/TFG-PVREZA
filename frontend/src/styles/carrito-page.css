@@ -1,0 +1,139 @@
+/* =========================================
+   CARRITO PAGE — LIQUID GLASS
+   ========================================= */
+
+.cart-page {
+    max-width: 1200px;
+    margin: 60px auto;
+    padding: 0 20px;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    animation: pageEnter var(--duration-enter) var(--ease-out-expo) both;
+}
+
+.cart-page-header {
+    border-bottom: 1px solid #000;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+}
+
+.cart-page-header h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    margin-bottom: 5px;
+}
+
+.cart-container {
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 60px;
+    align-items: start;
+}
+
+/* Fila de producto */
+.cart-item-row {
+    display: flex;
+    align-items: center;
+    padding: 25px 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    transition:
+        background-color var(--duration-fast) var(--ease-smooth),
+        transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.cart-item-row:hover {
+    background-color: rgba(0, 0, 0, 0.01);
+}
+
+.item-img img {
+    width: 120px;
+    height: 150px;
+    object-fit: cover;
+    margin-right: 30px;
+    border-radius: 2px;
+}
+
+.item-info { flex: 1; }
+.item-info h3 { font-size: 1rem; margin-bottom: 10px; text-transform: uppercase; }
+.item-meta { font-size: 0.8rem; color: #666; margin-bottom: 5px; }
+
+.btn-remove {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 0.75rem;
+    cursor: pointer;
+    color: #999;
+    padding: 0;
+    margin-top: 15px;
+    transition: color var(--duration-fast) var(--ease-smooth);
+}
+
+.btn-remove:hover {
+    color: #000;
+}
+
+.item-total-price {
+    font-weight: bold;
+    font-size: 1.1rem;
+    width: 100px;
+    text-align: right;
+}
+
+/* Caja de Resumen — Glass */
+.cart-summary-box {
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid var(--glass-border);
+    padding: 30px;
+    position: sticky;
+    top: 100px;
+}
+
+.cart-summary-box h2 { font-size: 1.2rem; margin-bottom: 25px; }
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    font-size: 0.9rem;
+}
+
+.summary-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.btn-checkout {
+    width: 100%;
+    background: #000;
+    color: #fff;
+    border: none;
+    padding: 18px;
+    margin-top: 30px;
+    cursor: pointer;
+    font-weight: bold;
+    letter-spacing: 1px;
+    transition:
+        background-color var(--duration-normal) var(--ease-smooth),
+        transform var(--duration-fast) var(--ease-spring),
+        box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.btn-checkout:hover {
+    background: #222;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.btn-checkout:active {
+    transform: translateY(0) scale(0.99);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .cart-container { grid-template-columns: 1fr; }
+}

@@ -1,0 +1,266 @@
+/* =========================================
+   INFO PAGES — LIQUID GLASS
+   ========================================= */
+
+.info-page {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 0 20px 60px;
+    animation: pageEnter var(--duration-enter) var(--ease-out-expo) both;
+}
+
+.info-page h1 {
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+    margin: 0 0 15px;
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+}
+
+.info-page .intro {
+    font-size: 0.95rem;
+    color: #666;
+    margin-bottom: 50px;
+    line-height: 1.6;
+}
+
+/* =========================================
+   FAQ — ACCORDION
+   ========================================= */
+.faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.faq-item {
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.faq-question {
+    width: 100%;
+    background: none;
+    border: none;
+    text-align: left;
+    padding: 22px 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color var(--duration-fast) var(--ease-smooth);
+}
+
+.faq-question:hover {
+    color: #666;
+}
+
+.faq-icon {
+    font-size: 1.2rem;
+    font-weight: 300;
+    transition: transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.faq-item.open .faq-icon {
+    transform: rotate(45deg);
+}
+
+.faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition:
+        max-height var(--duration-normal) var(--ease-out-expo),
+        padding var(--duration-normal) var(--ease-out-expo);
+}
+
+.faq-item.open .faq-answer {
+    max-height: 300px;
+    padding-bottom: 22px;
+}
+
+.faq-answer p {
+    font-size: 0.9rem;
+    color: #555;
+    line-height: 1.7;
+    margin: 0;
+}
+
+/* =========================================
+   INFO SECTIONS
+   ========================================= */
+.info-section {
+    margin-bottom: 45px;
+}
+
+.info-section h2 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+}
+
+.info-section p,
+.info-section li {
+    font-size: 0.95rem;
+    color: #333;
+    line-height: 1.7;
+    margin-bottom: 8px;
+}
+
+.info-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.info-section ul li::before {
+    content: "—";
+    margin-right: 10px;
+    color: #999;
+}
+
+/* Tabla de tarifas */
+.shipping-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.shipping-table th,
+.shipping-table td {
+    text-align: left;
+    padding: 12px 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.shipping-table th {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #888;
+}
+
+/* =========================================
+   CONTACTO — FORM + INFO
+   ========================================= */
+.contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 50px;
+    margin-top: 10px;
+}
+
+.contact-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.form-group input,
+.form-group textarea {
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+    padding: 12px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    outline: none;
+    transition:
+        border-color var(--duration-fast) var(--ease-smooth),
+        background-color var(--duration-fast) var(--ease-smooth),
+        box-shadow var(--duration-fast) var(--ease-smooth);
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    border-color: #000;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 120px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 16px;
+    background: #000;
+    color: #fff;
+    border: none;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition:
+        background-color var(--duration-normal) var(--ease-smooth),
+        transform var(--duration-fast) var(--ease-spring),
+        box-shadow var(--duration-normal) var(--ease-smooth);
+}
+
+.submit-btn:hover {
+    background: #222;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.submit-btn:active {
+    transform: translateY(0) scale(0.99);
+}
+
+.contact-info-side h3 {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 2px;
+    color: #888;
+    margin-bottom: 15px;
+}
+
+.contact-info-side p {
+    font-size: 0.9rem;
+    color: #333;
+    line-height: 1.7;
+    margin-bottom: 6px;
+}
+
+.contact-info-side a {
+    color: #000;
+    text-decoration: underline;
+    transition: opacity var(--duration-fast) var(--ease-smooth);
+}
+
+.contact-info-side a:hover {
+    opacity: 0.6;
+}
+
+.contact-info-block {
+    margin-bottom: 35px;
+}
+
+@media (max-width: 700px) {
+    .info-page h1 {
+        font-size: 1.8rem;
+    }
+
+    .contact-grid {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}

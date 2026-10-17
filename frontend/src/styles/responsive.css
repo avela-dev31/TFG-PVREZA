@@ -1,0 +1,61 @@
+/* =========================================
+   RESPONSIVE GLOBAL
+   ========================================= */
+
+/* Cart drawer full-width on small screens */
+@media (max-width: 420px) {
+    .cart-drawer {
+        max-width: 100%;
+    }
+}
+
+/* Carrito page */
+@media (max-width: 768px) {
+    .cart-page {
+        margin: 30px auto;
+    }
+
+    .cart-item-row {
+        flex-wrap: wrap;
+    }
+
+    .item-img img {
+        width: 80px;
+        height: 100px;
+    }
+}
+
+/* General touch improvements */
+@media (max-width: 768px) {
+    button, a, select, input[type="range"] {
+        min-height: 44px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"],
+    input[type="number"] {
+        font-size: 16px;
+    }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+
+    html {
+        scroll-behavior: auto;
+    }
+
+    .reveal,
+    .reveal-scale,
+    .reveal-left,
+    .reveal-right {
+        opacity: 1;
+        transform: none;
+    }
+}

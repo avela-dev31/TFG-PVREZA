@@ -1,0 +1,32 @@
+/* 1. Importamos la fuente de Google Fonts (Ejemplo con Montserrat) */
+@font-face {
+  font-family: 'FuentePvreza'; /* El nombre que tú quieras darle */
+  src: url('./assets/fonts/Belgiano_Seriff_2.ttf') format('truetype');
+  font-weight: normal; /* O bold, dependiendo del archivo */
+  font-style: normal;
+}
+
+/* 2. Se la aplicamos a TODA la página */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  /* Aquí defines la fuente principal */
+  font-family: 'Montserrat', 'Helvetica Neue', sans-serif;
+  
+  /* Detalles extra para que se vea premium */
+  background-color: #fff; /* o #000 si quieres que toda la web sea negra */
+  color: #000;
+  -webkit-font-smoothing: antialiased; /* Hace que la letra se vea más nítida en Mac/iPhone */
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 3. Opcional: Hacer que los títulos sean siempre en mayúsculas y más gruesos */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px; /* Separar un poco las letras da un toque lujoso */
+}

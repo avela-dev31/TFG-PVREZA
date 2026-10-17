@@ -1,0 +1,360 @@
+/* =========================================
+   PERFIL — LIQUID GLASS
+   ========================================= */
+
+.perfil-page {
+    max-width: 800px;
+    margin: 100px auto;
+    padding: 0 20px;
+    animation: pageEnter var(--duration-enter) var(--ease-out-expo) both;
+}
+
+.perfil-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid #000;
+    padding-bottom: 15px;
+    margin-bottom: 40px;
+}
+
+.perfil-header h1 {
+    font-size: 2.5rem;
+    letter-spacing: -1px;
+    margin: 0;
+}
+
+.logout-btn {
+    background: none;
+    border: none;
+    text-decoration: underline;
+    font-size: 0.8rem;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 1px;
+    transition:
+        opacity var(--duration-fast) var(--ease-smooth),
+        transform var(--duration-fast) var(--ease-spring);
+}
+
+.logout-btn:hover {
+    opacity: 0.6;
+    transform: translateY(-1px);
+}
+
+.user-info-card {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.info-group label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #888;
+    margin-bottom: 5px;
+    letter-spacing: 1px;
+}
+
+.info-group p {
+    font-size: 1.1rem;
+    margin: 0;
+    font-weight: 500;
+}
+
+.role-tag {
+    display: inline-block;
+    background: #000;
+    color: #fff;
+    padding: 2px 8px;
+    font-size: 0.7rem !important;
+}
+
+.perfil-actions h2 {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+}
+
+.action-btn {
+    width: 100%;
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #000;
+    font-weight: bold;
+    cursor: pointer;
+    letter-spacing: 2px;
+    transition:
+        background-color var(--duration-normal) var(--ease-smooth),
+        color var(--duration-normal) var(--ease-smooth),
+        transform var(--duration-fast) var(--ease-spring);
+}
+
+.action-btn:hover {
+    background: #000;
+    color: #fff;
+    transform: translateY(-1px);
+}
+
+.action-btn.admin {
+    background: #000;
+    color: #fff;
+}
+
+.action-btn.admin:hover {
+    background: #222;
+}
+
+/* Pedidos */
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.order-card {
+    border: 1px solid #e0e0e0;
+    padding: 25px;
+    transition:
+        box-shadow var(--duration-normal) var(--ease-smooth),
+        transform var(--duration-normal) var(--ease-out-expo);
+}
+
+.order-card:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transform: translateY(-2px);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.order-id {
+    font-weight: bold;
+    font-size: 0.95rem;
+    margin-right: 15px;
+}
+
+.order-date {
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.order-status {
+    font-size: 0.7rem;
+    font-weight: bold;
+    letter-spacing: 1px;
+    padding: 4px 12px;
+}
+
+.status-pendiente { background: #fff3cd; color: #856404; }
+.status-pagado    { background: #d4edda; color: #155724; }
+.status-enviado   { background: #cce5ff; color: #004085; }
+.status-entregado { background: #e0e0e0; color: #333; }
+.status-rechazado { background: #f8d7da; color: #721c24; }
+
+.order-items {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.order-item {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.order-item img {
+    width: 55px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 2px;
+}
+
+.order-item-info { flex: 1; }
+
+.order-item-name {
+    font-size: 0.85rem;
+    font-weight: bold;
+    text-transform: uppercase;
+    margin: 0 0 3px;
+}
+
+.order-item-meta {
+    font-size: 0.75rem;
+    color: #666;
+    margin: 0;
+}
+
+.order-item-price {
+    font-weight: bold;
+    font-size: 0.9rem;
+    margin: 0;
+}
+
+.order-footer {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    text-align: right;
+}
+
+.order-total {
+    font-weight: bold;
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+}
+
+/* Tabs */
+.perfil-tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 30px;
+}
+
+.perfil-tab {
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -2px;
+    padding: 12px 20px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    cursor: pointer;
+    color: #999;
+    transition:
+        color var(--duration-fast) var(--ease-smooth),
+        border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.perfil-tab.active {
+    color: #000;
+    border-bottom-color: #000;
+}
+
+.perfil-tab:hover {
+    color: #000;
+}
+
+.perfil-section {
+    margin-top: 10px;
+}
+
+/* Edit form */
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 500px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.7rem;
+    font-weight: 800;
+    color: #888;
+    letter-spacing: 1px;
+}
+
+.form-group input {
+    padding: 12px 14px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    background: rgba(0, 0, 0, 0.02);
+    font-size: 0.95rem;
+    outline: none;
+    transition:
+        border-color var(--duration-fast) var(--ease-smooth),
+        background-color var(--duration-fast) var(--ease-smooth),
+        box-shadow var(--duration-fast) var(--ease-smooth);
+}
+
+.form-group input:focus {
+    border-color: #000;
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.form-hint {
+    font-size: 0.7rem;
+    color: #999;
+}
+
+.form-success {
+    color: #155724;
+    background: #d4edda;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin: 0;
+    animation: pageEnter var(--duration-normal) var(--ease-out-expo) both;
+}
+
+.form-error {
+    color: #721c24;
+    background: #f8d7da;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    margin: 0;
+    animation: pageEnter var(--duration-normal) var(--ease-out-expo) both;
+}
+
+@media (max-width: 768px) {
+    .perfil-page {
+        margin: 40px auto;
+    }
+
+    .perfil-header h1 {
+        font-size: 1.5rem;
+    }
+
+    .user-info-card {
+        grid-template-columns: 1fr;
+        gap: 16px;
+        margin-bottom: 30px;
+    }
+
+    .perfil-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .perfil-tab {
+        padding: 10px 14px;
+        font-size: 0.65rem;
+        white-space: nowrap;
+    }
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .order-card {
+        padding: 16px;
+    }
+}
