@@ -75,25 +75,6 @@ const Home = () => {
         <HeroVideo />
       </section>
 
-      <section className="drops-section">
-        <h2 className="drops-title">DROPS</h2>
-        <div className="drops-grid">
-          <Link to="/catalogo/drop-genesis" className="drop-card">
-            <div className="drop-img-wrapper">
-              <img src="/assets/img/camis/IMG_8516a.jpg" alt="Genesis" className="drop-img" />
-            </div>
-            <p className="drop-name">GENESIS</p>
-          </Link>
-          <Link to="/isla-bonita" className="drop-card drop-card-coming">
-            <div className="drop-img-wrapper">
-              <img src="/assets/img/ISLA BONITA/IMG_7421a.jpg" alt="Isla Bonita" className="drop-img" />
-              <span className="drop-badge">PRÓXIMAMENTE</span>
-            </div>
-            <p className="drop-name">ISLA BONITA</p>
-          </Link>
-        </div>
-      </section>
-
       <section className="productos-section">
         <h2 className="drops-title">ALL PRODUCTS</h2>
         {loading && <p className="catalogo-loading">CARGANDO...</p>}
