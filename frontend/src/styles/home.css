@@ -166,6 +166,13 @@
 }
 
 /* =========================================
+   ALL PRODUCTS SECTION
+   ========================================= */
+.productos-section {
+    padding: 80px 24px;
+}
+
+/* =========================================
    RESPONSIVE
    ========================================= */
 @media (max-width: 768px) {
@@ -185,5 +192,9 @@
     .drop-name {
         font-size: 11px;
         margin-top: 8px;
+    }
+
+    .productos-section {
+        padding: 48px 12px;
     }
 }
