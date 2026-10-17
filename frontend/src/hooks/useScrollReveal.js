@@ -1,14 +1,14 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useCallback, useState } from 'react';
 
 export default function useScrollReveal(selector = '.reveal, .reveal-scale, .reveal-left, .reveal-right', threshold = 0.15) {
-  const containerRef = useRef(null);
+  const [container, setContainer] = useState(null);
+
+  const refCallback = useCallback(node => {
+    setContainer(node);
+  }, []);
 
   useEffect(() => {
-    const root = containerRef.current;
-    if (!root) return;
-
-    const elements = root.querySelectorAll(selector);
-    if (!elements.length) return;
+    if (!container) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -22,10 +22,25 @@ export default function useScrollReveal(selector = '.reveal, .reveal-scale, .rev
       { threshold, rootMargin: '0px 0px -40px 0px' }
     );
 
-    elements.forEach((el) => observer.observe(el));
+    const observeNewElements = () => {
+      const elements = container.querySelectorAll(selector);
+      elements.forEach((el) => {
+        if (!el.classList.contains('visible')) {
+          observer.observe(el);
+        }
+      });
+    };
 
-    return () => observer.disconnect();
-  }, [selector, threshold]);
+    observeNewElements();
 
-  return containerRef;
+    const mutation = new MutationObserver(observeNewElements);
+    mutation.observe(container, { childList: true, subtree: true });
+
+    return () => {
+      observer.disconnect();
+      mutation.disconnect();
+    };
+  }, [container, selector, threshold]);
+
+  return refCallback;
 }
