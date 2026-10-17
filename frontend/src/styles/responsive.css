@@ -51,11 +51,4 @@
         scroll-behavior: auto;
     }
 
-    .reveal,
-    .reveal-scale,
-    .reveal-left,
-    .reveal-right {
-        opacity: 1;
-        transform: none;
-    }
 }
