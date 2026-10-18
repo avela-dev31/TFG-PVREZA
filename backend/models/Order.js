@@ -47,7 +47,7 @@ const Order = {
 
   checkStock: async (id_stock) => {
     const { rows } = await db.query(
-      `SELECT s.cantidad, p.precio
+      `SELECT s.cantidad, s.talla, p.precio, p.nombre
        FROM stock s
        JOIN productos p ON s.id_producto = p.id_producto
        WHERE s.id_stock = $1`,
@@ -121,6 +121,26 @@ const Order = {
     for (const item of rows) {
       await db.query(
         'UPDATE stock SET cantidad = cantidad + $1 WHERE id_stock = $2',
+        [item.cantidad, item.id_stock]
+      );
+    }
+  },
+
+  setStripeSession: async (id_pedido, stripe_session_id) => {
+    await db.query(
+      'UPDATE pedidos SET stripe_session_id = $1 WHERE id_pedido = $2',
+      [stripe_session_id, id_pedido]
+    );
+  },
+
+  decreaseStockForOrder: async (id_pedido) => {
+    const { rows } = await db.query(
+      'SELECT id_stock, cantidad FROM detalles_pedido WHERE id_pedido = $1',
+      [id_pedido]
+    );
+    for (const item of rows) {
+      await db.query(
+        'UPDATE stock SET cantidad = cantidad - $1 WHERE id_stock = $2',
         [item.cantidad, item.id_stock]
       );
     }

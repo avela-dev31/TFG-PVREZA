@@ -247,6 +247,27 @@
     transform: translateY(-1px);
 }
 
+/* Info usuario + nota Stripe */
+.checkout-user-info {
+    margin-bottom: 24px;
+    padding: 16px;
+    background: rgba(0, 0, 0, 0.02);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.checkout-user-info p {
+    font-size: 0.9rem;
+    margin: 4px 0;
+    color: #333;
+}
+
+.checkout-stripe-note {
+    font-size: 0.85rem;
+    color: #666;
+    margin-bottom: 24px;
+    line-height: 1.5;
+}
+
 /* Carrito vacío */
 .checkout-empty {
     text-align: center;

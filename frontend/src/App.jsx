@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext'; 
 import Navbar from './components/Navbar';
@@ -11,6 +11,7 @@ import Catalogo from './pages/Catalogo';
 import Producto from './pages/Producto';
 import Carrito from './pages/Carrito';
 import Checkout from './pages/Checkout';
+import CheckoutSuccess from './pages/CheckoutSuccess';
 import Login from './pages/Login';
 import Registro from './pages/Registro';
 import Perfil from './pages/Perfil';
@@ -21,7 +22,6 @@ import Envios from './pages/Envios';
 import Contacto from './pages/Contacto';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
-import IslaBonita from './pages/IslaBonita';
 
 function App() {
   return (
@@ -41,7 +41,7 @@ function App() {
             <Route path="/faq" element={<FAQ />} />
             <Route path="/envios" element={<Envios />} />
             <Route path="/contacto" element={<Contacto />} />
-            <Route path="/isla-bonita" element={<IslaBonita />} />
+            <Route path="/isla-bonita" element={<Navigate to="/catalogo/isla-bonita" replace />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password/:token" element={<ResetPassword />} />
 
@@ -49,6 +49,7 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route path="/carrito" element={<Carrito />} />
               <Route path="/checkout" element={<Checkout />} />
+              <Route path="/checkout/success" element={<CheckoutSuccess />} />
               <Route path="/perfil" element={<Perfil />} />
               <Route path="/favoritos" element={<Favoritos />} />
             </Route>

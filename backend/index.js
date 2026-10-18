@@ -11,6 +11,8 @@ const authRoutes = require('./routes/authRoutes');
 const usuariosRoutes = require('./routes/usuariosRoutes');
 const pedidosRoutes = require('./routes/pedidosRoutes');
 const reservasRoutes = require('./routes/reservasRoutes');
+const stripeRoutes = require('./routes/stripeRoutes');
+const { handleWebhook } = require('./controllers/stripeController');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -44,6 +46,11 @@ app.use(cors({
 }));
 
 // ============================================
+// STRIPE WEBHOOK — necesita el body crudo, va ANTES del JSON parser
+// ============================================
+app.post('/api/stripe/webhook', express.raw({ type: 'application/json' }), handleWebhook);
+
+// ============================================
 // PARSEO — limita el tamaño del body (evita ataques DoS)
 // ============================================
 app.use(express.json({ limit: '10kb' }));
@@ -56,6 +63,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/users', usuariosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 app.use('/api/reservas', reservasRoutes);
+app.use('/api/stripe', stripeRoutes);
 
 app.get("/", (req, res) => {
   res.json({ status: "ok", message: "Backend PVREZA activo" });
