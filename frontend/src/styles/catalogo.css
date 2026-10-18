@@ -161,7 +161,7 @@
 .catalogo-img {
     width: 100%;
     aspect-ratio: 3/4;
-    object-fit: cover;
+    object-fit: contain;
     display: block;
     transition: transform var(--duration-slow) var(--ease-out-expo);
 }
