@@ -76,7 +76,7 @@ const Home = () => {
       </section>
 
       <section className="productos-section">
-        <h2 className="drops-title">ALL PRODUCTS</h2>
+        <h2 className="drops-title">PRODUCTOS</h2>
         {loading && <p className="catalogo-loading">CARGANDO...</p>}
         {!loading && productos.length > 0 && (
           <div className="catalogo-grid">
