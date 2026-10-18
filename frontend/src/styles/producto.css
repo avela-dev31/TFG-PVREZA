@@ -116,8 +116,9 @@ header {
     width: 100%;
     min-width: 100%;
     flex-shrink: 0;
-    object-fit: cover;
+    object-fit: contain;
     aspect-ratio: 3 / 4;
+    background: #f0f0f0;
 }
 
 /* --- Detalles del Producto --- */
