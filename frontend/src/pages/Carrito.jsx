@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { CartContext } from '../context/CartContext';
 import { Link, useNavigate } from 'react-router-dom';
-import { BACKEND_URL } from '../constants';
+import { imgUrl } from '../constants';
 import '../styles/carrito-page.css';
 
 const Carrito = () => {
@@ -31,7 +31,7 @@ const Carrito = () => {
                     {cart.map((item) => (
                         <div key={item.id_stock} className="cart-item-row">
                             <div className="item-img">
-                                <img src={`${BACKEND_URL}${item.imagen_url}`} alt={item.nombre} />
+                                <img src={imgUrl(item.imagen_url)} alt={item.nombre} />
                             </div>
                             
                             <div className="item-info">

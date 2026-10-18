@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
-import { BACKEND_URL } from '../constants';
+import { imgUrl } from '../constants';
 import '../styles/cart.css';
 
 const CartDrawer = () => {
@@ -29,7 +29,7 @@ const CartDrawer = () => {
                     ) : (
                         cart.map((item) => (
                             <div key={item.id_stock} className="cart-item">
-                                <img src={`${BACKEND_URL}${item.imagen_url}`} alt={item.nombre} />
+                                <img src={imgUrl(item.imagen_url)} alt={item.nombre} />
                                 <div className="item-details">
                                     <p className="item-name">{item.nombre}</p>
                                     <p className="item-size">TALLA: {item.talla}</p>

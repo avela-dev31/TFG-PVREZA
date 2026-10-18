@@ -3,7 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { getMisPedidos } from '../api/pedidosApi';
 import { updateProfile, updatePassword } from '../api/authApi';
-import { BACKEND_URL } from '../constants';
+import { imgUrl } from '../constants';
 import usePageTitle from '../hooks/usePageTitle';
 import '../styles/perfil.css';
 
@@ -191,7 +191,7 @@ const Perfil = () => {
                                                 <div className="order-items">
                                                     {pedido.items.map((item, i) => (
                                                         <div key={i} className="order-item">
-                                                            <img src={`${BACKEND_URL}${item.imagen_url}`} alt={item.nombre} />
+                                                            <img src={imgUrl(item.imagen_url)} alt={item.nombre} />
                                                             <div className="order-item-info">
                                                                 <p className="order-item-name">{item.nombre}</p>
                                                                 <p className="order-item-meta">Talla: {item.talla} | Cant: {item.cantidad}</p>

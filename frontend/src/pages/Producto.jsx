@@ -5,7 +5,7 @@ import { getProductoById, getProductos } from "../api/productosApi";
 import { getFavoritos, addFavorito, removeFavorito } from "../api/authApi";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
-import { BACKEND_URL } from "../constants";
+import { imgUrl } from "../constants";
 import AvatarCreator from "../components/AvatarCreator";
 import Banner from "../components/Banner";
 import guiaTallasImg from "../../assets/img/guia_tallas.png";
@@ -118,12 +118,12 @@ const Producto = () => {
                 imagenes.map((url, index) => (
                   <img
                     key={index}
-                    src={`${BACKEND_URL}${url}`}
+                    src={imgUrl(url)}
                     alt={`${producto.nombre} - vista ${index + 1}`}
                   />
                 ))
               ) : (
-                <img src={`${BACKEND_URL}${producto.imagen_url}`} alt={producto.nombre} />
+                <img src={imgUrl(producto.imagen_url)} alt={producto.nombre} />
               )}
             </div>
           </div>
@@ -206,7 +206,7 @@ const Producto = () => {
                 onClick={() => navigate(`/producto/${p.id_producto}`)}
               >
                 <img
-                  src={p.imagen_url ? `${BACKEND_URL}${p.imagen_url}` : ''}
+                  src={imgUrl(p.imagen_url)}
                   alt={p.nombre}
                 />
                 <p className="otro-producto-nombre">{p.nombre}</p>

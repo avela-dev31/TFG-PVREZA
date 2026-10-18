@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
 import { crearCheckoutSession } from '../api/pedidosApi';
-import { BACKEND_URL } from '../constants';
+import { imgUrl } from '../constants';
 import usePageTitle from '../hooks/usePageTitle';
 import '../styles/checkout.css';
 
@@ -79,7 +79,7 @@ const Checkout = () => {
                     <div className="checkout-items">
                         {cart.map((item) => (
                             <div key={item.id_stock} className="checkout-item">
-                                <img src={`${BACKEND_URL}${item.imagen_url}`} alt={item.nombre} />
+                                <img src={imgUrl(item.imagen_url)} alt={item.nombre} />
                                 <div className="checkout-item-info">
                                     <p className="checkout-item-name">{item.nombre}</p>
                                     <p className="checkout-item-meta">Talla: {item.talla} | Cant: {item.cantidadCompra}</p>

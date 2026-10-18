@@ -5,7 +5,7 @@ import usePageTitle from '../hooks/usePageTitle';
 import Banner from '../components/Banner';
 import { CartContext } from '../context/CartContext';
 import { getProductos } from '../api/productosApi';
-import { BACKEND_URL } from '../constants';
+import { imgUrl } from '../constants';
 import '../styles/home.css';
 import '../styles/catalogo.css';
 
@@ -84,7 +84,7 @@ const Home = () => {
               <Link to={`/producto/${producto.id_producto}`} key={producto.id_producto} className="catalogo-card">
                 <div className="catalogo-img-wrapper">
                   <img
-                    src={producto.imagen_url ? `${BACKEND_URL}${producto.imagen_url}` : ''}
+                    src={imgUrl(producto.imagen_url)}
                     alt={producto.nombre}
                     className="catalogo-img"
                   />

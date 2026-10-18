@@ -1,7 +1,7 @@
 import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import { getFavoritos, removeFavorito } from '../api/authApi';
-import { BACKEND_URL } from '../constants';
+import { imgUrl } from '../constants';
 import { CartContext } from '../context/CartContext';
 import usePageTitle from '../hooks/usePageTitle';
 import Banner from '../components/Banner';
@@ -46,7 +46,7 @@ const Favoritos = () => {
                             <div key={p.id_producto} className="favorito-card">
                                 <Link to={`/producto/${p.id_producto}`} className="catalogo-card">
                                     <img
-                                        src={p.imagen_url ? `${BACKEND_URL}${p.imagen_url}` : ''}
+                                        src={imgUrl(p.imagen_url)}
                                         alt={p.nombre}
                                         className="catalogo-img"
                                     />
