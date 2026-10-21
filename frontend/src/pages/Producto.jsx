@@ -41,7 +41,6 @@ const Producto = () => {
   };
 
   useEffect(() => {
-    window.scrollTo(0, 0);
     setLoading(true);
 
     getProductoById(id)
