@@ -1,7 +1,17 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { validationResult } = require('express-validator');
+const { OAuth2Client } = require('google-auth-library');
+const jwksRsa = require('jwks-rsa');
 const User = require('../models/User');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+
+const appleJwks = jwksRsa({
+  jwksUri: 'https://appleid.apple.com/auth/keys',
+  cache: true,
+  cacheMaxAge: 86400000,
+});
 
 const register = async (req, res) => {
   const errors = validationResult(req);
@@ -9,7 +19,7 @@ const register = async (req, res) => {
     return res.status(400).json({ errors: errors.array() });
   }
 
-  const { nombre, email, password, altura, peso, edad, avatar_url } = req.body;
+  const { nombre, email, password, altura, peso, edad } = req.body;
 
   try {
     const existingUser = await User.findByEmail(email);
@@ -25,8 +35,7 @@ const register = async (req, res) => {
       password: hashedPassword,
       altura,
       peso,
-      edad,
-      avatar_url
+      edad
     });
 
     const token = jwt.sign(
@@ -46,8 +55,7 @@ const register = async (req, res) => {
         id: newUserId,
         nombre,
         email,
-        rol: 'user',
-        avatar_url
+        rol: 'user'
       }
     });
 
@@ -71,6 +79,13 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
 
+    if (!user.password) {
+      const provider = user.auth_provider === 'apple' ? 'Apple' : 'Google';
+      return res.status(401).json({
+        message: `Esta cuenta usa inicio de sesión con ${provider}. Usa el botón correspondiente para entrar.`
+      });
+    }
+
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
@@ -91,8 +106,7 @@ const login = async (req, res) => {
         email: user.email,
         rol: user.rol,
         altura: user.altura,
-        peso: user.peso,
-        avatar_url: user.avatar_url
+        peso: user.peso
       }
     });
 
@@ -163,4 +177,97 @@ const resetPassword = async (req, res) => {
   }
 };
 
-module.exports = { register, login, forgotPassword, resetPassword };
+const buildUserResponse = (user) => ({
+  id: user.id_usuario,
+  nombre: user.nombre,
+  email: user.email,
+  rol: user.rol,
+  altura: user.altura,
+  peso: user.peso
+});
+
+const signToken = (user) =>
+  jwt.sign(
+    { id: user.id_usuario, email: user.email, rol: user.rol },
+    process.env.JWT_SECRET,
+    { expiresIn: '7d' }
+  );
+
+const googleLogin = async (req, res) => {
+  const { credential } = req.body;
+  if (!credential) return res.status(400).json({ message: 'Token de Google requerido' });
+
+  try {
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+
+    const { user, isNew } = await User.findOrCreateOAuth({
+      email: payload.email,
+      nombre: payload.name || payload.email.split('@')[0],
+      provider: 'google'
+    });
+
+    if (isNew) {
+      sendWelcome(user.email, user.nombre).catch(err =>
+        console.error('Error enviando email de bienvenida:', err)
+      );
+    }
+
+    res.json({ message: 'Login correcto', token: signToken(user), user: buildUserResponse(user) });
+  } catch (error) {
+    console.error('Error en Google login:', error);
+    res.status(401).json({ message: 'Token de Google inválido' });
+  }
+};
+
+const verifyAppleToken = (idToken) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(idToken, (header, callback) => {
+      appleJwks.getSigningKey(header.kid, (err, key) => {
+        if (err) return callback(err);
+        callback(null, key.getPublicKey());
+      });
+    }, {
+      algorithms: ['RS256'],
+      issuer: 'https://appleid.apple.com',
+      audience: process.env.APPLE_CLIENT_ID,
+    }, (err, decoded) => {
+      if (err) reject(err);
+      else resolve(decoded);
+    });
+  });
+};
+
+const appleLogin = async (req, res) => {
+  const { id_token, user: appleUser } = req.body;
+  if (!id_token) return res.status(400).json({ message: 'Token de Apple requerido' });
+
+  try {
+    const decoded = await verifyAppleToken(id_token);
+    const nombre = appleUser?.name
+      ? `${appleUser.name.firstName} ${appleUser.name.lastName}`.trim()
+      : decoded.email.split('@')[0];
+
+    const { user, isNew } = await User.findOrCreateOAuth({
+      email: decoded.email,
+      nombre,
+      provider: 'apple'
+    });
+
+    if (isNew) {
+      sendWelcome(user.email, user.nombre).catch(err =>
+        console.error('Error enviando email de bienvenida:', err)
+      );
+    }
+
+    res.json({ message: 'Login correcto', token: signToken(user), user: buildUserResponse(user) });
+  } catch (error) {
+    console.error('Error en Apple login:', error);
+    res.status(401).json({ message: 'Token de Apple inválido' });
+  }
+};
+
+module.exports = { register, login, forgotPassword, resetPassword, googleLogin, appleLogin };

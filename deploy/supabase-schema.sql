@@ -13,11 +13,11 @@ CREATE TABLE usuarios (
   id_usuario SERIAL PRIMARY KEY,
   nombre VARCHAR(100) NOT NULL,
   email VARCHAR(150) NOT NULL UNIQUE,
-  password VARCHAR(255) NOT NULL,
+  password VARCHAR(255) DEFAULT NULL,
+  auth_provider VARCHAR(20) DEFAULT 'local',
   altura DECIMAL(5,2) DEFAULT NULL,
   peso DECIMAL(5,2) DEFAULT NULL,
   edad INT DEFAULT NULL,
-  avatar_url VARCHAR(255) DEFAULT NULL,
   rol rol_tipo DEFAULT 'user',
   fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
@@ -38,8 +38,7 @@ CREATE TABLE stock (
   id_producto INT NOT NULL REFERENCES productos(id_producto) ON DELETE CASCADE,
   talla talla_tipo NOT NULL,
   color VARCHAR(50) NOT NULL,
-  cantidad INT DEFAULT 0,
-  url_modelo_3d VARCHAR(255) DEFAULT NULL
+  cantidad INT DEFAULT 0
 );
 
 -- Imágenes de producto

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { loginRequest } from '../api/authApi';
 import { useAuth } from '../context/AuthContext';
+import SocialAuthButtons from '../components/SocialAuthButtons';
 import '../styles/auth.css';
 
 const Login = () => {
@@ -60,6 +61,8 @@ const Login = () => {
             {loading ? 'CARGANDO...' : 'ENTRAR'}
           </button>
         </form>
+
+        <SocialAuthButtons />
 
         <p className="auth-footer">
           <Link to="/forgot-password" className="auth-link">¿Has olvidado tu contraseña?</Link>

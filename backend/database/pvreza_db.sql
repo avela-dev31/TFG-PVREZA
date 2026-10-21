@@ -99,26 +99,25 @@ CREATE TABLE `stock` (
   `talla` enum('S','M','L','XL') NOT NULL,
   `color` varchar(50) NOT NULL,
   `cantidad` int DEFAULT '0',
-  `url_modelo_3d` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Volcado de datos para la tabla `stock`
 --
 
-INSERT INTO `stock` (`id_stock`, `id_producto`, `talla`, `color`, `cantidad`, `url_modelo_3d`) VALUES
-(1, 1, 'S', 'Negro', 19, NULL),
-(2, 1, 'M', 'Negro', 20, NULL),
-(3, 1, 'L', 'Negro', 20, NULL),
-(4, 1, 'XL', 'Negro', 20, NULL),
-(5, 2, 'S', 'Negro', 20, NULL),
-(6, 2, 'M', 'Negro', 20, NULL),
-(7, 2, 'L', 'Negro', 20, NULL),
-(8, 2, 'XL', 'Negro', 20, NULL),
-(9, 3, 'S', 'Negro', 20, NULL),
-(10, 3, 'M', 'Negro', 20, NULL),
-(11, 3, 'L', 'Negro', 20, NULL),
-(12, 3, 'XL', 'Negro', 20, NULL);
+INSERT INTO `stock` (`id_stock`, `id_producto`, `talla`, `color`, `cantidad`) VALUES
+(1, 1, 'S', 'Negro', 19),
+(2, 1, 'M', 'Negro', 20),
+(3, 1, 'L', 'Negro', 20),
+(4, 1, 'XL', 'Negro', 20),
+(5, 2, 'S', 'Negro', 20),
+(6, 2, 'M', 'Negro', 20),
+(7, 2, 'L', 'Negro', 20),
+(8, 2, 'XL', 'Negro', 20),
+(9, 3, 'S', 'Negro', 20),
+(10, 3, 'M', 'Negro', 20),
+(11, 3, 'L', 'Negro', 20),
+(12, 3, 'XL', 'Negro', 20);
 
 -- --------------------------------------------------------
 

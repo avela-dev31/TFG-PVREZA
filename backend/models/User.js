@@ -12,11 +12,11 @@ const User = {
     return rows[0];
   },
 
-  create: async ({ nombre, email, password, altura = null, peso = null, edad = null, avatar_url = null }) => {
+  create: async ({ nombre, email, password, altura = null, peso = null, edad = null }) => {
     const { rows } = await db.query(
-      `INSERT INTO usuarios (nombre, email, password, altura, peso, edad, rol, avatar_url)
-       VALUES ($1, $2, $3, $4, $5, $6, 'user', $7) RETURNING id_usuario`,
-      [nombre, email, password, altura, peso, edad, avatar_url]
+      `INSERT INTO usuarios (nombre, email, password, altura, peso, edad, rol)
+       VALUES ($1, $2, $3, $4, $5, $6, 'user') RETURNING id_usuario`,
+      [nombre, email, password, altura, peso, edad]
     );
     return rows[0].id_usuario;
   },
@@ -25,7 +25,7 @@ const User = {
     const { rows } = await db.query(
       `UPDATE usuarios SET nombre = $1, email = $2, altura = $3, peso = $4
        WHERE id_usuario = $5
-       RETURNING id_usuario, nombre, email, rol, altura, peso, avatar_url`,
+       RETURNING id_usuario, nombre, email, rol, altura, peso`,
       [nombre, email, altura, peso, id]
     );
     return rows[0];
@@ -89,6 +89,20 @@ const User = {
       'UPDATE usuarios SET reset_token = NULL, reset_token_expires = NULL WHERE id_usuario = $1',
       [id]
     );
+  },
+
+  findOrCreateOAuth: async ({ email, nombre, provider }) => {
+    const { rows: existing } = await db.query(
+      'SELECT * FROM usuarios WHERE email = $1', [email]
+    );
+    if (existing[0]) return { user: existing[0], isNew: false };
+
+    const { rows } = await db.query(
+      `INSERT INTO usuarios (nombre, email, auth_provider, rol)
+       VALUES ($1, $2, $3, 'user') RETURNING *`,
+      [nombre, email, provider]
+    );
+    return { user: rows[0], isNew: true };
   }
 
 };

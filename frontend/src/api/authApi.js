@@ -2,6 +2,8 @@ import api from './axios';
 
 export const loginRequest = (data) => api.post('/auth/login', data);
 export const registerRequest = (data) => api.post('/auth/register', data);
+export const googleLoginRequest = (credential) => api.post('/auth/google', { credential });
+export const appleLoginRequest = (id_token, user) => api.post('/auth/apple', { id_token, user });
 
 export const getMe = () => api.get('/users/me');
 export const updateProfile = (data) => api.put('/users/me', data);

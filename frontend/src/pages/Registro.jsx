@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerRequest } from '../api/authApi';
 import { useAuth } from '../context/AuthContext';
+import SocialAuthButtons from '../components/SocialAuthButtons';
 import '../styles/auth.css';
 
 const Registro = () => {
@@ -109,6 +110,8 @@ const Registro = () => {
             {loading ? 'CREANDO CUENTA...' : 'CREAR CUENTA'}
           </button>
         </form>
+
+        <SocialAuthButtons />
 
         <p className="auth-footer">
           ¿Ya tienes cuenta?{' '}
