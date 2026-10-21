@@ -25,7 +25,7 @@ const Perfil = () => {
 
     const [tab, setTab] = useState('pedidos');
 
-    const [form, setForm] = useState({ nombre: '', email: '', altura: '', peso: '' });
+    const [form, setForm] = useState({ nombre: '', email: '' });
     const [editMsg, setEditMsg] = useState('');
     const [editError, setEditError] = useState('');
     const [saving, setSaving] = useState(false);
@@ -40,8 +40,6 @@ const Perfil = () => {
         setForm({
             nombre: user.nombre || '',
             email: user.email || '',
-            altura: user.altura || '',
-            peso: user.peso || '',
         });
     }, [user]);
 
@@ -69,8 +67,6 @@ const Perfil = () => {
             const res = await updateProfile({
                 nombre: form.nombre,
                 email: form.email,
-                altura: form.altura || null,
-                peso: form.peso || null,
             });
             updateUser(res.data.user);
             setEditMsg('Perfil actualizado correctamente');
@@ -230,30 +226,6 @@ const Perfil = () => {
                                             onChange={(e) => setForm({ ...form, email: e.target.value })}
                                             required
                                         />
-                                    </div>
-                                    <div className="form-row">
-                                        <div className="form-group">
-                                            <label>ALTURA (cm)</label>
-                                            <input
-                                                type="number"
-                                                min="100"
-                                                max="250"
-                                                value={form.altura}
-                                                onChange={(e) => setForm({ ...form, altura: e.target.value })}
-                                                placeholder="175"
-                                            />
-                                        </div>
-                                        <div className="form-group">
-                                            <label>PESO (kg)</label>
-                                            <input
-                                                type="number"
-                                                min="30"
-                                                max="300"
-                                                value={form.peso}
-                                                onChange={(e) => setForm({ ...form, peso: e.target.value })}
-                                                placeholder="75"
-                                            />
-                                        </div>
                                     </div>
                                     {editMsg && <p className="form-success">{editMsg}</p>}
                                     {editError && <p className="form-error">{editError}</p>}

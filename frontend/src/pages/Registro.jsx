@@ -9,9 +9,7 @@ const Registro = () => {
   const [form, setForm] = useState({
     nombre: '',
     email: '',
-    password: '',
-    altura: '',
-    peso: ''
+    password: ''
   });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,11 +25,6 @@ const Registro = () => {
 
     if (form.password.length < 8 || !/[A-Z]/.test(form.password) || !/[0-9]/.test(form.password)) {
       setError('La contraseña debe tener al menos 8 caracteres, una mayúscula y un número');
-      return;
-    }
-
-    if (form.altura < 100 || form.altura > 250 || form.peso < 30 || form.peso > 200) {
-      setError('Por favor, introduce una altura y peso válidos.');
       return;
     }
 
@@ -82,27 +75,6 @@ const Registro = () => {
             className="auth-input"
             required
           />
-
-          <div className="auth-row">
-            <input
-              type="number"
-              name="altura"
-              placeholder="Altura (cm)"
-              value={form.altura}
-              onChange={handleChange}
-              className="auth-input"
-              required
-            />
-            <input
-              type="number"
-              name="peso"
-              placeholder="Peso (kg)"
-              value={form.peso}
-              onChange={handleChange}
-              className="auth-input"
-              required
-            />
-          </div>
 
           {error && <p className="auth-error">{error}</p>}
 

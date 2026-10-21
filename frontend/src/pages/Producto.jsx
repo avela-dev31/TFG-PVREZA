@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useContext, useRef } from "react";
+import { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { getProductoById, getProductos } from "../api/productosApi";
 import { getFavoritos, addFavorito, removeFavorito } from "../api/authApi";
@@ -25,6 +25,20 @@ const Producto = () => {
   const [fotoActiva, setFotoActiva] = useState(0);
   const [otrosProductos, setOtrosProductos] = useState([]);
   const [esFavorito, setEsFavorito] = useState(false);
+  const [showRecomendador, setShowRecomendador] = useState(false);
+  const [altura, setAltura] = useState('');
+  const [peso, setPeso] = useState('');
+
+  const tallaRecomendada = () => {
+    const a = Number(altura);
+    const p = Number(peso);
+    if (!a || !p || a < 100 || p < 30) return null;
+    const score = ((a - 150) / 60) * 50 + ((p - 50) / 70) * 50;
+    if (score < 25) return 'S';
+    if (score < 45) return 'M';
+    if (score < 65) return 'L';
+    return 'XL';
+  };
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -70,15 +84,6 @@ const Producto = () => {
     } else {
       await addFavorito(id);
       setEsFavorito(true);
-    }
-  };
-
-  const guiaTallasRef = useRef(null);
-
-  const handleAbrirGuiaTallas = () => {
-    if (guiaTallasRef.current) {
-      guiaTallasRef.current.open = true;
-      guiaTallasRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   };
 
@@ -152,15 +157,64 @@ const Producto = () => {
             ))}
           </div>
 
-          <button className="tryon-trigger-btn" onClick={handleAbrirGuiaTallas}>
+          <button
+            className="tryon-trigger-btn"
+            onClick={() => setShowRecomendador(!showRecomendador)}
+          >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-              <path d="M3 3h7v7H3z" />
-              <path d="M14 3h7v7h-7z" />
-              <path d="M3 14h7v7H3z" />
-              <path d="M14 14h7v7h-7z" />
+              <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+              <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" />
+              <path d="M12 7v6" />
+              <path d="M9 10h6" />
             </svg>
-            Ver guía de tallas
+            {showRecomendador ? 'Cerrar recomendador' : '¿Cuál es mi talla?'}
           </button>
+
+          {showRecomendador && (
+            <div className="recomendador">
+              <p className="recomendador-desc">Introduce tus medidas y te recomendamos la talla ideal.</p>
+              <div className="recomendador-inputs">
+                <input
+                  type="number"
+                  placeholder="Altura (cm)"
+                  min="100"
+                  max="250"
+                  value={altura}
+                  onChange={(e) => setAltura(e.target.value)}
+                  className="recomendador-input"
+                />
+                <input
+                  type="number"
+                  placeholder="Peso (kg)"
+                  min="30"
+                  max="200"
+                  value={peso}
+                  onChange={(e) => setPeso(e.target.value)}
+                  className="recomendador-input"
+                />
+              </div>
+              {tallaRecomendada() && (
+                <div className="recomendador-resultado">
+                  <p>Tu talla recomendada es</p>
+                  <span className="talla-recomendada">{tallaRecomendada()}</span>
+                  <button
+                    className="seleccionar-recomendada-btn"
+                    onClick={() => {
+                      const match = stock.find(
+                        (s) => s.talla === tallaRecomendada() && s.cantidad > 0
+                      );
+                      if (match) setTallaSeleccionada(match);
+                    }}
+                    disabled={!stock.find((s) => s.talla === tallaRecomendada() && s.cantidad > 0)}
+                  >
+                    {stock.find((s) => s.talla === tallaRecomendada() && s.cantidad > 0)
+                      ? 'Seleccionar esta talla'
+                      : 'Agotada'}
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
 
           <button
             className="cart-btn"
@@ -175,7 +229,7 @@ const Producto = () => {
             <p>{producto.descripcion}</p>
           </details>
 
-          <details className="product-details-section" ref={guiaTallasRef}>
+          <details className="product-details-section">
             <summary><strong>GUÍA DE TALLAS</strong></summary>
             <img
               src={guiaTallasImg}

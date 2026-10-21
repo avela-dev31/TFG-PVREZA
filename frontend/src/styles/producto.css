@@ -223,6 +223,84 @@ header {
     transform: translateY(-1px);
 }
 
+/* Recomendador de talla */
+.recomendador {
+    padding: 20px;
+    background: #fafafa;
+    border: 1px solid #eee;
+    animation: pageEnter var(--duration-normal) var(--ease-out-expo) both;
+}
+
+.recomendador-desc {
+    font-size: 13px;
+    color: #666;
+    margin: 0 0 16px;
+}
+
+.recomendador-inputs {
+    display: flex;
+    gap: 10px;
+}
+
+.recomendador-input {
+    flex: 1;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 14px;
+    outline: none;
+    transition: border-color var(--duration-fast) var(--ease-smooth);
+}
+
+.recomendador-input:focus {
+    border-color: #000;
+}
+
+.recomendador-resultado {
+    margin-top: 20px;
+    text-align: center;
+    animation: pageEnter var(--duration-normal) var(--ease-out-expo) both;
+}
+
+.recomendador-resultado p {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #888;
+    margin: 0 0 8px;
+    text-transform: uppercase;
+}
+
+.talla-recomendada {
+    display: block;
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 4px;
+    margin-bottom: 16px;
+}
+
+.seleccionar-recomendada-btn {
+    padding: 10px 24px;
+    background: none;
+    border: 1px solid #000;
+    cursor: pointer;
+    font-size: 11px;
+    letter-spacing: 2px;
+    font-weight: 600;
+    transition:
+        background-color var(--duration-fast) var(--ease-smooth),
+        color var(--duration-fast) var(--ease-smooth);
+}
+
+.seleccionar-recomendada-btn:hover:not(:disabled) {
+    background: #000;
+    color: #fff;
+}
+
+.seleccionar-recomendada-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
 .cart-btn {
     padding: 14px;
     background-color: #000;
