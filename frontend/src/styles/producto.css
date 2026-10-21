@@ -256,6 +256,47 @@ header {
     border-color: #000;
 }
 
+.recomendador-complexion {
+    margin-top: 16px;
+}
+
+.recomendador-label {
+    font-size: 12px;
+    letter-spacing: 2px;
+    color: #888;
+    text-transform: uppercase;
+    margin: 0 0 8px;
+}
+
+.complexion-opciones {
+    display: flex;
+    gap: 8px;
+}
+
+.complexion-btn {
+    flex: 1;
+    padding: 10px 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    cursor: pointer;
+    font-size: 12px;
+    letter-spacing: 1px;
+    transition:
+        background-color var(--duration-fast) var(--ease-smooth),
+        border-color var(--duration-fast) var(--ease-smooth),
+        color var(--duration-fast) var(--ease-smooth);
+}
+
+.complexion-btn:hover {
+    border-color: #000;
+}
+
+.complexion-btn.selected {
+    background: #000;
+    color: #fff;
+    border-color: #000;
+}
+
 .recomendador-resultado {
     margin-top: 20px;
     text-align: center;

@@ -28,17 +28,15 @@ const Producto = () => {
   const [showRecomendador, setShowRecomendador] = useState(false);
   const [altura, setAltura] = useState('');
   const [peso, setPeso] = useState('');
+  const [complexion, setComplexion] = useState('');
 
   const tallaRecomendada = () => {
     const a = Number(altura);
     const p = Number(peso);
-    if (!a || !p || a < 140 || p < 35) return null;
+    if (!a || !p || !complexion || a < 140 || p < 35) return null;
 
-    // Boxy fit — medidas de la prenda (medio pecho):
-    // XS=58  S=60  M=62  L=64  XL=66
-    // Largo: XS=65  S=68  M=69  L=71  XL=73
-
-    const pecho = a * 0.4 + p * 0.3 + 10;
+    const mod = complexion === 'delgada' ? -4 : complexion === 'ancha' ? 4 : 0;
+    const pecho = a * 0.4 + p * 0.3 + 10 + mod;
     const tallaPecho = pecho <= 92 ? 0 : pecho <= 98 ? 1 : pecho <= 104 ? 2 : pecho <= 112 ? 3 : 4;
     const tallaAltura = a <= 165 ? 0 : a <= 172 ? 1 : a <= 178 ? 2 : a <= 185 ? 3 : 4;
 
@@ -182,8 +180,8 @@ const Producto = () => {
                 <input
                   type="number"
                   placeholder="Altura (cm)"
-                  min="100"
-                  max="250"
+                  min="140"
+                  max="220"
                   value={altura}
                   onChange={(e) => setAltura(e.target.value)}
                   className="recomendador-input"
@@ -191,12 +189,32 @@ const Producto = () => {
                 <input
                   type="number"
                   placeholder="Peso (kg)"
-                  min="30"
-                  max="200"
+                  min="35"
+                  max="150"
                   value={peso}
                   onChange={(e) => setPeso(e.target.value)}
                   className="recomendador-input"
                 />
+              </div>
+              <div className="recomendador-complexion">
+                <p className="recomendador-label">Complexión</p>
+                <div className="complexion-opciones">
+                  {[
+                    { key: 'delgada', label: 'Delgada', desc: 'Hombros estrechos, constitución ligera' },
+                    { key: 'media', label: 'Media', desc: 'Proporción estándar' },
+                    { key: 'ancha', label: 'Ancha', desc: 'Hombros anchos, constitución fuerte' },
+                  ].map((c) => (
+                    <button
+                      key={c.key}
+                      type="button"
+                      className={`complexion-btn ${complexion === c.key ? 'selected' : ''}`}
+                      onClick={() => setComplexion(c.key)}
+                      title={c.desc}
+                    >
+                      {c.label}
+                    </button>
+                  ))}
+                </div>
               </div>
               {tallaRecomendada() && (
                 <div className="recomendador-resultado">
