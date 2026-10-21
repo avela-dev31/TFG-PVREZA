@@ -32,12 +32,18 @@ const Producto = () => {
   const tallaRecomendada = () => {
     const a = Number(altura);
     const p = Number(peso);
-    if (!a || !p || a < 100 || p < 30) return null;
-    const score = ((a - 150) / 60) * 50 + ((p - 50) / 70) * 50;
-    if (score < 25) return 'S';
-    if (score < 45) return 'M';
-    if (score < 65) return 'L';
-    return 'XL';
+    if (!a || !p || a < 140 || p < 35) return null;
+
+    // Boxy fit — medidas de la prenda (medio pecho):
+    // XS=58  S=60  M=62  L=64  XL=66
+    // Largo: XS=65  S=68  M=69  L=71  XL=73
+
+    const pecho = a * 0.4 + p * 0.3 + 10;
+    const tallaPecho = pecho <= 92 ? 0 : pecho <= 98 ? 1 : pecho <= 104 ? 2 : pecho <= 112 ? 3 : 4;
+    const tallaAltura = a <= 165 ? 0 : a <= 172 ? 1 : a <= 178 ? 2 : a <= 185 ? 3 : 4;
+
+    const tallas = ['XS', 'S', 'M', 'L', 'XL'];
+    return tallas[Math.max(tallaPecho, tallaAltura)];
   };
 
   useEffect(() => {
@@ -171,7 +177,7 @@ const Producto = () => {
 
           {showRecomendador && (
             <div className="recomendador">
-              <p className="recomendador-desc">Introduce tus medidas y te recomendamos la talla ideal.</p>
+              <p className="recomendador-desc">Nuestras camisetas son de corte boxy fit. Introduce tus medidas y te recomendamos la talla ideal.</p>
               <div className="recomendador-inputs">
                 <input
                   type="number"
