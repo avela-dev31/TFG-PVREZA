@@ -9,7 +9,7 @@ const preguntas = [
     },
     {
         pregunta: '¿Cómo puedo saber mi talla?',
-        respuesta: 'En PVREZA ofrecemos un sistema de probador virtual 3D. Al crear tu perfil, puedes introducir tus medidas (altura, peso) y nuestro avatar te mostrará cómo te quedará cada prenda antes de comprarla.'
+        respuesta: 'En cada ficha de producto encontrarás una guía de tallas detallada con las medidas reales de cada prenda (pecho, largo, hombro). Consulta la guía y compara con tus medidas para elegir la talla perfecta.'
     },
     {
         pregunta: '¿Cuánto tarda en llegar mi pedido?',

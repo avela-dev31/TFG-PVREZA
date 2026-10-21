@@ -1,17 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useEffect, useState, useContext } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState, useContext, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { getProductoById, getProductos } from "../api/productosApi";
 import { getFavoritos, addFavorito, removeFavorito } from "../api/authApi";
 import { CartContext } from "../context/CartContext";
 import { useAuth } from "../context/AuthContext";
 import { imgUrl } from "../constants";
-import AvatarCreator from "../components/AvatarCreator";
 import Banner from "../components/Banner";
 import guiaTallasImg from "../../assets/img/guia_tallas.png";
 import "../styles/producto.css";
-
-const FALLBACK_MODEL = "camiseta_azul.glb";
 
 const Producto = () => {
   const { id } = useParams();
@@ -27,17 +24,7 @@ const Producto = () => {
   const [tallaSeleccionada, setTallaSeleccionada] = useState(null);
   const [fotoActiva, setFotoActiva] = useState(0);
   const [otrosProductos, setOtrosProductos] = useState([]);
-
-  const [isTryOnOpen, setIsTryOnOpen] = useState(false);
-  const [altura, setAltura] = useState(175);
-  const [peso, setPeso] = useState(75);
   const [esFavorito, setEsFavorito] = useState(false);
-
-  // Modelo 3D: usa la talla seleccionada, si no el primero disponible, si no el fallback
-  const modeloCamiseta =
-    tallaSeleccionada?.url_modelo_3d ||
-    stock.find((s) => s.url_modelo_3d)?.url_modelo_3d ||
-    FALLBACK_MODEL;
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -86,10 +73,13 @@ const Producto = () => {
     }
   };
 
-  const handleAbrirProbador = () => {
-    setAltura(user && user ? (user.altura || 175) : 175);
-    setPeso(user && user ? (user.peso || 75) : 75);
-    setIsTryOnOpen(true);
+  const guiaTallasRef = useRef(null);
+
+  const handleAbrirGuiaTallas = () => {
+    if (guiaTallasRef.current) {
+      guiaTallasRef.current.open = true;
+      guiaTallasRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
   };
 
   const siguiente = () => setFotoActiva((prev) => (prev === imagenes.length - 1 ? 0 : prev + 1));
@@ -105,7 +95,7 @@ const Producto = () => {
 
   return (
     <main>
-    {!isTryOnOpen && !isCartOpen && !isMenuOpen && <Banner />}
+    {!isCartOpen && !isMenuOpen && <Banner />}
       <section className="product">
         {/* CARRUSEL */}
         <div className="carousel">
@@ -162,13 +152,14 @@ const Producto = () => {
             ))}
           </div>
 
-          <button className="tryon-trigger-btn" onClick={handleAbrirProbador}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M12 3v19" />
-              <path d="M5 10h14" />
-              <path d="M5 15h14" />
+          <button className="tryon-trigger-btn" onClick={handleAbrirGuiaTallas}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
+              <path d="M3 3h7v7H3z" />
+              <path d="M14 3h7v7h-7z" />
+              <path d="M3 14h7v7H3z" />
+              <path d="M14 14h7v7h-7z" />
             </svg>
-            Probar en mi Avatar 3D
+            Ver guía de tallas
           </button>
 
           <button
@@ -184,7 +175,7 @@ const Producto = () => {
             <p>{producto.descripcion}</p>
           </details>
 
-          <details className="product-details-section">
+          <details className="product-details-section" ref={guiaTallasRef}>
             <summary><strong>GUÍA DE TALLAS</strong></summary>
             <img
               src={guiaTallasImg}
@@ -217,66 +208,6 @@ const Producto = () => {
         </section>
       )}
 
-      {/* MODAL PROBADOR 3D */}
-      {isTryOnOpen && (
-        <div className="modal-overlay">
-          <div className="modal-content">
-            <button onClick={() => setIsTryOnOpen(false)} className="modal-close">&times;</button>
-            <div className="modal-layout">
-
-              <div className="modal-canvas">
-                <AvatarCreator altura={Number(altura)} peso={Number(peso)} modeloCamiseta={modeloCamiseta} />
-              </div>
-
-              <div className="modal-controls">
-                <h2>{user ? "TUS MEDIDAS GUARDADAS" : "CONFIGURA TU AVATAR"}</h2>
-
-                {user ? (
-                  <p className="user-greeting">
-                    Hola <strong>{user.nombre}</strong>, estamos proyectando tu avatar con los datos de tu perfil.
-                  </p>
-                ) : (
-                  <p className="guest-notice">
-                    ⚠️ No has iniciado sesión. Introduce tus datos manualmente para el probador virtual.
-                  </p>
-                )}
-
-                <label className="controls-label">Altura</label>
-                <div className="input-group">
-                  <input type="range" min="150" max="210" value={altura} onChange={(e) => setAltura(e.target.value)} />
-                  <span className="val-display">{altura} cm</span>
-                </div>
-
-                <label className="controls-label mt">Peso</label>
-                <div className="input-group">
-                  <input type="range" min="50" max="120" value={peso} onChange={(e) => setPeso(e.target.value)} />
-                  <span className="val-display">{peso} kg</span>
-                </div>
-
-                <div className="info-box">
-                  <p><strong>Talla recomendada:</strong> {
-                    (() => {
-                      const a = Number(altura);
-                      const p = Number(peso);
-                      const score = (a - 150) / 60 * 50 + (p - 50) / 70 * 50;
-                      if (score < 25) return "S";
-                      if (score < 45) return "M";
-                      if (score < 65) return "L";
-                      return "XL";
-                    })()
-                  }</p>
-                </div>
-
-                {!user && (
-                  <Link to="/login" className="login-prompt-link">
-                    ¿Quieres guardar tus medidas? Inicia sesión
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </main>
   );
 };
