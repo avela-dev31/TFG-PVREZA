@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { isBlacklisted } = require('./tokenBlacklist');
 
 const verifyToken = (req, res, next) => {
   const authHeader = req.headers['authorization'];
@@ -7,16 +8,20 @@ const verifyToken = (req, res, next) => {
     return res.status(401).json({ message: 'Acceso denegado: token no proporcionado' });
   }
 
-  // El header llega como "Bearer <token>"
   const token = authHeader.split(' ')[1];
 
   if (!token) {
     return res.status(401).json({ message: 'Formato de token inválido' });
   }
 
+  if (isBlacklisted(token)) {
+    return res.status(401).json({ message: 'Sesión cerrada. Vuelve a iniciar sesión.' });
+  }
+
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = decoded; // { id, email, rol }
+    req.user = decoded;
+    req.token = token;
     next();
   } catch (error) {
     return res.status(403).json({ message: 'Token inválido o expirado' });

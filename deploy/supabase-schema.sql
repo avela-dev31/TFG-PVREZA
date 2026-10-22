@@ -90,6 +90,7 @@ INSERT INTO stock (id_producto, talla, color, cantidad) VALUES
 (2, 'S', 'Negro', 20), (2, 'M', 'Negro', 20), (2, 'L', 'Negro', 20), (2, 'XL', 'Negro', 20),
 (3, 'S', 'Negro', 20), (3, 'M', 'Negro', 20), (3, 'L', 'Negro', 20), (3, 'XL', 'Negro', 20);
 
--- Usuario admin (password: admin123 con bcrypt)
-INSERT INTO usuarios (nombre, email, password, rol) VALUES
-('Admin', 'admin@pvreza.com', '$2b$10$hJjWg6X1gjUtb3vVQX/z6.aSfLctc4jleL1qR8C1RdWgNpIHxwRWW', 'admin');
+-- Usuario admin: crear manualmente con una contraseña segura.
+-- Genera el hash con: node -e "require('bcryptjs').hash('TU_PASSWORD_SEGURA', 10).then(h => console.log(h))"
+-- INSERT INTO usuarios (nombre, email, password, rol) VALUES
+--   ('Admin', 'admin@pvreza.com', '<HASH_BCRYPT>', 'admin');

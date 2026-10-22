@@ -141,9 +141,12 @@ CREATE TABLE `usuarios` (
 -- Volcado de datos para la tabla `usuarios`
 --
 
+-- Usuario de prueba (solo para desarrollo local)
 INSERT INTO `usuarios` (`id_usuario`, `nombre`, `email`, `password`, `altura`, `peso`, `edad`, `rol`, `fecha_registro`) VALUES
-(1, 'Antonio', 'antonio@test.com', '$2b$10$jUOq/mgsSMQsLqQrWEQBQOU6Axl.dM6vXby.t0TMmm9L5qAPWtb5G', NULL, NULL, NULL, 'user', '2026-04-14 17:55:33'),
-(4, 'Admin', 'admin@pvreza.com', '$2b$10$hJjWg6X1gjUtb3vVQX/z6.aSfLctc4jleL1qR8C1RdWgNpIHxwRWW', NULL, NULL, NULL, 'admin', '2026-04-15 14:35:21');
+(1, 'Antonio', 'antonio@test.com', '$2b$10$jUOq/mgsSMQsLqQrWEQBQOU6Axl.dM6vXby.t0TMmm9L5qAPWtb5G', NULL, NULL, NULL, 'user', '2026-04-14 17:55:33');
+-- Admin: crear manualmente con contraseña segura.
+-- Genera el hash con: node -e "require('bcryptjs').hash('TU_PASSWORD_SEGURA', 10).then(h => console.log(h))"
+-- INSERT INTO `usuarios` (...) VALUES (..., 'admin');
 
 --
 -- Índices para tablas volcadas

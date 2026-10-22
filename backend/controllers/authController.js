@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 const { OAuth2Client } = require('google-auth-library');
 const jwksRsa = require('jwks-rsa');
 const User = require('../models/User');
+const { addToBlacklist, isBlacklisted } = require('../middleware/tokenBlacklist');
 
 const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
@@ -41,6 +42,12 @@ const register = async (req, res) => {
     const token = jwt.sign(
       { id: newUserId, email, rol: 'user' },
       process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: newUserId, email, rol: 'user', type: 'refresh' },
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
@@ -51,6 +58,7 @@ const register = async (req, res) => {
     res.status(201).json({
       message: 'Usuario registrado correctamente',
       token,
+      refreshToken,
       user: {
         id: newUserId,
         nombre,
@@ -94,12 +102,19 @@ const login = async (req, res) => {
     const token = jwt.sign(
       { id: user.id_usuario, email: user.email, rol: user.rol },
       process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    const refreshToken = jwt.sign(
+      { id: user.id_usuario, email: user.email, rol: user.rol, type: 'refresh' },
+      process.env.JWT_SECRET,
       { expiresIn: '7d' }
     );
 
     res.status(200).json({
       message: 'Login correcto',
       token,
+      refreshToken,
       user: {
         id: user.id_usuario,
         nombre: user.nombre,
@@ -190,6 +205,13 @@ const signToken = (user) =>
   jwt.sign(
     { id: user.id_usuario, email: user.email, rol: user.rol },
     process.env.JWT_SECRET,
+    { expiresIn: '2h' }
+  );
+
+const signRefreshToken = (user) =>
+  jwt.sign(
+    { id: user.id_usuario, email: user.email, rol: user.rol, type: 'refresh' },
+    process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );
 
@@ -216,7 +238,7 @@ const googleLogin = async (req, res) => {
       );
     }
 
-    res.json({ message: 'Login correcto', token: signToken(user), user: buildUserResponse(user) });
+    res.json({ message: 'Login correcto', token: signToken(user), refreshToken: signRefreshToken(user), user: buildUserResponse(user) });
   } catch (error) {
     console.error('Error en Google login:', error);
     res.status(401).json({ message: 'Token de Google inválido' });
@@ -263,11 +285,44 @@ const appleLogin = async (req, res) => {
       );
     }
 
-    res.json({ message: 'Login correcto', token: signToken(user), user: buildUserResponse(user) });
+    res.json({ message: 'Login correcto', token: signToken(user), refreshToken: signRefreshToken(user), user: buildUserResponse(user) });
   } catch (error) {
     console.error('Error en Apple login:', error);
     res.status(401).json({ message: 'Token de Apple inválido' });
   }
 };
 
-module.exports = { register, login, forgotPassword, resetPassword, googleLogin, appleLogin };
+const logout = (req, res) => {
+  addToBlacklist(req.token);
+  res.status(200).json({ message: 'Sesión cerrada correctamente' });
+};
+
+const refreshTokenHandler = (req, res) => {
+  const { refreshToken } = req.body;
+  if (!refreshToken) {
+    return res.status(400).json({ message: 'Refresh token requerido' });
+  }
+
+  if (isBlacklisted(refreshToken)) {
+    return res.status(401).json({ message: 'Refresh token revocado' });
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.JWT_SECRET);
+    if (decoded.type !== 'refresh') {
+      return res.status(401).json({ message: 'Token inválido' });
+    }
+
+    const newToken = jwt.sign(
+      { id: decoded.id, email: decoded.email, rol: decoded.rol },
+      process.env.JWT_SECRET,
+      { expiresIn: '2h' }
+    );
+
+    res.json({ token: newToken });
+  } catch (error) {
+    return res.status(401).json({ message: 'Refresh token inválido o expirado' });
+  }
+};
+
+module.exports = { register, login, forgotPassword, resetPassword, googleLogin, appleLogin, logout, refreshTokenHandler };

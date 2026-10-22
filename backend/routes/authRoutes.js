@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 const { body } = require('express-validator');
 const rateLimit = require('express-rate-limit');
-const { register, login, forgotPassword, resetPassword, googleLogin, appleLogin } = require('../controllers/authController');
+const { register, login, forgotPassword, resetPassword, googleLogin, appleLogin, logout, refreshTokenHandler } = require('../controllers/authController');
+const { verifyToken } = require('../middleware/middlewareAuth');
 
 // ============================================
 // RATE LIMITING — máximo 10 intentos por IP cada 15 minutos
@@ -76,5 +77,7 @@ router.post('/google', authLimiter, googleLogin);
 router.post('/apple', authLimiter, appleLogin);
 router.post('/forgot-password', authLimiter, forgotValidation, forgotPassword);
 router.post('/reset-password', authLimiter, resetValidation, resetPassword);
+router.post('/logout', verifyToken, logout);
+router.post('/refresh-token', authLimiter, refreshTokenHandler);
 
 module.exports = router;

@@ -22,7 +22,7 @@ const Login = () => {
     setLoading(true);
     try {
       const res = await loginRequest(form);
-      login(res.data.user, res.data.token);
+      login(res.data.user, res.data.token, res.data.refreshToken);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al iniciar sesión');

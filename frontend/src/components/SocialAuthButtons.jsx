@@ -28,7 +28,7 @@ const SocialAuthButtons = () => {
   const [loading, setLoading] = useState(false);
 
   const handleSuccess = (res) => {
-    login(res.data.user, res.data.token);
+    login(res.data.user, res.data.token, res.data.refreshToken);
     navigate('/');
   };
 

@@ -33,7 +33,7 @@ const Registro = () => {
 
     try {
       const res = await registerRequest(form);
-      login(res.data.user, res.data.token);
+      login(res.data.user, res.data.token, res.data.refreshToken);
       navigate('/perfil');
     } catch (err) {
       setError(err.response?.data?.message || 'Error al registrarse');
