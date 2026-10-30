@@ -99,6 +99,18 @@ const login = async (req, res) => {
       return res.status(401).json({ message: 'Credenciales incorrectas' });
     }
 
+    if (user.totp_enabled) {
+      const tempToken = jwt.sign(
+        { id: user.id_usuario, email: user.email, type: '2fa_pending' },
+        process.env.JWT_SECRET,
+        { expiresIn: '5m' }
+      );
+      return res.status(200).json({
+        requires2FA: true,
+        tempToken,
+      });
+    }
+
     const token = jwt.sign(
       { id: user.id_usuario, email: user.email, rol: user.rol },
       process.env.JWT_SECRET,

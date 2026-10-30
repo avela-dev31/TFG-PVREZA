@@ -91,6 +91,27 @@ const User = {
     );
   },
 
+  saveTotpSecret: async (id, secret) => {
+    await db.query(
+      'UPDATE usuarios SET totp_secret = $1 WHERE id_usuario = $2',
+      [secret, id]
+    );
+  },
+
+  enableTotp: async (id) => {
+    await db.query(
+      'UPDATE usuarios SET totp_enabled = TRUE WHERE id_usuario = $1',
+      [id]
+    );
+  },
+
+  disableTotp: async (id) => {
+    await db.query(
+      'UPDATE usuarios SET totp_secret = NULL, totp_enabled = FALSE WHERE id_usuario = $1',
+      [id]
+    );
+  },
+
   findOrCreateOAuth: async ({ email, nombre, provider }) => {
     const { rows: existing } = await db.query(
       'SELECT * FROM usuarios WHERE email = $1', [email]

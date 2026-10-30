@@ -90,6 +90,10 @@ INSERT INTO stock (id_producto, talla, color, cantidad) VALUES
 (2, 'S', 'Negro', 20), (2, 'M', 'Negro', 20), (2, 'L', 'Negro', 20), (2, 'XL', 'Negro', 20),
 (3, 'S', 'Negro', 20), (3, 'M', 'Negro', 20), (3, 'L', 'Negro', 20), (3, 'XL', 'Negro', 20);
 
+-- 2FA (TOTP) para admins
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS totp_secret VARCHAR(255) DEFAULT NULL;
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS totp_enabled BOOLEAN DEFAULT FALSE;
+
 -- Usuario admin: crear manualmente con una contraseña segura.
 -- Genera el hash con: node -e "require('bcryptjs').hash('TU_PASSWORD_SEGURA', 10).then(h => console.log(h))"
 -- INSERT INTO usuarios (nombre, email, password, rol) VALUES

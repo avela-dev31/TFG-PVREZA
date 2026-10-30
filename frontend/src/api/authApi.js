@@ -12,6 +12,12 @@ export const updatePassword = (data) => api.put('/users/me/password', data);
 export const forgotPassword = (email) => api.post('/auth/forgot-password', { email });
 export const resetPasswordRequest = (token, password) => api.post('/auth/reset-password', { token, password });
 
+export const verify2FA = (tempToken, code) => api.post('/auth/2fa/verify', { tempToken, code });
+export const setup2FA = () => api.post('/auth/2fa/setup');
+export const verifySetup2FA = (code) => api.post('/auth/2fa/verify-setup', { code });
+export const disable2FA = (code) => api.post('/auth/2fa/disable', { code });
+export const get2FAStatus = () => api.get('/auth/2fa/status');
+
 export const getFavoritos = () => api.get('/users/favoritos');
 export const addFavorito = (idProducto) => api.post(`/users/favoritos/${idProducto}`);
 export const removeFavorito = (idProducto) => api.delete(`/users/favoritos/${idProducto}`);

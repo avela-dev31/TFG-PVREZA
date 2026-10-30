@@ -15,6 +15,7 @@ const usuariosRoutes = require('./routes/usuariosRoutes');
 const pedidosRoutes = require('./routes/pedidosRoutes');
 const reservasRoutes = require('./routes/reservasRoutes');
 const stripeRoutes = require('./routes/stripeRoutes');
+const twoFactorRoutes = require('./routes/twoFactorRoutes');
 const { handleWebhook } = require('./controllers/stripeController');
 
 const app = express();
@@ -66,6 +67,7 @@ app.use('/api/users', usuariosRoutes);
 app.use('/api/pedidos', pedidosRoutes);
 app.use('/api/reservas', reservasRoutes);
 app.use('/api/stripe', stripeRoutes);
+app.use('/api/auth/2fa', twoFactorRoutes);
 
 app.get("/", (req, res) => {
   res.json({ status: "ok", message: "Backend PVREZA activo" });

@@ -191,6 +191,16 @@
     border-radius: 4px;
 }
 
+/* TOTP 2FA input */
+.totp-input {
+    text-align: center;
+    font-size: 28px !important;
+    letter-spacing: 12px;
+    font-weight: 700;
+    font-family: monospace;
+    padding: 16px !important;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .auth-page {

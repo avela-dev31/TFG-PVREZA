@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { getProductosConStock, crearProducto, eliminarProducto as eliminarProductoApi } from '../../api/productosApi';
 import { getDashboardStats, getTodosPedidos, actualizarEstadoPedido } from '../../api/pedidosApi';
+import { setup2FA, verifySetup2FA, disable2FA, get2FAStatus } from '../../api/authApi';
 import '../../styles/dashboard.css';
 
 const PRODUCTO_VACIO = { nombre: '', precio: '', coleccion: '', descripcion: '' };
@@ -21,6 +22,13 @@ const Dashboard = () => {
     const [creando, setCreando] = useState(false);
     const [modalError, setModalError] = useState('');
 
+    const [twoFAEnabled, setTwoFAEnabled] = useState(false);
+    const [twoFASetup, setTwoFASetup] = useState(null);
+    const [twoFACode, setTwoFACode] = useState('');
+    const [twoFAError, setTwoFAError] = useState('');
+    const [twoFALoading, setTwoFALoading] = useState(false);
+    const [disableCode, setDisableCode] = useState('');
+
     const openModal = () => dialogRef.current?.showModal();
     const closeModal = () => dialogRef.current?.close();
 
@@ -28,15 +36,17 @@ const Dashboard = () => {
         setLoading(true);
         setFetchError('');
 
-        const [statsRes, productosRes, pedidosRes] = await Promise.allSettled([
+        const [statsRes, productosRes, pedidosRes, twoFARes] = await Promise.allSettled([
             getDashboardStats(),
             getProductosConStock(),
-            getTodosPedidos()
+            getTodosPedidos(),
+            get2FAStatus()
         ]);
 
         if (statsRes.status === 'fulfilled') setStats(statsRes.value.data);
         if (productosRes.status === 'fulfilled') setProductos(productosRes.value.data);
         if (pedidosRes.status === 'fulfilled') setPedidos(pedidosRes.value.data);
+        if (twoFARes.status === 'fulfilled') setTwoFAEnabled(twoFARes.value.data.enabled);
 
         const errores = [];
         if (statsRes.status === 'rejected') errores.push('Stats: ' + (statsRes.reason?.response?.data?.message || statsRes.reason?.message));
@@ -48,6 +58,52 @@ const Dashboard = () => {
     };
 
     useEffect(() => { fetchData(); }, []);
+
+    const handleSetup2FA = async () => {
+        setTwoFAError('');
+        setTwoFALoading(true);
+        try {
+            const res = await setup2FA();
+            setTwoFASetup(res.data);
+        } catch (err) {
+            setTwoFAError(err.response?.data?.message || 'Error al configurar 2FA');
+        } finally {
+            setTwoFALoading(false);
+        }
+    };
+
+    const handleVerifySetup2FA = async (e) => {
+        e.preventDefault();
+        setTwoFAError('');
+        setTwoFALoading(true);
+        try {
+            await verifySetup2FA(twoFACode);
+            setTwoFAEnabled(true);
+            setTwoFASetup(null);
+            setTwoFACode('');
+        } catch (err) {
+            setTwoFAError(err.response?.data?.message || 'Código incorrecto');
+            setTwoFACode('');
+        } finally {
+            setTwoFALoading(false);
+        }
+    };
+
+    const handleDisable2FA = async (e) => {
+        e.preventDefault();
+        setTwoFAError('');
+        setTwoFALoading(true);
+        try {
+            await disable2FA(disableCode);
+            setTwoFAEnabled(false);
+            setDisableCode('');
+        } catch (err) {
+            setTwoFAError(err.response?.data?.message || 'Código incorrecto');
+            setDisableCode('');
+        } finally {
+            setTwoFALoading(false);
+        }
+    };
 
     const eliminarProducto = async (id) => {
         if (!window.confirm('¿Estás seguro de que quieres eliminar este producto?')) return;
@@ -247,6 +303,109 @@ const Dashboard = () => {
                     </div>
                 );
             }
+            case 'seguridad':
+                return (
+                    <div className="dash-section">
+                        <h2>SEGURIDAD — AUTENTICACIÓN 2FA</h2>
+                        <p style={{ color: '#666', fontSize: '14px', marginBottom: '24px' }}>
+                            La autenticación de doble factor añade una capa extra de seguridad.
+                            Necesitarás una app como Google Authenticator o Authy.
+                        </p>
+
+                        {twoFAEnabled && !twoFASetup ? (
+                            <div className="twofa-status">
+                                <div className="twofa-badge active">2FA ACTIVADO</div>
+                                <p style={{ margin: '16px 0', fontSize: '14px' }}>
+                                    Tu cuenta está protegida con autenticación de doble factor.
+                                </p>
+                                <form onSubmit={handleDisable2FA} className="twofa-form">
+                                    <p style={{ fontSize: '13px', color: '#666' }}>
+                                        Para desactivar 2FA, introduce un código de tu app:
+                                    </p>
+                                    <input
+                                        type="text"
+                                        inputMode="numeric"
+                                        pattern="[0-9]{6}"
+                                        maxLength={6}
+                                        placeholder="000000"
+                                        value={disableCode}
+                                        onChange={(e) => setDisableCode(e.target.value.replace(/\D/g, ''))}
+                                        className="twofa-code-input"
+                                        required
+                                    />
+                                    {twoFAError && <p className="auth-error">{twoFAError}</p>}
+                                    <button
+                                        type="submit"
+                                        className="btn-text danger"
+                                        disabled={twoFALoading || disableCode.length !== 6}
+                                    >
+                                        {twoFALoading ? 'DESACTIVANDO...' : 'DESACTIVAR 2FA'}
+                                    </button>
+                                </form>
+                            </div>
+                        ) : !twoFASetup ? (
+                            <div className="twofa-status">
+                                <div className="twofa-badge inactive">2FA DESACTIVADO</div>
+                                {twoFAError && <p className="auth-error">{twoFAError}</p>}
+                                <button
+                                    className="btn-primary"
+                                    onClick={handleSetup2FA}
+                                    disabled={twoFALoading}
+                                    style={{ marginTop: '16px' }}
+                                >
+                                    {twoFALoading ? 'PREPARANDO...' : 'ACTIVAR 2FA'}
+                                </button>
+                            </div>
+                        ) : (
+                            <div className="twofa-setup">
+                                <h3 style={{ marginBottom: '16px' }}>Configuración 2FA</h3>
+                                <p style={{ fontSize: '14px', marginBottom: '16px' }}>
+                                    1. Abre tu app de autenticación (Google Authenticator, Authy...)<br />
+                                    2. Escanea este código QR:<br />
+                                </p>
+                                <div className="twofa-qr">
+                                    <img src={twoFASetup.qrCode} alt="QR Code 2FA" />
+                                </div>
+                                <p style={{ fontSize: '12px', color: '#666', marginBottom: '20px', wordBreak: 'break-all' }}>
+                                    Clave manual: <code>{twoFASetup.secret}</code>
+                                </p>
+                                <p style={{ fontSize: '14px', marginBottom: '12px' }}>
+                                    3. Introduce el código de 6 dígitos que te muestra la app:
+                                </p>
+                                <form onSubmit={handleVerifySetup2FA} className="twofa-form">
+                                    <input
+                                        type="text"
+                                        inputMode="numeric"
+                                        pattern="[0-9]{6}"
+                                        maxLength={6}
+                                        placeholder="000000"
+                                        value={twoFACode}
+                                        onChange={(e) => setTwoFACode(e.target.value.replace(/\D/g, ''))}
+                                        className="twofa-code-input"
+                                        required
+                                    />
+                                    {twoFAError && <p className="auth-error">{twoFAError}</p>}
+                                    <div style={{ display: 'flex', gap: '12px' }}>
+                                        <button
+                                            type="submit"
+                                            className="btn-primary"
+                                            disabled={twoFALoading || twoFACode.length !== 6}
+                                        >
+                                            {twoFALoading ? 'VERIFICANDO...' : 'ACTIVAR'}
+                                        </button>
+                                        <button
+                                            type="button"
+                                            className="btn-text"
+                                            onClick={() => { setTwoFASetup(null); setTwoFACode(''); setTwoFAError(''); }}
+                                        >
+                                            CANCELAR
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        )}
+                    </div>
+                );
             default:
                 return null;
         }
@@ -277,6 +436,12 @@ const Dashboard = () => {
                         onClick={() => setActiveTab('pedidos')}
                     >
                         PEDIDOS
+                    </button>
+                    <button
+                        className={activeTab === 'seguridad' ? 'active' : ''}
+                        onClick={() => setActiveTab('seguridad')}
+                    >
+                        SEGURIDAD
                     </button>
                 </nav>
             </aside>
